@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perth BoreWater | Perth Suburb Directory</title>
+    <link rel="icon" type="image/jpeg" href="https://perthborewater.com.au/serve-image.php?file=Logo.jpeg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Resilience Core and Diagnostics Loader -->
+    <script>
+      (function() {
+        window.__pbLogs = [];
+        const originalLog = console.log;
+        const originalError = console.error;
+        const prependLog = (type, args) => {
+          const msg = Array.from(args).map(v => typeof v === 'object' ? JSON.stringify(v) : String(v)).join(' ');
+          window.__pbLogs.push({ type, msg, time: new Date().toLocaleTimeString() });
+        };
+        console.log = function() {
+          prependLog('log', arguments);
+          originalLog.apply(console, arguments);
+        };
+        console.error = function() {
+          prependLog('error', arguments);
+          originalError.apply(console, arguments);
+        };
+
+        window.__showDiagnosticError = function(title, details, isAssetError) {
+          if (document.getElementById('pb-error-overlay')) return;
+
+          const container = document.createElement('div');
+          container.id = 'pb-error-overlay';
+          container.style.position = 'fixed';
+          container.style.inset = '0';
+          container.style.backgroundColor = '#0b1329';
+          container.style.color = '#f1f5f9';
+          container.style.zIndex = '999999';
+          container.style.fontFamily = '"JetBrains Mono", ui-monospace, monospace';
+          container.style.padding = '24px';
+          container.style.overflowY = 'auto';
+          container.style.display = 'flex';
+          container.style.flexDirection = 'column';
+          container.style.alignItems = 'center';
+          container.style.justifyContent = 'center';
+
+          const card = document.createElement('div');
+          card.style.maxWidth = '700px';
+          card.style.width = '100%';
+          card.style.backgroundColor = '#111827';
+          card.style.border = '2px solid #ef4444';
+          card.style.borderRadius = '16px';
+          card.style.padding = '32px';
+          card.style.boxShadow = '0 25px 50px -12px rgba(0, 0, 0, 0.5)';
+
+          const badgeBox = document.createElement('div');
+          badgeBox.innerHTML = '<span style="background-color: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; font-size: 10px; font-weight: bold; padding: 4px 12px; border-radius: 9999px; text-transform: uppercase; font-family: sans-serif;">DEPLOYMENT DIAGNOSTIC CENTRE</span>';
+          card.appendChild(badgeBox);
+
+          const heading = document.createElement('h1');
+          heading.innerText = title || 'Initialization Error Detected';
+          heading.style.fontSize = '22px';
+          heading.style.fontWeight = '800';
+          heading.style.color = '#f87171';
+          heading.style.marginTop = '16px';
+          heading.style.marginBottom = '8.5px';
+          heading.style.fontFamily = 'sans-serif';
+          card.appendChild(heading);
+
+          const desc = document.createElement('p');
+          desc.innerText = 'The system encountered an error loading or rendering index resources. Since this is on Hostinger/GitHub Pages, this is typically caused by asset path lookup issues, permission settings, or server routing rules.';
+          desc.style.fontSize = '12px';
+          desc.style.color = '#9ca3af';
+          desc.style.lineHeight = '1.6';
+          desc.style.marginBottom = '20px';
+          desc.style.fontFamily = 'sans-serif';
+          card.appendChild(desc);
+
+          const errorDetails = document.createElement('div');
+          errorDetails.style.backgroundColor = '#030712';
+          errorDetails.style.border = '1px solid #374151';
+          errorDetails.style.borderRadius = '8px';
+          errorDetails.style.padding = '16px';
+          errorDetails.style.fontSize = '12px';
+          errorDetails.style.color = '#34d399';
+          errorDetails.style.overflowX = 'auto';
+          errorDetails.style.marginBottom = '20px';
+          errorDetails.style.whiteSpace = 'pre-wrap';
+          errorDetails.innerText = details || 'No additional stack details trace parsed.';
+          card.appendChild(errorDetails);
+
+          const metaBox = document.createElement('div');
+          metaBox.style.fontSize = '11px';
+          metaBox.style.color = '#9ca3af';
+          metaBox.style.borderTop = '1px solid #1f2937';
+          metaBox.style.paddingTop = '16px';
+          metaBox.style.marginBottom = '20px';
+          metaBox.style.display = 'grid';
+          metaBox.style.gridTemplateColumns = 'repeat(auto-fit, minmax(200px, 1fr))';
+          metaBox.style.gap = '12px';
+          
+          metaBox.innerHTML = '<div><strong>Hostname:</strong> ' + window.location.hostname + '</div>' +
+                              '<div><strong>Pathname:</strong> ' + window.location.pathname + '</div>' +
+                              '<div><strong>Protocol:</strong> ' + window.location.protocol + '</div>' +
+                              '<div><strong>Navigator:</strong> ' + navigator.userAgent.substring(0, 50) + '...</div>';
+          card.appendChild(metaBox);
+
+          const tipsBox = document.createElement('div');
+          tipsBox.style.backgroundColor = '#1e1b4b';
+          tipsBox.style.borderLeft = '4px solid #6366f1';
+          tipsBox.style.borderRadius = '0 8px 8px 0';
+          tipsBox.style.padding = '14px';
+          tipsBox.style.fontSize = '12px';
+          tipsBox.style.color = '#e0e7ff';
+          tipsBox.style.lineHeight = '1.6';
+          tipsBox.style.fontFamily = 'sans-serif';
+          
+          let tipsHtml = '<strong>Hostinger Troubleshooting Steps:</strong><ul style="margin-top: 6px; margin-bottom: 0; padding-left: 20px; list-style-type: decimal;">';
+          if (isAssetError) {
+            tipsHtml += '<li>Your browser failed to fetch files from <code>' + window.location.pathname + '</code>. Check if files exist inside <code>public_html/</code> on Hostinger.</li>';
+            tipsHtml += '<li><strong>Base Path Fix:</strong> Make sure Vite is configured with relative bases. We added <code>base: "./"</code> in vite.config.ts which is optimized for Hostinger sub-directories.</li>';
+          } else {
+            tipsHtml += '<li>An exception occurred while parsing the bundles. Read the exception variable trace box above.</li>';
+          }
+          tipsHtml += '<li>Ensure folders have <strong>755</strong> permissions & files have <strong>644</strong> permissions inside your Hostinger File Manager to avoid 403 blocks.</li>';
+          tipsHtml += '<li>Make sure you upload everything in the <strong>dist</strong> folder (your build bundle output) directly to <code>public_html/</code> instead of the repository root folders.</li>';
+          tipsHtml += '</ul>';
+          
+          tipsBox.innerHTML = tipsHtml;
+          card.appendChild(tipsBox);
+
+          const btnGroup = document.createElement('div');
+          btnGroup.style.display = 'flex';
+          btnGroup.style.gap = '12px';
+          btnGroup.style.marginTop = '24px';
+
+          const reloadBtn = document.createElement('button');
+          reloadBtn.innerText = 'Reload Page';
+          reloadBtn.style.backgroundColor = '#10b981';
+          reloadBtn.style.color = '#022c22';
+          reloadBtn.style.fontWeight = 'bold';
+          reloadBtn.style.fontSize = '12px';
+          reloadBtn.style.border = 'none';
+          reloadBtn.style.padding = '10px 20px';
+          reloadBtn.style.borderRadius = '8px';
+          reloadBtn.style.cursor = 'pointer';
+          reloadBtn.onclick = function() { window.location.reload(); };
+          btnGroup.appendChild(reloadBtn);
+
+          const dismissBtn = document.createElement('button');
+          dismissBtn.innerText = 'Close Display';
+          dismissBtn.style.backgroundColor = '#374151';
+          dismissBtn.style.color = '#d1d5db';
+          dismissBtn.style.fontSize = '12px';
+          dismissBtn.style.border = 'none';
+          dismissBtn.style.padding = '10px 20px';
+          dismissBtn.style.borderRadius = '8px';
+          dismissBtn.style.cursor = 'pointer';
+          dismissBtn.onclick = function() { container.remove(); };
+          btnGroup.appendChild(dismissBtn);
+
+          card.appendChild(btnGroup);
+          container.appendChild(card);
+          document.body.appendChild(container);
+        };
+
+        window.onerror = function(message, source, lineno, colno, error) {
+          const stack = error && error.stack ? error.stack : 'No stack trace available.';
+          const details = 'File: ' + source + '\nLine: ' + lineno + ':' + colno + '\nError: ' + message + '\n\n' + stack;
+          window.__showDiagnosticError('Unhandled Syntax / Runtime Exception', details, false);
+          return false;
+        };
+
+        window.onunhandledrejection = function(event) {
+          const reason = event.reason;
+          const details = 'Unhandled Promise Rejection:\n' + (reason && reason.stack ? reason.stack : String(reason));
+          window.__showDiagnosticError('Promise Rejection Failure', details, false);
+        };
+
+        window.addEventListener('error', function(event) {
+          if (event.target && (event.target.tagName === 'SCRIPT' || event.target.tagName === 'LINK')) {
+            const src = event.target.src || event.target.href;
+            const details = 'Failed to load static source: ' + src + '\nTag: <' + event.target.tagName.toLowerCase() + '>\n\nThis occurs when the relative paths are missing or Hostinger permissions block the module assets. Ensure you uploaded the contents of the /dist/ directory into your Hostinger public_html.';
+            window.__showDiagnosticError('Asset Loading Error (450/404/403)', details, true);
+          }
+        }, true);
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-950 text-slate-100 antialiased font-sans">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

@@ -1,0 +1,6 @@
+{
+  "name": "Perth BoreWater",
+  "description": "Premium trade pSEO directory for water bore repairs, soil analysis, and local council water compliance across Perth operated by Perth BoreWater.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

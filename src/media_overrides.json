@@ -1,0 +1,842 @@
+{
+  "baldivis": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "beeliar": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "spearwood": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "coogee": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "hamilton-hill": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "kardinya": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "bibra-lake": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "coolbellup": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "yangebup": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "munster": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "south-lake": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "hilton": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "o-apos-connor": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "willagee": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "melville": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "myaree": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "bicton": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "attadale": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "palmyra": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "east-fremantle": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "fremantle": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "south-fremantle": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "beaconsfield": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "white-gum-valley": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "wanneroo": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "joondalup": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "duncraig": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "kingsley": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "woodvale": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "padbury": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "craigie": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "hillarys": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "mullaloo": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "ocean-reef": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "heathridge": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "beldon": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "connolly": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "currambine": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "kinross": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "iluka": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "canning-vale": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=Canningvale.mp4",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=CanningvaleSoil.jpg",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "wellard": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "bertram": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "atwell": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "aubin-grove": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "success": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "cockburn-central": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "hammond-park": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "thornlie": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "huntingdale": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "gosnells": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "maddington": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "kenwick": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "wattle-grove": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "forrestfield": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "jandakot": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "anketell": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "wandi": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "casuarina": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "oakford": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "karawara": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "manning": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "salter-point": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "como": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "south-perth": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "kensington": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "victoria-park": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "east-victoria-park": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "carlisle": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "lathlain": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "rockingham": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=Rockingham.mp4",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=Rockingham-hero.mp4",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=Rockingham-geology.jpg",
+    "pump": "https://perthborewater.com.au/serve-image.php?file=Rockingham-pump.jpg"
+  },
+  "safety-bay": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "shoalwater": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "warnbro": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "port-kennedy": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "secret-harbour": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "golden-bay": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "singleton": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "madora-bay": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "san-remo": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "mandurah": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "halls-head": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "falcon": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "wannanup": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "cottesloe": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "peppermint-grove": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "mosman-park": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "claremont": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "nedlands": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "dalkeith": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "piara-waters": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "harrisdale": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "southern-river": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "guildford": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "south-guildford": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "bassendean": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "bayswater": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "ashfield": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "belmont": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "redcliffe": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "ascot": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "kloverdale": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "kewdale": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "welshpool": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "beckenham": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "langford": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "lynwood": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "parkwood": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "riverton": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "shelley": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "armadale": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "kelmscott": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "byford": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "kalamunda": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "lesmurdie": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "walliston": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "bickley": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "carmel": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "gooseberry-hill": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "maida-vale": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "roleystone": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "bedfordale": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "mount-richon": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "wungong": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "darling-downs": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "cardup": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "mundijong": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "serpentine": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "jarrahdale": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "gidgegannup": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "chidlow": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "mundaring": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "stoneville": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "parkerville": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "glen-forrest": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "darlington": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "boya": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "helena-valley": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "midland": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  },
+  "swan-view": {
+    "video": "https://perthborewater.com.au/serve-image.php?file=",
+    "photo": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://perthborewater.com.au/serve-image.php?file="
+  }
+}

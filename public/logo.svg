@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+  <defs>
+    <!-- Top-Right Bright Segment (Yellow-Green) -->
+    <linearGradient id="topGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#BEF264" />
+      <stop offset="100%" stop-color="#84CC16" />
+    </linearGradient>
+    
+    <!-- Main Right Leaf Segment (Fresh Foliage Green) -->
+    <linearGradient id="rightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#22C55E" />
+      <stop offset="50%" stop-color="#15803D" />
+      <stop offset="100%" stop-color="#064E3B" />
+    </linearGradient>
+
+    <!-- Left Upper Slate-Green Segment -->
+    <linearGradient id="leftUpperGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#94A3B8" />
+      <stop offset="100%" stop-color="#475569" />
+    </linearGradient>
+
+    <!-- Left Middle Slate-Green Segment -->
+    <linearGradient id="leftMidGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#64748B" />
+      <stop offset="100%" stop-color="#334155" />
+    </linearGradient>
+
+    <!-- Left Bottom Teal-Green Segment -->
+    <linearGradient id="leftLowerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#475569" />
+      <stop offset="100%" stop-color="#1E293B" />
+    </linearGradient>
+  </defs>
+
+  <!-- Droplet Leaf Components -->
+  <g id="logo-mark" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    
+    <!-- 1. Right Main Leaf (Dominant shape) -->
+    <path d="M 256,60 
+             C 256,60 380,200 395,290 
+             C 410,380 340,450 256,450 
+             C 256,450 310,360 256,230 
+             C 220,140 256,60 256,60 Z" 
+          fill="url(#rightGrad)" />
+
+    <!-- 2. Top-Right Yellow-Green Accent Shield -->
+    <path d="M 256,60 
+             C 256,60 200,105 180,160 
+             C 170,185 180,210 210,215 
+             C 240,220 256,180 256,130 
+             C 256,100 256,60 256,60 Z" 
+          fill="url(#topGrad)" />
+
+    <!-- 3. Left Upper Segment (Sage / Slate Green) -->
+    <path d="M 175,170 
+             C 145,210 135,245 135,245 
+             C 135,245 160,250 190,240 
+             C 230,225 245,190 245,190 
+             C 245,190 205,190 175,170 Z" 
+          fill="url(#leftUpperGrad)" />
+
+    <!-- 4. Left Middle Segment (Medium Slate-Green) -->
+    <path d="M 128,260 
+             C 112,295 110,335 110,335 
+             C 110,335 140,335 185,310 
+             C 215,295 235,260 235,260 
+             C 235,260 178,280 128,260 Z" 
+          fill="url(#leftMidGrad)" />
+
+    <!-- 5. Left Lower Segment (Deep Forest / Dark Slate Green) -->
+    <path d="M 115,350 
+             C 125,400 180,450 256,450 
+             C 256,450 210,390 215,340 
+             C 218,315 200,325 170,335 
+             C 140,345 115,350 115,350 Z" 
+          fill="url(#leftLowerGrad)" />
+
+  </g>
+</svg>

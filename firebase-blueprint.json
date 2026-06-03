@@ -1,0 +1,23 @@
+{
+  "entities": {
+    "MediaOverride": {
+      "title": "Media Override",
+      "description": "Custom image, video, and pump URLs for a suburb",
+      "type": "object",
+      "properties": {
+        "video": { "type": "string", "description": "URL for suburb hero video" },
+        "photo": { "type": "string", "description": "URL for suburb hero photo" },
+        "geology": { "type": "string", "description": "URL for suburb geology photo" },
+        "pump": { "type": "string", "description": "URL for suburb pump photo" },
+        "background": { "type": "string", "description": "URL for suburb background photo" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp of last update" }
+      }
+    }
+  },
+  "firestore": {
+    "/media_overrides/{suburbSlug}": {
+      "schema": "MediaOverride",
+      "description": "Suburbs media asset overrides map"
+    }
+  }
+}
