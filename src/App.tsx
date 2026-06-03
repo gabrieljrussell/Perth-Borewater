@@ -32,6 +32,7 @@ import {
 import { SUBURBS_DATA, GENERAL_REVIEWS } from './data';
 import { ALL_SUBURBS_LIST, generateSuburbData } from './allSuburbs';
 import HomeCommandCenter from './components/HomeCommandCenter';
+import MediaAdmin from './components/MediaAdmin';
 import AuthorityBentoCards from './components/AuthorityBentoCards';
 import mediaOverridesPreset from './media_overrides.json';
 import { getSuburbNarrative } from './masterSuburbNarratives';
@@ -1039,15 +1040,31 @@ export default function App() {
       
       {/* 0. Top Admin Session Sticky Banner */}
       {isAdmin && (
-        <div className="bg-emerald-900 border-b border-emerald-800 text-white font-mono text-[10px] sm:text-xs py-2 px-4 text-center fixed top-0 left-0 right-0 z-55 flex items-center justify-center gap-2 shadow-md">
-          <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping shrink-0" />
-          <span>Admin Session: Authenticated as <strong className="text-emerald-300 font-bold uppercase">Gabrieljrussell@gmail.com</strong></span>
+        <div className="bg-[#0B1221] border-b border-[#007AFF]/35 text-white font-mono text-[10px] sm:text-xs py-2.5 px-4 text-center fixed top-0 left-0 right-0 z-55 flex items-center justify-center gap-4 shadow-md">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="w-2 h-2 bg-emerald-400 rounded-full animate-ping" />
+            <span>Admin Active: <strong className="text-[#38BDF8] font-bold uppercase font-sans">Gabrieljrussell@gmail.com</strong></span>
+          </div>
+
+          <button 
+            type="button"
+            onClick={() => setIsEditorMode(!isEditorMode)}
+            className={`font-sans font-bold text-[10px] uppercase tracking-wider py-1.5 px-3 rounded-lg transition-all border duration-200 cursor-pointer ${
+              isEditorMode 
+                ? 'bg-amber-600 text-white border-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.25)] hover:bg-amber-500 animate-pulse' 
+                : 'bg-[#007AFF] text-white border-blue-500 hover:bg-[#0060DF] shadow-[0_0_12px_rgba(0,122,255,0.2)]'
+            }`}
+          >
+            {isEditorMode ? '✦ Close Media Panel' : '🔧 Open Media Admin'}
+          </button>
+
           <button 
             onClick={() => {
               localStorage.removeItem('perth_borewater_admin_email');
               setAdminEmail('');
+              setIsEditorMode(false);
             }}
-            className="underline underline-offset-2 ml-2 hover:text-emerald-250 font-bold cursor-pointer uppercase tracking-wider text-[10px]"
+            className="underline underline-offset-2 hover:text-slate-200 transition-colors cursor-pointer font-bold uppercase tracking-wider text-[10px]"
           >
             Sign Out
           </button>
@@ -1217,8 +1234,19 @@ export default function App() {
         className="hidden"
       />
 
-         {/* 1. High-Gloss Floating Navigation Bar (Backdrop filter blur(16px)) */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-[16px] border-b border-slate-200/50 px-4 sm:px-8 py-4.5 transition-all w-full shadow-[0_10px_35px_-5px_rgba(0,0,0,0.05),0_0_15px_rgba(16,185,129,0.02)]">
+      {isAdmin && isEditorMode ? (
+        <MediaAdmin 
+          mediaOverrides={mediaOverrides}
+          onSaveOverrides={(updated) => {
+            setMediaOverrides(updated);
+            persistToServer(updated);
+          }}
+          onClose={() => setIsEditorMode(false)}
+        />
+      ) : (
+        <>
+          {/* 1. High-Gloss Floating Navigation Bar (Backdrop filter blur(16px)) */}
+          <header className="fixed top-0 left-0 right-0 z-50 bg-white/70 backdrop-blur-[16px] border-b border-slate-200/50 px-4 sm:px-8 py-4.5 transition-all w-full shadow-[0_10px_35px_-5px_rgba(0,0,0,0.05),0_0_15px_rgba(16,185,129,0.02)]">
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           
           {/* Brand Logo - Clean bold uppercase typography and custom SVG icon */}
@@ -1338,14 +1366,17 @@ export default function App() {
             {isAdmin ? (
               <div 
                 onClick={() => {
-                  setAdminLoginInput(adminEmail);
-                  setAdminLoginError('');
-                  setShowAdminLogin(true);
+                  setIsEditorMode(!isEditorMode);
                 }}
-                className="hidden lg:flex items-center gap-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-700 rounded-full py-1.5 px-3.5 text-[11px] font-mono font-bold cursor-pointer hover:bg-emerald-500/20 transition-all shadow-sm"
+                className={`hidden lg:flex items-center gap-1.5 border rounded-full py-1.5 px-3.5 text-[11px] font-mono font-bold cursor-pointer transition-all shadow-sm ${
+                  isEditorMode 
+                    ? 'bg-amber-500/10 border-amber-500/30 text-amber-500 hover:bg-amber-500/20' 
+                    : 'bg-emerald-500/10 border-emerald-500/20 text-emerald-700 hover:bg-emerald-500/20'
+                }`}
+                title={isEditorMode ? "Close Media Admin Panel" : "Open Media Admin Panel"}
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Admin Active</span>
+                <ShieldCheck className={`w-3.5 h-3.5 ${isEditorMode ? 'text-amber-500 animate-pulse' : 'text-emerald-600'}`} />
+                <span>{isEditorMode ? 'Close Media Panel' : 'Admin Active'}</span>
               </div>
             ) : (
               <button
@@ -2471,14 +2502,18 @@ export default function App() {
               </button>
               <button 
                 onClick={() => {
-                  setAdminLoginInput(adminEmail);
-                  setAdminLoginError('');
-                  setShowAdminLogin(true);
+                  if (isAdmin) {
+                    setIsEditorMode(!isEditorMode);
+                  } else {
+                    setAdminLoginInput(adminEmail);
+                    setAdminLoginError('');
+                    setShowAdminLogin(true);
+                  }
                 }} 
                 className={`transition-colors cursor-pointer flex items-center gap-1 ${isAdmin ? 'text-emerald-400 hover:text-emerald-300 font-bold' : 'text-slate-400 hover:text-white'}`}
               >
                 <Shield className="w-3 h-3 text-emerald-500 shrink-0" />
-                <span>{isAdmin ? 'Admin Session: Active' : 'Admin Portal'}</span>
+                <span>{isAdmin ? (isEditorMode ? 'Close Media Panel' : 'Open Media Admin') : 'Admin Portal'}</span>
               </button>
             </div>
 
@@ -2660,6 +2695,8 @@ export default function App() {
 
           </div>
         </div>
+      )}
+        </>
       )}
 
     </div>
