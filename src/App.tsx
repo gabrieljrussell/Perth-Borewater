@@ -1363,7 +1363,7 @@ export default function App() {
           <div className="flex items-center gap-4">
             
             {/* Desktop right: Admin Session Portal */}
-            {isAdmin ? (
+            {isAdmin && (
               <div 
                 onClick={() => {
                   setIsEditorMode(!isEditorMode);
@@ -1378,19 +1378,6 @@ export default function App() {
                 <ShieldCheck className={`w-3.5 h-3.5 ${isEditorMode ? 'text-amber-500 animate-pulse' : 'text-emerald-600'}`} />
                 <span>{isEditorMode ? 'Close Media Panel' : 'Admin Active'}</span>
               </div>
-            ) : (
-              <button
-                onClick={() => {
-                  setAdminLoginInput(adminEmail);
-                  setAdminLoginError('');
-                  setShowAdminLogin(true);
-                }}
-                className="hidden lg:flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-full py-1.5 px-3.5 text-[11px] font-mono font-bold transition-all cursor-pointer"
-                title="Authorize Admin Session"
-              >
-                <Shield className="w-3.5 h-3.5 text-slate-500" />
-                <span>Admin Login</span>
-              </button>
             )}
 
             {/* Desktop right: Semi-transparent silver phone pill + Emerald Green button */}
@@ -1520,22 +1507,20 @@ export default function App() {
                 Resources
               </button>
 
-              <div className="px-1 pt-1 border-t border-slate-100/50 mt-2">
-                <button 
-                  onClick={() => {
-                    setAdminLoginInput(adminEmail);
-                    setAdminLoginError('');
-                    setIsMobileMenuOpen(false);
-                    setShowAdminLogin(true);
-                  }}
-                  className={`w-full py-2.5 px-4 rounded-xl text-left font-semibold text-xs transition-all flex items-center gap-2 ${
-                    isAdmin ? 'bg-emerald-50 text-emerald-700' : 'text-slate-500 hover:bg-slate-50 hover:text-slate-800'
-                  }`}
-                >
-                  <Shield className="w-4 h-4 text-slate-400 shrink-0" />
-                  <span>{isAdmin ? 'Admin Mode (Active)' : 'Admin Sign In'}</span>
-                </button>
-              </div>
+              {isAdmin && (
+                <div className="px-1 pt-1 border-t border-slate-100/50 mt-2">
+                  <button 
+                    onClick={() => {
+                      setIsEditorMode(!isEditorMode);
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full py-2.5 px-4 rounded-xl text-left font-semibold text-xs transition-all flex items-center gap-2 bg-emerald-50 text-emerald-700"
+                  >
+                    <Shield className="w-4 h-4 text-emerald-500 shrink-0" />
+                    <span>{isEditorMode ? 'Close Media Panel' : 'Admin Mode (Active)'}</span>
+                  </button>
+                </div>
+              )}
 
               <div className="pt-2 px-1">
                 <button 
@@ -2500,21 +2485,17 @@ export default function App() {
               >
                 Contact Support
               </button>
-              <button 
-                onClick={() => {
-                  if (isAdmin) {
+              {isAdmin && (
+                <button 
+                  onClick={() => {
                     setIsEditorMode(!isEditorMode);
-                  } else {
-                    setAdminLoginInput(adminEmail);
-                    setAdminLoginError('');
-                    setShowAdminLogin(true);
-                  }
-                }} 
-                className={`transition-colors cursor-pointer flex items-center gap-1 ${isAdmin ? 'text-emerald-400 hover:text-emerald-300 font-bold' : 'text-slate-400 hover:text-white'}`}
-              >
-                <Shield className="w-3 h-3 text-emerald-500 shrink-0" />
-                <span>{isAdmin ? (isEditorMode ? 'Close Media Panel' : 'Open Media Admin') : 'Admin Portal'}</span>
-              </button>
+                  }} 
+                  className="transition-colors cursor-pointer flex items-center gap-1 text-emerald-400 hover:text-emerald-300 font-bold"
+                >
+                  <Shield className="w-3 h-3 text-emerald-500 shrink-0" />
+                  <span>{isEditorMode ? 'Close Media Panel' : 'Open Media Admin'}</span>
+                </button>
+              )}
             </div>
 
           </div>

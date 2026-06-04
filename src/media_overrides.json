@@ -420,7 +420,7 @@
     "pump": "https://perthborewater.com.au/serve-image.php?file="
   },
   "rockingham": {
-    "video": "https://perthborewater.com.au/serve-image.php?file=Rockingham.mp4",
+    "video": "https://assets.perthborewater.com.au/Rockingham.mp4",
     "photo": "https://perthborewater.com.au/serve-image.php?file=rockinghamfallback.png",
     "geology": "https://perthborewater.com.au/serve-image.php?file=RockinghamSoil.jpg",
     "pump": "https://perthborewater.com.au/serve-image.php?file=RockinghamDrilling.mp4",
