@@ -421,7 +421,7 @@
   },
   "rockingham": {
     "video": "https://assets.perthborewater.com.au/Rockingham.mp4",
-    "photo": "https://perthborewater.com.au/serve-image.php?file=rockinghamfallback.png",
+    "photo": "",
     "geology": "https://perthborewater.com.au/serve-image.php?file=RockinghamSoil.jpg",
     "pump": "https://perthborewater.com.au/serve-image.php?file=RockinghamDrilling.mp4",
     "background": "https://perthborewater.com.au/serve-image.php?file=Rockingham.png"
