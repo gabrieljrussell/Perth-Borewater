@@ -32,6 +32,7 @@ import {
 import { SUBURBS_DATA, GENERAL_REVIEWS } from './data';
 import { ALL_SUBURBS_LIST, generateSuburbData } from './allSuburbs';
 import HomeCommandCenter from './components/HomeCommandCenter';
+import HomeBentoPage from './components/HomeBentoPage';
 import MediaAdmin from './components/MediaAdmin';
 import AuthorityBentoCards from './components/AuthorityBentoCards';
 import mediaOverridesPreset from './media_overrides.json';
@@ -1329,10 +1330,10 @@ export default function App() {
           
           {/* Brand Logo - Clean bold uppercase typography and custom SVG icon */}
           <div 
-            onClick={() => handleSuburbChange('rockingham')}
+            onClick={() => handleSuburbChange('')}
             className="flex items-center gap-2.5 cursor-pointer group"
           >
-            <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-white shadow-sm overflow-hidden p-0.5 transition-transform group-hover:scale-105 duration-300">
+            <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-white shadow-sm overflow-hidden p-0.5 transition-transform group-hover:scale-105 duration-350">
               <img src="https://assets.perthborewater.com.au/BoreWaterLogo.png" alt="Perth BoreWater Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
             </div>
             <span className="text-lg font-display font-black tracking-tight text-[#0F2C59] transition-colors">
@@ -1343,7 +1344,7 @@ export default function App() {
           {/* Centered Simplified Navigation Links */}
           <nav className="hidden lg:flex items-center gap-8 font-sans">
             <button 
-              onClick={() => handleSuburbChange('rockingham')}
+              onClick={() => handleSuburbChange('')}
               className="text-[#0F2C59] hover:text-[#007AFF] text-sm font-semibold tracking-wide cursor-pointer focus:outline-none"
             >
               Home
@@ -1512,7 +1513,7 @@ export default function App() {
               <button 
                 onClick={() => {
                   setIsMobileMenuOpen(false);
-                  handleSuburbChange('rockingham');
+                  handleSuburbChange('');
                 }}
                 className="w-full text-left py-2 px-4 font-semibold text-slate-700 hover:text-[#007AFF] hover:bg-slate-50 rounded-xl text-sm"
               >
@@ -1621,8 +1622,58 @@ export default function App() {
         )}
       </header>
 
-      {/* 2. Hero Background blur container with embedded central frosted card */}
-      <section className="relative w-full py-8 sm:py-12 md:py-16 px-4 flex items-center justify-center overflow-hidden">
+      {selectedSuburbSlug ? (
+        <>
+          {/* Quick Emergency Support Indicator banner & Breadcrumb */}
+          <div className="max-w-7xl mx-auto px-4 pt-6 space-y-4">
+            
+            {/* Breadcrumb Navigation block */}
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => handleSuburbChange('')} 
+                className="flex items-center gap-2 text-xs font-mono font-bold text-[#007AFF] hover:text-[#007AFF]/95 bg-[#007AFF]/10 hover:bg-[#007AFF]/15 border border-[#007AFF]/20 px-4 py-2 rounded-xl transition-all cursor-pointer font-sans"
+              >
+                <span>←</span> Back to Perth Directory
+              </button>
+              <span className="text-slate-350 font-mono text-xs">/</span>
+              <span className="text-slate-500 font-mono text-[11px] font-bold uppercase tracking-wider">{selectedSuburb.name} Subsurface Blueprint</span>
+            </div>
+
+            {/* Emergency & Repair Dispatch Hotline Banner */}
+            <div className="bg-red-500/[0.04] border border-red-500/20 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row justify-between items-center gap-4 text-left shadow-xs relative overflow-hidden backdrop-blur-xs">
+              <div className="absolute right-[-10px] bottom-[-20px] text-red-500/5 font-extrabold text-[7rem] pointer-events-none select-none font-sans font-black">
+                +
+              </div>
+              <div className="flex items-center gap-3 relative z-10">
+                <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-650 shrink-0">
+                  <Wrench className="w-6 h-6 text-red-605 animate-spin" style={{ animationDuration: '6s' }} />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[10px] font-mono font-black text-red-650 uppercase tracking-widest leading-none">
+                      Emergency &amp; Repair Dispatch
+                    </span>
+                  </div>
+                  <h4 className="font-display font-black text-slate-900 text-sm mt-1 sm:text-base">Need Urgent Pump, Motor, or Electrical Support?</h4>
+                  <p className="text-xs text-slate-500 leading-normal max-w-2xl font-sans">
+                    We stand as local mechanics of Perth&apos;s groundwater networks. Quick diagnostic kits, capacitor swaps, and re-wires available today around {selectedSuburb.name}.
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 shrink-0 w-full md:w-auto relative z-10 font-sans">
+                <a 
+                  href="tel:0863704982" 
+                  className="w-full md:w-auto text-center bg-red-600 hover:bg-red-700 text-white font-mono font-bold text-xs uppercase px-5 py-3.5 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-red-500/20 hover:scale-[1.01] active:scale-[0.99]"
+                >
+                  <Phone className="w-4 h-4 shrink-0 animate-pulse" />
+                  <span>Emergency Repair: (08) 6370 4982</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* 2. Hero Background blur container with embedded central frosted card */}
+          <section className="relative w-full py-8 sm:py-12 md:py-16 px-4 flex items-center justify-center overflow-hidden">
         
         {/* Seaside Drone Blurred Background (matches layout perfectly) */}
         <div 
@@ -1727,7 +1778,7 @@ export default function App() {
         {/* Floating frosted glass central card */}
         <div 
           onClick={(e) => e.stopPropagation()}
-          className="bg-white/80 backdrop-blur-2xl border border-white/40 rounded-3xl p-6 sm:p-10 max-w-4xl w-full mx-auto relative z-10 shadow-2xl flex flex-col justify-between"
+          className="bg-white/80 backdrop-blur-2xl border border-white/40 rounded-3xl p-6 sm:p-10 max-w-7xl w-full mx-auto relative z-10 shadow-2xl flex flex-col justify-between"
         >
           
           {/* Top image/video: Active Upload Component */}
@@ -1905,14 +1956,21 @@ export default function App() {
               We specialize in providing water bore drilling &amp; upkeep near <strong className="text-slate-900 font-bold">{landmark1}</strong> and the neighboring <strong className="text-slate-900 font-bold">{landmark2}</strong> fields. Access the Superficial Aquifer at <span className="text-[#007AFF] font-bold">{getDepthRange(selectedSuburb.name).text}</span> depth. Sustainable irrigation engineered for <strong className="text-slate-900 font-bold">{getSoilData(selectedSuburb.name).name}</strong> {getSoilData(selectedSuburb.name).type}.
             </p>
 
-            {/* High-Gloss Emerald Action Call-to-action button */}
-            <div className="pt-2 flex justify-center">
+            {/* High-Gloss Action Call-to-actions (A drilling primary CTA & an emergency repair secondary CTA) */}
+            <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center w-full max-w-2xl mx-auto font-sans">
               <button
                 onClick={() => handleOpenModal('Secure My Drill Date')}
-                className="bg-emerald-600 hover:bg-emerald-500 hover:shadow-[0_0_25px_rgba(16,185,129,0.55),inset_0_1.5px_0_rgba(255,255,255,0.3)] text-white px-8 py-4 rounded-full font-black uppercase text-xs tracking-wider border border-emerald-500/20 shadow-[0_0_15px_rgba(16,185,129,0.3),inset_0_1.5px_0_rgba(255,255,255,0.25)] hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer inline-flex items-center gap-2 duration-300"
+                className="flex-grow bg-emerald-600 hover:bg-emerald-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] text-white px-6 py-3.5 rounded-full font-black uppercase text-[11px] tracking-wider border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.2)] hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer text-center duration-300"
               >
-                <span>Secure My Drill Date</span>
-                <span>→</span>
+                Secure My Drill Date →
+              </button>
+              
+              <button
+                onClick={() => handleOpenModal('My Bore is Broken – Request Emergency Repair')}
+                className="flex-grow bg-red-600 hover:bg-red-700 text-white px-6 py-3.5 rounded-full font-black uppercase text-[11px] tracking-wider shadow-lg hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex items-center justify-center gap-2 border border-red-500/15 duration-300"
+              >
+                <Wrench className="w-3.5 h-3.5 text-white shrink-0 animate-bounce" />
+                <span>My Bore is Broken – Request Emergency Repair</span>
               </button>
             </div>
 
@@ -1922,7 +1980,7 @@ export default function App() {
       </section>
 
       {/* 3. Bento Grid - Formulated to display exactly what is featured in the screenshot */}
-      <main className="flex-grow max-w-[1400px] mx-auto px-4 sm:px-8 py-8 w-full z-10" id="bento-grid-container">
+      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-8 py-8 w-full z-10" id="bento-grid-container">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch justify-center">
           
           {/* LEFT PARTION COLUMN (Contains Soil info, Geological evidence, and Staining risk cards) */}
@@ -1973,39 +2031,7 @@ export default function App() {
                   </span>
                 </div>
 
-                <div>
-                  <span className="text-[10px] font-mono tracking-widest text-[#007AFF] font-bold uppercase block mb-1.5 flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping shrink-0" />
-                    BORE DRILLING SIMULATION
-                  </span>
-                  <div className="w-full aspect-video rounded-2xl overflow-hidden border border-slate-200/80 bg-slate-105 relative shadow-sm">
-                    <video
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      className="w-full h-full object-cover"
-                      src={
-                        mediaOverrides[selectedSuburb.slug]?.drilling || 
-                        (mediaOverrides[selectedSuburb.slug]?.pump && mediaOverrides[selectedSuburb.slug]?.pump.endsWith('.mp4') ? mediaOverrides[selectedSuburb.slug]?.pump : undefined) || 
-                        "https://assets.mixkit.co/videos/preview/mixkit-mechanical-drilling-machine-working-on-a-site-41584-large.mp4"
-                      }
-                      key={`${selectedSuburb.slug}-drilling`}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
-                    
-                    {/* Live overlay markers */}
-                    <div className="absolute top-2.5 left-2.5 pointer-events-none flex items-center gap-1 bg-black/60 backdrop-blur-xs px-1.5 py-0.5 rounded text-[8px] font-mono text-white/95 uppercase tracking-widest leading-none border border-white/5">
-                      <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
-                      <span>{selectedSuburb.name} Feed</span>
-                    </div>
 
-                    <div className="absolute bottom-2.5 right-2.5 pointer-events-none flex items-center gap-1 bg-[#0F172A]/85 backdrop-blur-xs px-2 py-0.5 rounded text-[7.5px] font-mono text-[#38BDF8] border border-blue-500/10 uppercase tracking-tight">
-                      <span>RATED AQUIFER DEPTH: </span>
-                      <strong className="text-white font-bold">{getDepthRange(selectedSuburb.name).text}</strong>
-                    </div>
-                  </div>
-                </div>
 
                 <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 font-mono text-[10px] text-slate-500 space-y-1">
                   <span className="text-slate-400 block font-bold">HOLE CALIBER REPORT</span>
@@ -2185,6 +2211,49 @@ export default function App() {
                 </div>
               </div>
 
+            </div>
+
+            {/* Card 8: Aquifer Health Check & Maintenance Checklist (quantifying maintenance & common failures checklist - Suggestion C) */}
+            <div className="bg-white border border-slate-200/60 rounded-3xl p-7 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between text-left" id="maintenance-checklist-card">
+              <div className="space-y-4">
+                <div className="flex justify-between items-start">
+                  <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
+                    <ShieldCheck className="w-6 h-6 text-amber-600" />
+                  </div>
+                  <span className="font-mono text-[9px] font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full uppercase tracking-wider border border-amber-100">
+                    HEALTH CHECKLIST
+                  </span>
+                </div>
+                
+                <div className="space-y-3">
+                  <h3 className="font-display font-black text-slate-900 text-base">Bore Common Failures &amp; Upkeep</h3>
+                  <p className="text-xs text-slate-500 leading-relaxed font-sans">
+                    Most bore systems don&apos;t need replacing — they need simple maintenance mechanics. Before investing in a costly new install, run our modular health checks.
+                  </p>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-semibold text-slate-600 font-sans pt-1">
+                    <div className="flex items-center gap-2">
+                       <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                       <span>Testing Start Capacitors &amp; Relays</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                       <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                       <span>Solenoid Valve Resistance Checks</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                       <span className="w-2 h-2 rounded-full bg-[#007AFF] shrink-0" />
+                       <span>Iron Stain Prevention Treatments</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                       <span className="w-2 h-2 rounded-full bg-[#007AFF] shrink-0" />
+                       <span>Motor Insulation Megger Tests</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="pt-4 mt-4 border-t border-slate-100 text-[10.5px] text-slate-500 italic font-sans">
+                💡 Maintaining the health of your existing pump &amp; capacitors saves homeowners thousands on average.
+              </div>
             </div>
 
           </div>
@@ -2393,6 +2462,17 @@ export default function App() {
                   <p className="text-xs text-slate-500 mt-3.5 leading-relaxed border-b border-slate-100 pb-2.5">
                     High-priority dispatch focusing on mechanical, electrical, and flow faults downhole.
                   </p>
+
+                  {/* Quantified Response Times addressing Suggestion B */}
+                  <div className="mt-3.5 flex flex-wrap gap-2">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-red-50 border border-red-200 text-red-700 rounded-lg text-[9px] font-mono font-bold uppercase tracking-wider animate-pulse">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-650 shrink-0"></span>
+                      24-48 Hour Emergency Dispatch
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-200 text-amber-700 rounded-lg text-[9px] font-mono font-bold uppercase tracking-wider">
+                      ⚡ Same-Day Fault Finding Available
+                    </span>
+                  </div>
                   
                   <ul className="mt-3.5 space-y-2 text-[11px] text-slate-600 font-medium font-sans">
                     <li className="flex items-center gap-1.5">
@@ -2603,6 +2683,15 @@ export default function App() {
         </section>
 
       </main>
+        </>
+      ) : (
+        <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-8 py-8 w-full z-10 relative">
+          <HomeBentoPage 
+            onSelectSuburb={handleSuburbChange} 
+            onOpenModal={handleOpenModal} 
+          />
+        </main>
+      )}
 
       {/* 4. Deep Dark Charcoal Navy Footer */}
       <footer className="bg-[#0F172A] text-white py-14 px-4 sm:px-8 border-t border-slate-800 w-full mt-auto">

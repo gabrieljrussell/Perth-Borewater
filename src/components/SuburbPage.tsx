@@ -74,10 +74,42 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
   };
 
   return (
-    <div className="space-y-12 animate-fade-in-up text-[#1E293B]" id={`suburb-page-${suburb.slug}`}>
+    <div className="space-y-6 animate-fade-in-up text-[#1E293B]" id={`suburb-page-${suburb.slug}`}>
       
+      {/* 1. Quick Emergency Support Indicator banner */}
+      <div className="bg-red-500/[0.04] border border-red-500/20 rounded-2xl p-4 sm:p-5 flex flex-col md:flex-row justify-between items-center gap-4 text-left shadow-xs mt-2 relative overflow-hidden">
+        <div className="absolute right-[-10px] bottom-[-20px] text-red-500/5 font-extrabold text-[7rem] pointer-events-none select-none font-sans">
+          +
+        </div>
+        <div className="flex items-center gap-3 relative z-10">
+          <div className="w-12 h-12 rounded-xl bg-red-500/10 border border-red-500/20 flex items-center justify-center text-red-650 shrink-0">
+            <Wrench className="w-6 h-6 animate-spin" style={{ animationDuration: '4s' }} />
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] font-mono font-black text-red-650 uppercase tracking-widest leading-none">
+                Emergency &amp; Repair Dispatch
+              </span>
+            </div>
+            <h4 className="font-display font-black text-slate-900 text-sm mt-1 sm:text-base">Need Urgent Pump, Motor, or Electrical Support?</h4>
+            <p className="text-xs text-slate-500 leading-normal max-w-2xl">
+              We stand as local mechanics of Perth&apos;s groundwater networks. Quick diagnostic kits, capacitor swaps, and re-wires available today.
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3 shrink-0 w-full md:w-auto relative z-10 font-sans">
+          <a 
+            href="tel:0863704982" 
+            className="w-full md:w-auto text-center bg-red-600 hover:bg-red-700 text-white font-mono font-bold text-xs uppercase px-5 py-3.5 rounded-xl transition-all cursor-pointer flex items-center justify-center gap-2 shadow-md shadow-red-500/20 hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <Phone className="w-4 h-4 shrink-0" />
+            <span>Emergency Repair: (08) 6370 4982</span>
+          </a>
+        </div>
+      </div>
+
       {/* Breadcrumbs Navigation */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 pt-2">
         <button 
           onClick={onGoBack} 
           className="flex items-center gap-2 text-xs font-mono font-bold text-[#007AFF] hover:text-[#007AFF]/95 bg-[#007AFF]/10 hover:bg-[#007AFF]/15 border border-[#007AFF]/20 px-4 py-2 rounded-xl transition-all cursor-pointer font-sans"
@@ -103,7 +135,7 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
         />
         
         {/* Central Floating Bento-Style Card (frosted glass) */}
-        <div className="glass-panel border border-white/25 rounded-[2rem] p-6 sm:p-10 md:p-12 max-w-4xl w-full mx-auto relative z-10 text-center cloud-shadow flex flex-col justify-between">
+        <div className="glass-panel border border-white/25 rounded-[2rem] p-6 sm:p-10 md:p-12 max-w-7xl w-full mx-auto relative z-10 text-center cloud-shadow flex flex-col justify-between">
           
           {/* Top Video / Media aspect-video container */}
           <div className="w-full aspect-[21/9] sm:aspect-[16/7] rounded-2xl overflow-hidden relative mb-8 border border-white/30 bg-slate-900/50 shadow-inner">
@@ -130,7 +162,7 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
             <div className="absolute inset-0 p-4 flex flex-col justify-between pointer-events-none text-white font-mono select-none z-10">
               <div className="flex justify-between items-start">
                 <div className="bg-emerald-500/25 border border-emerald-500/40 text-emerald-300 backdrop-blur-md rounded-full px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-wider flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-ping shrink-0" />
+                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse shrink-0" />
                   <span>Stream Active</span>
                 </div>
                 <div className="bg-slate-900/55 border border-white/10 backdrop-blur-md rounded-lg px-2 py-0.5 text-[8px] tracking-wide pointer-events-auto">
@@ -160,24 +192,37 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
             </div>
 
             <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-display font-black text-slate-900 tracking-tight leading-tight">
-              Perth's Precision Bore Drilling for {suburb.name}.
+              Perth&apos;s Precision Bore Drilling for {suburb.name}.
             </h1>
 
             <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
               Access the Superficial Aquifer at <span className="text-[#007AFF] font-bold italic">{suburb.typicalDepth}</span> depth. Sustainable subsurface irrigation systems engineered precisely around the local <strong className="text-slate-900 font-semibold">{suburb.soilComposition.split(' (')[0] || suburb.soilComposition}</strong> layers.
             </p>
 
-            <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="pt-4 flex flex-col md:flex-row gap-4 justify-center items-stretch sm:items-center w-full max-w-4xl mx-auto font-sans">
               <button
                 onClick={scrollQuoteFormIntoView}
-                className="w-full sm:w-auto bg-[#FFD700] hover:bg-[#FFD700]/95 text-slate-900 px-8 py-4 rounded-3xl font-bold uppercase text-xs tracking-wider shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer font-sans shimmer-btn"
+                className="flex-1 bg-[#FFD700] hover:bg-[#FFD700]/95 text-slate-900 px-8 py-4 rounded-3xl font-black uppercase text-xs tracking-wider shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shimmer-btn block text-center"
               >
                 Secure My Drill Date →
               </button>
               
-              <div className="flex items-center gap-2 text-xs font-mono font-bold text-slate-500 bg-white/50 px-4 py-2 border border-slate-200/65 rounded-2xl">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>On-Call Dispatch Team Active Today</span>
+              <button
+                onClick={() => {
+                  const el = document.getElementById('emergency-repair-booking-form');
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+                className="flex-1 bg-[#E11D48] hover:bg-[#BE123C] text-white px-8 py-4 rounded-3xl font-black uppercase text-xs tracking-wider shadow-lg hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer flex items-center justify-center gap-2 border border-red-500/20"
+              >
+                <Wrench className="w-3.5 h-3.5 text-white shrink-0 animate-bounce" />
+                <span>My Bore is Broken – Request Emergency Repair</span>
+              </button>
+
+              <div className="flex-none flex items-center justify-center gap-2 text-xs font-mono font-bold text-slate-500 bg-white/50 px-4 py-4 border border-slate-200/65 rounded-3xl md:w-auto">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse shrink-0" />
+                <span>Dispatch Roster Active Today</span>
               </div>
             </div>
           </div>
@@ -304,6 +349,68 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
                 Monday &amp; Friday Roster
               </p>
               <p className="text-[10px] text-slate-500 mt-1">Based on Water Corporation 2-day-per-week scheme for postcode {postcode}.</p>
+            </div>
+          </div>
+
+          {/* Card 7: Bore Diagnostics & Service Speed (2x1 Column block - addressing Suggestion B) */}
+          <div className="md:col-span-2 bento-card p-6 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left" id="service-speed-diagnostics-card">
+            <div className="space-y-4">
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600">
+                  <Wrench className="w-5 h-5 text-orange-600" />
+                </div>
+                <span className="font-mono text-[9px] font-bold text-orange-650 px-2.5 py-1 bg-orange-50 rounded-full uppercase tracking-wider border border-orange-100 animate-pulse">
+                  24-48 HOUR EMERGENCY DISPATCH
+                </span>
+              </div>
+              <div className="space-y-1.5">
+                <h3 className="font-display font-black text-slate-900 text-base">Service Speed &amp; Diagnostics</h3>
+                <p className="text-xs text-slate-500 leading-normal">
+                  Maintenance and repair customers prioritize speed. We guarantee <strong className="text-slate-800">Same-Day Fault Finding Available</strong> across our South Corridor centers. Our trucks run active flow diagnostics &amp; electrical testing gears.
+                </p>
+              </div>
+            </div>
+            <div className="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] font-mono text-slate-400 font-bold uppercase tracking-wider">
+              <span>✦ ACTIVE RESPONSE TEAM</span>
+              <span className="text-orange-600">STANDBY DRIVERS</span>
+            </div>
+          </div>
+
+          {/* Card 8: Aquifer Health Check & Maintenance Checklist (2x1 Column block - addressing Suggestion C) */}
+          <div className="md:col-span-2 bento-card p-6 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left" id="maintenance-checklist-card">
+            <div className="space-y-4">
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-xl bg-[#007AFF]/10 border border-[#007AFF]/20 flex items-center justify-center text-[#007AFF]">
+                  <ShieldCheck className="w-5 h-5 text-[#007AFF]" />
+                </div>
+                <span className="font-mono text-[9px] font-bold text-[#007AFF] px-2.5 py-1 bg-[#007AFF]/10 rounded-full uppercase tracking-wider">
+                  HEALTH CHECKLIST
+                </span>
+              </div>
+              <div className="space-y-3">
+                <h3 className="font-display font-black text-slate-900 text-base">Bore Common Failures &amp; Upkeep</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-[11px] font-medium text-slate-600">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                    <span>Testing Start Capacitors</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shrink-0" />
+                    <span>Solenoid Valve Resistance Checks</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#007AFF] shrink-0" />
+                    <span>Iron Stain Prevention</span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#007AFF] shrink-0" />
+                    <span>Motor Insulation Megger Tests</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="pt-3.5 border-t border-slate-100 text-[10px] text-slate-500 italic">
+              Maintain the overall health of your current system to avoid costly brand-new installation bills.
             </div>
           </div>
 
