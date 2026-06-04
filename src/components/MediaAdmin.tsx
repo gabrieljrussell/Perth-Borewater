@@ -25,7 +25,7 @@ import {
 import { SUBURBS_DATA } from '../data';
 
 interface MediaAdminProps {
-  mediaOverrides: Record<string, { video?: string; photo?: string; geology?: string; pump?: string; background?: string }>;
+  mediaOverrides: Record<string, { video?: string; photo?: string; geology?: string; pump?: string; background?: string; drilling?: string }>;
   onSaveOverrides: (updated: Record<string, any>) => void;
   onClose: () => void;
 }
@@ -66,6 +66,13 @@ const ASSET_FIELDS = [
     description: 'Full-width blur effect panorama matching the background theme colors.',
     icon: BookOpen,
     accept: 'image/*'
+  },
+  { 
+    key: 'drilling' as const, 
+    label: 'Drilling Video URL', 
+    description: 'Direct MP4 link of the borehole drilling operation for this suburb displayed in Card 1.',
+    icon: Video,
+    accept: 'video/mp4,video/*'
   }
 ];
 
@@ -99,12 +106,12 @@ export default function MediaAdmin({ mediaOverrides, onSaveOverrides, onClose }:
 
   // Active inputs state for selected suburb keys
   const activeData = useMemo(() => {
-    const defaultData = { video: '', photo: '', geology: '', pump: '', background: '' };
+    const defaultData = { video: '', photo: '', geology: '', pump: '', background: '', drilling: '' };
     return { ...defaultData, ...(localOverrides[selectedSlug] || {}) };
   }, [localOverrides, selectedSlug]);
 
   // Handle manual input updates
-  const handleFieldChange = (key: 'video' | 'photo' | 'geology' | 'pump' | 'background', value: string) => {
+  const handleFieldChange = (key: 'video' | 'photo' | 'geology' | 'pump' | 'background' | 'drilling', value: string) => {
     setLocalOverrides(prev => {
       const currentSuburbData = { ...(prev[selectedSlug] || {}) };
       
@@ -127,7 +134,7 @@ export default function MediaAdmin({ mediaOverrides, onSaveOverrides, onClose }:
   };
 
   // Convert uploaded file to base64 inline and save
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, key: 'video' | 'photo' | 'geology' | 'pump' | 'background') => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, key: 'video' | 'photo' | 'geology' | 'pump' | 'background' | 'drilling') => {
     const file = e.target.files?.[0];
     if (!file) return;
 

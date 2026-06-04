@@ -415,7 +415,7 @@ export default function App() {
   const [bgUrlVal, setBgUrlVal] = React.useState('');
 
   // Media Overrides persistent local map (statically reads from media_overrides.json)
-  const [mediaOverrides, setMediaOverrides] = React.useState<Record<string, { video?: string; photo?: string; geology?: string; background?: string; pump?: string }>>(() => {
+  const [mediaOverrides, setMediaOverrides] = React.useState<Record<string, { video?: string; photo?: string; geology?: string; background?: string; pump?: string; drilling?: string }>>(() => {
     return (mediaOverridesPreset as any) || {};
   });
 
@@ -1851,7 +1851,7 @@ export default function App() {
           <div className="lg:col-span-6 space-y-6 flex flex-col justify-start">
             
             {/* Card 1: Technical Analysis Bento Box */}
-            <div id="bore-atlas-blueprint" className="bg-white border border-slate-200/60 rounded-3xl p-8 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-left flex flex-col justify-between h-full min-h-[350px]">
+            <div id="bore-atlas-blueprint" className="bg-white border border-slate-200/60 rounded-3xl p-8 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-left flex flex-col justify-start min-h-[350px]">
               <div className="flex justify-between items-start">
                 <div className="w-12 h-12 rounded-2xl bg-[#007AFF]/10 flex items-center justify-center border border-[#007AFF]/10 shadow-xs">
                   <Layers className="w-6 h-6 text-[#007AFF]" />
@@ -1889,6 +1889,40 @@ export default function App() {
                   </span>
                 </div>
 
+                <div>
+                  <span className="text-[10px] font-mono tracking-widest text-[#007AFF] font-bold uppercase block mb-1.5 flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-ping shrink-0" />
+                    BORE DRILLING SIMULATION
+                  </span>
+                  <div className="w-full aspect-video rounded-2xl overflow-hidden border border-slate-200/80 bg-slate-105 relative shadow-sm">
+                    <video
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="w-full h-full object-cover"
+                      src={
+                        mediaOverrides[selectedSuburb.slug]?.drilling || 
+                        (mediaOverrides[selectedSuburb.slug]?.pump && mediaOverrides[selectedSuburb.slug]?.pump.endsWith('.mp4') ? mediaOverrides[selectedSuburb.slug]?.pump : undefined) || 
+                        "https://assets.mixkit.co/videos/preview/mixkit-mechanical-drilling-machine-working-on-a-site-41584-large.mp4"
+                      }
+                      key={`${selectedSuburb.slug}-drilling`}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent pointer-events-none" />
+                    
+                    {/* Live overlay markers */}
+                    <div className="absolute top-2.5 left-2.5 pointer-events-none flex items-center gap-1 bg-black/60 backdrop-blur-xs px-1.5 py-0.5 rounded text-[8px] font-mono text-white/95 uppercase tracking-widest leading-none border border-white/5">
+                      <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                      <span>{selectedSuburb.name} Feed</span>
+                    </div>
+
+                    <div className="absolute bottom-2.5 right-2.5 pointer-events-none flex items-center gap-1 bg-[#0F172A]/85 backdrop-blur-xs px-2 py-0.5 rounded text-[7.5px] font-mono text-[#38BDF8] border border-blue-500/10 uppercase tracking-tight">
+                      <span>RATED AQUIFER DEPTH: </span>
+                      <strong className="text-white font-bold">{getDepthRange(selectedSuburb.name).text}</strong>
+                    </div>
+                  </div>
+                </div>
+
                 <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 font-mono text-[10px] text-slate-500 space-y-1">
                   <span className="text-slate-400 block font-bold">HOLE CALIBER REPORT</span>
                   <p className="text-slate-700 font-medium font-sans">
@@ -1897,7 +1931,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="mt-6 pt-5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <div className="mt-auto pt-5 border-t border-slate-100 flex items-center justify-between text-[11px]">
                 <span className="text-slate-400 font-semibold font-sans">
                   {selectedSuburb.name} Geotechnical Model
                 </span>
