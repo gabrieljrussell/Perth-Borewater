@@ -17,7 +17,7 @@ export default function Header({ onSelectSuburb, currentSuburb }: HeaderProps) {
           id="hdr-logo"
         >
           <div className="relative flex items-center justify-center w-10 h-10 rounded-xl bg-white shadow-sm overflow-hidden p-0.5 transition-transform group-hover:scale-105 duration-300">
-            <img src="https://perthborewater.com.au/serve-image.php?file=Logo.jpeg" alt="Perth BoreWater Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+            <img src="https://assets.perthborewater.com.au/BoreWaterLogo.png" alt="Perth BoreWater Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
           </div>
           <div>
             <div className="flex items-center gap-2">

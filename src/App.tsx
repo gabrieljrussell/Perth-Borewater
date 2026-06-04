@@ -334,6 +334,30 @@ function getVimeoEmbedUrl(url: string): string | null {
   return null;
 }
 
+const safeStorage = {
+  getItem: (key: string): string => {
+    try {
+      return localStorage.getItem(key) || '';
+    } catch {
+      return '';
+    }
+  },
+  setItem: (key: string, value: string): void => {
+    try {
+      localStorage.setItem(key, value);
+    } catch {
+      // safe fallback
+    }
+  },
+  removeItem: (key: string): void => {
+    try {
+      localStorage.removeItem(key);
+    } catch {
+      // safe fallback
+    }
+  }
+};
+
 export default function App() {
   // Custom router state from URL paths
   const getPathInfo = () => {
@@ -352,17 +376,15 @@ export default function App() {
   
   // Admin Mode State (supports URL parameter auto-login, e.g., ?admin=Gabrieljrussell@gmail.com)
   const [adminEmail, setAdminEmail] = React.useState<string>(() => {
-    try {
-      const urlParams = new URLSearchParams(window.location.search);
-      const urlEmail = urlParams.get('admin');
-      if (urlEmail) {
-        localStorage.setItem('perth_borewater_admin_email', urlEmail);
-        return urlEmail;
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlEmail = urlParams.get('admin');
+    if (urlEmail) {
+      if (urlEmail.trim().toLowerCase() === 'gabrieljrussell@gmail.com') {
+        safeStorage.setItem('perth_borewater_admin_email', urlEmail.trim());
+        return urlEmail.trim();
       }
-      return localStorage.getItem('perth_borewater_admin_email') || '';
-    } catch {
-      return '';
     }
+    return safeStorage.getItem('perth_borewater_admin_email');
   });
 
   const isAdmin = React.useMemo(() => {
@@ -372,6 +394,18 @@ export default function App() {
   const [showAdminLogin, setShowAdminLogin] = React.useState(false);
   const [adminLoginInput, setAdminLoginInput] = React.useState('');
   const [adminLoginError, setAdminLoginError] = React.useState('');
+
+  // Auto-trigger admin modal when query params `admin` or `login` exist for secret admin access
+  React.useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (!isAdmin && (urlParams.has('login') || urlParams.has('admin'))) {
+      const adminVal = urlParams.get('admin') || '';
+      if (adminVal.toLowerCase() !== 'gabrieljrussell@gmail.com') {
+        setAdminLoginInput(adminVal);
+        setShowAdminLogin(true);
+      }
+    }
+  }, [isAdmin]);
   
   // Resolve Selected Suburb details dynamically
   const selectedSuburb = React.useMemo(() => {
@@ -467,7 +501,7 @@ export default function App() {
         if (data.email && data.email.trim().toLowerCase() === 'gabrieljrussell@gmail.com') {
           console.log("Auto-authenticated Gabrieljrussell as Admin.");
           setAdminEmail(data.email.trim());
-          localStorage.setItem('perth_borewater_admin_email', data.email.trim());
+          safeStorage.setItem('perth_borewater_admin_email', data.email.trim());
         }
       })
       .catch(err => {
@@ -526,7 +560,7 @@ export default function App() {
       if (user && user.email?.toLowerCase() === 'gabrieljrussell@gmail.com') {
         console.log("Firebase Auth modern sign-in session successfully active:", user.email);
         setAdminEmail(user.email);
-        localStorage.setItem('perth_borewater_admin_email', user.email);
+        safeStorage.setItem('perth_borewater_admin_email', user.email);
       }
     });
 
@@ -848,7 +882,7 @@ export default function App() {
         "name": selectedSuburbSlug 
           ? `Perth BoreWater Operations - ${selectedSuburb.name} Division` 
           : "Perth BoreWater Operations",
-        "image": "https://perthborewater.com.au/serve-image.php?file=Logo.jpeg",
+        "image": "https://assets.perthborewater.com.au/BoreWaterLogo.png",
         "@id": selectedSuburbSlug 
           ? `https://perthborewater.com.au/bore-drilling/${selectedSuburbSlug}`
           : "https://perthborewater.com.au/",
@@ -1060,7 +1094,7 @@ export default function App() {
 
           <button 
             onClick={() => {
-              localStorage.removeItem('perth_borewater_admin_email');
+              safeStorage.removeItem('perth_borewater_admin_email');
               setAdminEmail('');
               setIsEditorMode(false);
             }}
@@ -1100,7 +1134,7 @@ export default function App() {
                   const user = await logInWithGoogle();
                   if (user && user.email?.toLowerCase() === 'gabrieljrussell@gmail.com') {
                     setAdminEmail(user.email);
-                    localStorage.setItem('perth_borewater_admin_email', user.email);
+                    safeStorage.setItem('perth_borewater_admin_email', user.email);
                     setShowAdminLogin(false);
                     setAdminLoginError('');
                     console.log("Admin successfully logged in with Google Firebase Auth.");
@@ -1151,7 +1185,7 @@ export default function App() {
             <form onSubmit={(e) => {
               e.preventDefault();
               if (adminLoginInput.trim().toLowerCase() === 'gabrieljrussell@gmail.com') {
-                localStorage.setItem('perth_borewater_admin_email', adminLoginInput.trim());
+                safeStorage.setItem('perth_borewater_admin_email', adminLoginInput.trim());
                 setAdminEmail(adminLoginInput.trim());
                 setAdminLoginError('');
                 setShowAdminLogin(false);
@@ -1190,7 +1224,7 @@ export default function App() {
                   <button
                     type="button"
                     onClick={() => {
-                      localStorage.removeItem('perth_borewater_admin_email');
+                      safeStorage.removeItem('perth_borewater_admin_email');
                       setAdminEmail('');
                       setShowAdminLogin(false);
                     }}
@@ -1255,7 +1289,7 @@ export default function App() {
             className="flex items-center gap-2.5 cursor-pointer group"
           >
             <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-white shadow-sm overflow-hidden p-0.5 transition-transform group-hover:scale-105 duration-300">
-              <img src="https://perthborewater.com.au/serve-image.php?file=Logo.jpeg" alt="Perth BoreWater Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+              <img src="https://assets.perthborewater.com.au/BoreWaterLogo.png" alt="Perth BoreWater Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
             </div>
             <span className="text-lg font-display font-black tracking-tight text-[#0F2C59] transition-colors">
               Perth<span className="text-[#007AFF] font-medium ml-0.5">BoreWater</span>
@@ -2481,7 +2515,7 @@ export default function App() {
             <div className="space-y-3 text-left">
               <div className="flex items-center gap-2.5">
                 <div className="relative flex items-center justify-center w-8 h-8 rounded-lg overflow-hidden bg-white/10 p-0.5">
-                  <img src="https://perthborewater.com.au/serve-image.php?file=Logo.jpeg" alt="Perth BoreWater Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                  <img src="https://assets.perthborewater.com.au/BoreWaterLogo.png" alt="Perth BoreWater Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                 </div>
                 <span className="text-lg font-display font-extrabold tracking-tight text-white">
                   Perth<span className="text-[#38BDF8] font-medium ml-1">BoreWater</span>
