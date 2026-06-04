@@ -116,7 +116,7 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
                   playsInline 
                   className="w-full h-full object-cover opacity-60"
                 >
-                  <source src="https://assets.mixkit.co/videos/preview/mixkit-mechanical-drilling-machine-working-on-a-site-41584-large.mp4" type="video/mp4" />
+                  <source src={suburb.slug === 'rockingham' ? 'https://perthborewater.com.au/serve-image.php?file=Rockingham.mp4' : `https://perthborewater.com.au/serve-image.php?file=${suburb.slug}-hero.mp4`} type="video/mp4" />
                 </video>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
               </div>

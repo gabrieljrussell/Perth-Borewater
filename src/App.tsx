@@ -86,6 +86,36 @@ const getPostcode = (suburbName: string) => {
   }
 };
 
+const getLandmarks = (suburb: { name: string; landmark?: string }) => {
+  const landmark = suburb.landmark || '';
+  let landmark1 = '';
+  let landmark2 = '';
+  if (landmark.includes('/')) {
+    const parts = landmark.split('/');
+    landmark1 = parts[0].trim();
+    landmark2 = parts[1].trim();
+  } else if (landmark.includes('&')) {
+    const parts = landmark.split('&');
+    landmark1 = parts[0].trim();
+    landmark2 = parts[1].trim();
+  } else if (landmark.includes('and')) {
+    const parts = landmark.split(/\band\b/i);
+    landmark1 = parts[0].trim();
+    landmark2 = parts[1].trim();
+  } else {
+    landmark1 = landmark || `${suburb.name} Hub`;
+    landmark2 = `${suburb.name} Community Precinct`;
+  }
+  return { landmark1, landmark2 };
+};
+
+const getNearbySuburbs = (suburbName: string) => {
+  const filtered = SUBURBS_DATA.filter(s => s.name.toLowerCase() !== suburbName.toLowerCase());
+  const index = SUBURBS_DATA.findIndex(s => s.name.toLowerCase() === suburbName.toLowerCase());
+  const startIndex = index >= 0 ? index % (filtered.length - 3) : 0;
+  return filtered.slice(startIndex, startIndex + 4).map(s => s.name);
+};
+
 const getDepthRange = (suburbName: string) => {
   const entry = ALL_SUBURBS_LIST.find(s => s.name.toLowerCase() === suburbName.toLowerCase());
   if (entry) {
@@ -421,6 +451,8 @@ export default function App() {
     }
     return generateSuburbData('Rockingham', '6168');
   }, [selectedSuburbSlug]);
+
+  const { landmark1, landmark2 } = React.useMemo(() => getLandmarks(selectedSuburb), [selectedSuburb]);
 
   // Reusable check for a real custom URL (not empty, not the placeholder URL)
   const isRealUrl = React.useCallback((url?: string) => {
@@ -863,10 +895,22 @@ export default function App() {
     if (selectedSuburb) {
       const pc = getPostcode(selectedSuburb.name);
       
-      // Update HTML Title tag to showcase scientific authority
+      // Update HTML Title tag
       document.title = selectedSuburbSlug 
-        ? `Soil & Water Table Analysis for ${selectedSuburb.name} (${pc}) | Perth BoreWater`
+        ? `Bore Drilling ${selectedSuburb.name} | Expert Water Bore Services & Repairs`
         : `Perth BoreWater Operations | Aquifer Intelligence Command Center`;
+      
+      // Update HTML Meta Description tag using the dynamic Meta Description requirement
+      let metaDesc = document.querySelector('meta[name="description"]');
+      if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        metaDesc.setAttribute('name', 'description');
+        document.head.appendChild(metaDesc);
+      }
+      const metaDescription = selectedSuburbSlug
+        ? `Professional water bore drilling and expert casing services in ${selectedSuburb.name} (${pc}). Safe aquifer access, waterwise filtration, and pump repairs near ${selectedSuburb.landmark || selectedSuburb.name}.`
+        : "Perth's premier residential and commercial water bore drilling, pump repairs, reticulation servicing, and downhole geological diagnostics.";
+      metaDesc.setAttribute('content', metaDescription);
       
       // Upsert JSON-LD Schema
       let schemaScript = document.getElementById('suburb-jsonld-schema');
@@ -1105,13 +1149,13 @@ export default function App() {
         </div>
       )}
 
-       {/* Admin Login Dialog / Modal Overlay */}
+      {/* Admin Login Dialog / Modal Overlay */}
       {showAdminLogin && (
         <div className="fixed inset-0 z-55 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-xs animate-fade-in pointer-events-auto">
           <div className="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 max-w-sm w-full shadow-2xl relative text-left">
             <button
               onClick={() => setShowAdminLogin(false)}
-              className="absolute top-4 right-4 text-slate-400 hover:text-slate-800 font-mono text-base transition-colors p-1 cursor-pointer"
+              className="absolute top-4 right-4 text-slate-450 hover:text-slate-800 font-mono text-base transition-colors p-1"
               aria-label="Close"
             >
               ✕
@@ -1123,18 +1167,47 @@ export default function App() {
               </h3>
             </div>
             
-            <p className="text-[11px] text-slate-500 mb-5 leading-relaxed font-sans">
-              Verify your registered administrator email address below to authorize this session and manage live bore geotechnical media assets.
+            <p className="text-[11px] text-slate-505 mb-5 leading-relaxed font-sans">
+              Authenticate via standard Google Sign-In to unlock cloud-synced changes, or enter your email to access local offline mode controls.
             </p>
+
+            <button
+              type="button"
+              onClick={async () => {
+                try {
+                  const user = await logInWithGoogle();
+                  if (user && user.email?.toLowerCase() === 'gabrieljrussell@gmail.com') {
+                    setAdminEmail(user.email);
+                    safeStorage.setItem('perth_borewater_admin_email', user.email);
+                    setShowAdminLogin(false);
+                    setAdminLoginError('');
+                    console.log("Admin successfully logged in with Google Firebase Auth.");
+                  } else {
+                    setAdminLoginError('Google Sign-In succeeded, but you are not the registered administrator.');
+                  }
+                } catch (err: any) {
+                  setAdminLoginError(`Authentication failed: ${err.message || err}`);
+                }
+              }}
+              className="w-full flex items-center justify-center gap-2.5 bg-slate-900 hover:bg-slate-800 text-white font-sans text-xs uppercase tracking-wider py-3 rounded-xl font-bold transition-all shadow-md cursor-pointer mb-5 hover:shadow-lg active:scale-98"
+            >
+              <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path fill="#FBBC05" d="M5.84 14.1c-.22-.66-.35-1.36-.35-2.1s.13-1.44.35-2.1V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.62z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+              </svg>
+              Sign In with Google
+            </button>
             
             {isAdmin && (
-              <div className="mb-5 p-4 bg-[#E0F2FE]/45 border border-[#BAE6FD]/40 rounded-2xl space-y-2 animate-fade-in text-left">
+              <div className="my-5 p-4 bg-slate-50 border border-slate-200/60 rounded-2xl space-y-2.5 animate-fade-in text-left">
                 <div className="flex items-center justify-between">
-                  <span className="text-[9px] font-mono font-bold text-slate-500 uppercase tracking-widest">Active Configuration</span>
+                  <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest">Active Configuration</span>
                   <span className="text-[9px] font-mono font-bold text-emerald-600 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-100 uppercase tracking-widest font-black">Authorized</span>
                 </div>
-                <p className="text-[10.5px] text-slate-600 leading-normal font-sans">
-                  Keep your local code file updated! Tap below to download the compiled media overrides dictionary directly as <strong className="font-mono text-[9.5px] bg-sky-100 px-1 py-0.5 rounded text-sky-805">media_overrides.json</strong>.
+                <p className="text-[10.5px] text-slate-500 leading-normal font-sans">
+                  Keep your local code file updated! Tap below to download the compiled media overrides dictionary directly as <strong className="font-mono text-[9.5px] bg-slate-150 px-1 py-0.5 rounded text-slate-700">media_overrides.json</strong>.
                 </p>
                 <a
                   href="/api/download-media-overrides"
@@ -1146,6 +1219,12 @@ export default function App() {
                 </a>
               </div>
             )}
+
+            <div className="relative flex py-2 items-center mb-4">
+              <div className="flex-grow border-t border-slate-200"></div>
+              <span className="flex-shrink mx-3 text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest">OR USE OFFLINE CONTROL</span>
+              <div className="flex-grow border-t border-slate-200"></div>
+            </div>
 
             <form onSubmit={(e) => {
               e.preventDefault();
@@ -1159,8 +1238,8 @@ export default function App() {
               }
             }} className="space-y-4 font-sans">
               <div>
-                <label className="block text-[8.5px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-1.5">
-                  ADMINISTRATIVE EMAIL REGISTER
+                <label className="block text-[8.5px] font-mono font-bold text-slate-500 uppercase tracking-widest mb-1">
+                  ADMINISTRATIVE EMAIL
                 </label>
                 <div className="relative">
                   <input
@@ -1169,9 +1248,9 @@ export default function App() {
                     placeholder="gabrieljrussell@gmail.com"
                     value={adminLoginInput}
                     onChange={(e) => setAdminLoginInput(e.target.value)}
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-4 pr-10 py-3 text-xs text-slate-950 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-emerald-555/30 focus:border-emerald-500 focus:bg-white transition-all font-semibold"
+                    className="w-full bg-slate-50 border border-slate-250/70 rounded-xl pl-4 pr-10 py-3 text-xs text-slate-950 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-emerald-550/30 focus:border-emerald-500 focus:bg-white transition-all font-semibold"
                   />
-                  <Mail className="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <Mail className="w-4 h-4 text-slate-450 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" />
                 </div>
               </div>
 
@@ -1193,7 +1272,7 @@ export default function App() {
                       setAdminEmail('');
                       setShowAdminLogin(false);
                     }}
-                    className="px-4 py-2.5 bg-rose-50 text-rose-750 hover:text-rose-800 rounded-xl text-xs font-bold font-mono tracking-wider hover:bg-rose-100 transition-all uppercase cursor-pointer"
+                    className="px-4 py-2 bg-rose-50 text-rose-700 rounded-xl text-xs font-bold font-mono tracking-wider hover:bg-rose-100 transition-all uppercase"
                   >
                     Revoke Mode
                   </button>
@@ -1202,7 +1281,7 @@ export default function App() {
                   type="submit"
                   className="bg-emerald-600 hover:bg-emerald-500 text-white font-sans text-xs uppercase tracking-wider px-5 py-2.5 rounded-xl font-bold transition-all shadow-md cursor-pointer hover:shadow-lg active:scale-98"
                 >
-                  Authorize Admin
+                  Authorize admin
                 </button>
               </div>
             </form>
@@ -1784,7 +1863,7 @@ export default function App() {
             ) : (
               <img 
                 src={heroPhoto || undefined} 
-                alt={`${selectedSuburb.name} precision bore drilling`} 
+                alt={`Bore drilling services in ${selectedSuburb.name} - Perth Bore Water`} 
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"
               />
@@ -1818,12 +1897,12 @@ export default function App() {
 
             {/* Display Header */}
             <h1 className="text-3xl sm:text-4.5xl md:text-5xl font-display font-black text-[#0F172A] tracking-tight leading-tight">
-              Perth's Precision Bore Drilling for {selectedSuburb.name}.
+              Professional Bore Drilling &amp; Maintenance in {selectedSuburb.name}
             </h1>
 
             {/* Geological statement */}
             <p className="text-sm sm:text-base text-slate-600 max-w-2xl mx-auto leading-relaxed">
-              Access the Superficial Aquifer at <span className="text-[#007AFF] font-bold">{getDepthRange(selectedSuburb.name).text}</span> depth. Sustainable irrigation engineered for <strong className="text-slate-900 font-bold">{getSoilData(selectedSuburb.name).name}</strong> {getSoilData(selectedSuburb.name).type}.
+              We specialize in providing water bore drilling &amp; upkeep near <strong className="text-slate-900 font-bold">{landmark1}</strong> and the neighboring <strong className="text-slate-900 font-bold">{landmark2}</strong> fields. Access the Superficial Aquifer at <span className="text-[#007AFF] font-bold">{getDepthRange(selectedSuburb.name).text}</span> depth. Sustainable irrigation engineered for <strong className="text-slate-900 font-bold">{getSoilData(selectedSuburb.name).name}</strong> {getSoilData(selectedSuburb.name).type}.
             </p>
 
             {/* High-Gloss Emerald Action Call-to-action button */}
@@ -1863,18 +1942,24 @@ export default function App() {
               <div className="mt-6 space-y-4 font-mono text-xs">
                 <div>
                   <span className="text-[10px] font-mono tracking-widest text-slate-400 font-bold uppercase block">
-                    SUBSTRATE PROFILE
+                    LOCAL GEOLOGY TYPE
                   </span>
                   <span className="text-slate-800 font-semibold font-sans text-sm mt-0.5 block">
+                    {selectedSuburb.soilComposition}
+                  </span>
+                  <span className="text-slate-600 font-medium font-sans text-xs mt-1 block leading-relaxed">
                     {getConsultantSpeak(selectedSuburb.name).profile}
                   </span>
                 </div>
 
                 <div>
                   <span className="text-[10px] font-mono tracking-widest text-[#007AFF] font-bold uppercase block">
-                    OPERATIONAL PRIORITY
+                    COMMON HYDROLOGIC ISSUE
                   </span>
-                  <span className="text-slate-705 font-sans text-xs mt-0.5 block font-medium leading-relaxed">
+                  <span className="text-[#007AFF] font-extrabold text-xs font-sans mt-0.5 block uppercase">
+                    {selectedSuburb.localHeadache}
+                  </span>
+                  <span className="text-slate-705 font-sans text-xs mt-1 block font-medium leading-relaxed">
                     {getConsultantSpeak(selectedSuburb.name).priority}
                   </span>
                 </div>
@@ -2039,7 +2124,7 @@ export default function App() {
                 {/* Rock Core spectroscopy image */}
                 <img 
                   src={geologyPhoto || undefined} 
-                  alt="Geological sands" 
+                  alt={`Bore drilling services in ${selectedSuburb.name} - Perth Bore Water`} 
                   className="absolute inset-0 w-full h-full object-cover opacity-75 animate-fade-in"
                   referrerPolicy="no-referrer"
                   key={geologyPhoto || 'geology'}
@@ -2093,6 +2178,9 @@ export default function App() {
                   
                   <p className="text-[10px] text-slate-500 italic leading-snug line-clamp-3">
                     {getIronRiskExplanation(selectedSuburb.name)}
+                    <span className="block mt-1 font-semibold text-slate-700 not-italic">
+                      Managing {selectedSuburb.soilComposition} aquifers to counter {selectedSuburb.localHeadache}.
+                    </span>
                   </p>
                 </div>
               </div>
@@ -2231,7 +2319,7 @@ export default function App() {
                       <>
                         <img 
                           src={pumpPhoto || undefined} 
-                          alt="Bore Diagnostics Technical Pump" 
+                          alt={`Bore drilling services in ${selectedSuburb.name} - Perth Bore Water`} 
                           className="w-full h-full object-cover transition-all"
                           referrerPolicy="no-referrer"
                           key={pumpPhoto || 'pump'}
@@ -2453,6 +2541,17 @@ export default function App() {
                 <p className="text-sm text-slate-650 leading-relaxed font-sans whitespace-pre-line">
                   {getSuburbNarrative(selectedSuburb.name)}
                 </p>
+                
+                {/* Trust Signals: Local Knowledge block */}
+                <div className="bg-slate-50 border border-slate-200/60 p-4.5 rounded-2xl space-y-1.5 mt-4">
+                  <span className="text-[10px] font-mono font-bold tracking-wider text-emerald-600 uppercase block flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Expertise &amp; Local Knowledge
+                  </span>
+                  <p className="text-xs text-slate-705 leading-relaxed font-sans font-medium">
+                    We specialize in navigating <strong className="text-slate-900 font-bold">{selectedSuburb.name}</strong>'s unique <strong className="text-slate-900 font-extrabold">{selectedSuburb.soilComposition}</strong> layers to prevent <strong className="text-slate-900 font-extrabold">{selectedSuburb.localHeadache}</strong>.
+                  </p>
+                </div>
               </div>
             </div>
             {/* Trust approval indicator */}
@@ -2464,6 +2563,41 @@ export default function App() {
                 <span className="text-[8px] font-mono text-slate-400 uppercase tracking-widest block font-bold">REGIONAL APPROVAL</span>
                 <span className="text-xs text-slate-800 font-extrabold font-mono uppercase">WA BORE LIC #2241</span>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Nearby Suburbs Footer Section for SEO Clustering */}
+        <section className="bg-slate-50 border border-slate-200/60 rounded-3xl p-8 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-left mt-8 w-full">
+          <div className="space-y-4 font-sans">
+            <div className="flex items-center gap-2">
+              <span className="w-2.5 h-2.5 bg-[#007AFF] rounded-full animate-pulse" />
+              <h4 className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
+                NEARBY SERVICE AREAS &amp; LOCAL SEO CLUSTERS
+              </h4>
+            </div>
+            <div className="space-y-1.5">
+              <h3 className="text-lg font-display font-black text-slate-900 tracking-tight">
+                Water Bore Drilling &amp; Reticulation Diagnostics near {selectedSuburb.name}
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                We provide complete Waterwise certified drilling, pump repairs, and downhole flow diagnostics across Western Australia. Explore specific groundwater depth tables and specific soil profiles for neighboring suburbs:
+              </p>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
+              {getNearbySuburbs(selectedSuburb.name).map((subName) => {
+                const subSlug = subName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                return (
+                  <button
+                    key={subName}
+                    onClick={() => handleSuburbChange(subSlug)}
+                    className="flex items-center justify-between bg-white border border-slate-200/80 hover:border-[#007AFF]/30 hover:shadow-xs px-4 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-[#007AFF] transition-all cursor-pointer text-left font-sans duration-200 group"
+                  >
+                    <span>{subName} Bores</span>
+                    <span className="text-[#007AFF]/60 group-hover:text-[#007AFF] font-bold text-xs transition-colors">→</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </section>
