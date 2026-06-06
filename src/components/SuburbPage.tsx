@@ -21,6 +21,34 @@ import {
   Droplet
 } from 'lucide-react';
 import { GENERAL_REVIEWS } from '../data';
+import SoilProfileDiagram from './SoilProfileDiagram';
+
+const getSoilTypeAndDepthFromSuburb = (suburb: SuburbData) => {
+  let waterDepth = 15;
+  if (suburb.typicalDepth) {
+    const matched = suburb.typicalDepth.match(/(\d+)\s*m\s*-\s*(\d+)\s*m/);
+    if (matched) {
+      const min = parseInt(matched[1], 10);
+      const max = parseInt(matched[2], 10);
+      waterDepth = Math.round((min + max) / 2);
+    } else {
+      const singleNum = suburb.typicalDepth.match(/(\d+)\s*m/);
+      if (singleNum) {
+        waterDepth = parseInt(singleNum[1], 10);
+      }
+    }
+  }
+
+  const comp = (suburb.soilComposition || '').toLowerCase();
+  let soilType: 'Limestone' | 'Clay' | 'Sand' = 'Sand';
+  if (comp.includes('limestone')) {
+    soilType = 'Limestone';
+  } else if (comp.includes('clay')) {
+    soilType = 'Clay';
+  }
+
+  return { soilType, waterDepth };
+};
 
 interface SuburbPageProps {
   suburb: SuburbData;
@@ -29,6 +57,7 @@ interface SuburbPageProps {
 }
 
 export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: SuburbPageProps) {
+  const { soilType, waterDepth } = getSoilTypeAndDepthFromSuburb(suburb);
   const [isPlayingVideo, setIsPlayingVideo] = useState(true);
   const [activeTab, setActiveTab] = useState<'diagnostics' | 'compliance' | 'reviews'>('diagnostics');
 
@@ -242,8 +271,8 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
         {/* Dynamic Bento Box Matrix - 4 Column Layout */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch">
           
-          {/* Card 1: Soil Composition (2x2 Column block) */}
-          <div className="md:col-span-2 md:row-span-2 bento-card p-7 sm:p-9 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left">
+          {/* Card 1: Soil Composition (2x1 Column block) */}
+          <div className="md:col-span-2 bento-card p-7 sm:p-9 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left">
             <div className="flex justify-between items-start">
               <div className="w-12 h-12 rounded-full bg-[#007AFF]/10 flex items-center justify-center border border-[#007AFF]/20 shadow-xs">
                 <Layers className="w-6 h-6 text-[#007AFF]" />
@@ -320,22 +349,9 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
             </button>
           </div>
 
-          {/* Card 5: Geological Evidence Photographic Sample (2x1 column block) */}
-          <div className="md:col-span-2 bento-card relative overflow-hidden group hover:scale-[1.01] transition-transform duration-300 min-h-[170px] text-left">
-            <img 
-              alt={`Ground sample for ${suburb.name}`} 
-              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-              src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-DHHe-WJTQQyXAhmDCvZ3pj2owtlLrn6z8LZbSV3KdCgClcKXE0BgdV1EhIrz7isw9dK0LmhjQMobpttsB_38b6uOnBtxYrJVJBGwZORnzWy5G4CHTW-05sM8mfnx7ifyNJ08BncfKxqxkwKL5vUAKsPQpYTiIC_jkDaHrQgJnwM3jyznCnIssiuuw3UWpV35yhBP4t8sF3Y5m-vasGbP9KF4x4R7bAbXrdWRLpqHdFjNqvo6NvoDBaMvZTBdBtEMir-Gu59V2RNl"
-              referrerPolicy="no-referrer"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent" />
-            <div className="absolute bottom-0 left-0 p-6 w-full text-white">
-              <h3 className="font-display font-bold text-base tracking-tight flex items-center gap-2">
-                <ImageIcon className="w-4 h-4 text-[#FFD700]" />
-                <span>Geological Core Evidence Specimen</span>
-              </h3>
-              <p className="text-[10px] text-slate-300 mt-0.5">High-definition spectroscopy image of {suburb.name} core sandstone matrix.</p>
-            </div>
+          {/* Card 5: Geological Cross-Section Diagram (2x2 Column block) */}
+          <div className="md:col-span-2 md:row-span-2" id="geological-cross-section-diagram-card">
+            <SoilProfileDiagram soilType={soilType} waterDepth={waterDepth} />
           </div>
 
           {/* Card 6: Watering Days (2x1 Column block) */}

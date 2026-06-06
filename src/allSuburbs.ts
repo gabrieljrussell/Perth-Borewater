@@ -49,6 +49,7 @@ export const ALL_SUBURBS_LIST: SuburbEntry[] = [
   { name: 'Currambine', postcode: '6028', sector: 'spearwood', aquifer: 'Gnangara Superficial' },
   { name: 'Kinross', postcode: '6028', sector: 'spearwood', aquifer: 'Gnangara Superficial' },
   { name: 'Iluka', postcode: '6028', sector: 'spearwood', aquifer: 'Gnangara Superficial' },
+  { name: 'Kwinana', postcode: '6167', sector: 'spearwood', aquifer: 'Jandakot Superficial' },
 
   // Bassendean Sector (Colloidal iron, high organic acidity)
   { name: 'Canning Vale', postcode: '6155', sector: 'bassendean', aquifer: 'Jandakot Superficial' },
@@ -87,6 +88,8 @@ export const ALL_SUBURBS_LIST: SuburbEntry[] = [
   { name: 'Safety Bay', postcode: '6169', sector: 'quindalup', aquifer: 'Rockingham Superficial' },
   { name: 'Shoalwater', postcode: '6169', sector: 'quindalup', aquifer: 'Rockingham Superficial' },
   { name: 'Warnbro', postcode: '6169', sector: 'quindalup', aquifer: 'Rockingham Superficial' },
+  { name: 'Cooloongup', postcode: '6168', sector: 'quindalup', aquifer: 'Rockingham Superficial' },
+  { name: 'Karnup', postcode: '6176', sector: 'quindalup', aquifer: 'Rockingham-Warnbro Coastal' },
   { name: 'Port Kennedy', postcode: '6172', sector: 'quindalup', aquifer: 'Port Kennedy Coastal Skimming' },
   { name: 'Secret Harbour', postcode: '6173', sector: 'quindalup', aquifer: 'Port Kennedy Coastal Skimming' },
   { name: 'Golden Bay', postcode: '6174', sector: 'quindalup', aquifer: 'Mandurah Coastal Skimming' },
@@ -130,6 +133,7 @@ export const ALL_SUBURBS_LIST: SuburbEntry[] = [
   { name: 'Armadale', postcode: '6112', sector: 'scarp', aquifer: 'Darling Range Bedrock' },
   { name: 'Kelmscott', postcode: '6111', sector: 'scarp', aquifer: 'Darling Range Bedrock' },
   { name: 'Byford', postcode: '6122', sector: 'scarp', aquifer: 'Darling Range Bedrock' },
+  { name: 'Karrakup', postcode: '6122', sector: 'scarp', aquifer: 'Darling Range Bedrock' },
   { name: 'Kalamunda', postcode: '6076', sector: 'scarp', aquifer: 'Darling Range Bedrock' },
   { name: 'Lesmurdie', postcode: '6076', sector: 'scarp', aquifer: 'Darling Range Bedrock' },
   { name: 'Walliston', postcode: '6076', sector: 'scarp', aquifer: 'Darling Range Bedrock' },

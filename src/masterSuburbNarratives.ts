@@ -21,12 +21,13 @@ export const MASTER_SUBURB_NARRATIVES: Record<string, SuburbNarrative> = {
 };
 
 export function getSuburbNarrative(nameOrSlug: string): string {
-  const normalized = nameOrSlug.trim().toLowerCase().replace(/\s+/g, '-');
+  if (!nameOrSlug) return "Technical Hydro-Geological Profile: Data Pending Regional Survey.";
+  const normalized = (nameOrSlug || '').trim().toLowerCase().replace(/\s+/g, '-');
   const record = MASTER_SUBURB_NARRATIVES[normalized];
   if (record) {
     return record.regionalOutlook;
   }
   // Fallback to human name if slug look-up doesn't match directly
-  const rawSubName = nameOrSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  const rawSubName = (nameOrSlug || '').split('-').map(word => word ? (word.charAt(0).toUpperCase() + word.slice(1)) : '').join(' ');
   return `${rawSubName} Technical Hydro-Geological Profile: Data Pending Regional Survey.`;
 }

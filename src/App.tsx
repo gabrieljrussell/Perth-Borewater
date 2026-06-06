@@ -40,6 +40,41 @@ import { getSuburbNarrative } from './masterSuburbNarratives';
 import { db, auth, logInWithGoogle, handleFirestoreError, OperationType } from './firebase';
 import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
+import SoilProfileDiagram from './components/SoilProfileDiagram';
+
+const getSoilTypeAndDepthFromSuburbApp = (suburbName: string) => {
+  const depth = getDepthRange(suburbName);
+  const midDepth = Math.round((depth.min + depth.max) / 2);
+  
+  const matchedEntry = ALL_SUBURBS_LIST.find(s => s.name.toLowerCase() === suburbName.toLowerCase());
+  let soilType: 'Limestone' | 'Clay' | 'Sand' = 'Sand';
+  
+  if (matchedEntry) {
+    switch (matchedEntry.sector) {
+      case 'spearwood': 
+      case 'quindalup':
+        soilType = 'Limestone';
+        break;
+      case 'guildford': 
+        soilType = 'Clay';
+        break;
+      case 'bassendean':
+      case 'scarp':
+      default:
+        soilType = 'Sand';
+        break;
+    }
+  } else {
+    if (suburbName.includes('Guildford') || suburbName.includes('Valley') || suburbName.includes('Canning')) {
+      soilType = 'Clay';
+    } else if (suburbName.includes('Rockingham') || suburbName.includes('Beach') || suburbName.includes('Ocean')) {
+      soilType = 'Limestone';
+    } else {
+      soilType = 'Sand';
+    }
+  }
+  return { soilType, waterDepth: midDepth || 15 };
+};
 
 // Static helper mappings for deep tech metrics
 const getSoilData = (suburbName: string) => {
@@ -93,16 +128,16 @@ const getLandmarks = (suburb: { name: string; landmark?: string }) => {
   let landmark2 = '';
   if (landmark.includes('/')) {
     const parts = landmark.split('/');
-    landmark1 = parts[0].trim();
-    landmark2 = parts[1].trim();
+    landmark1 = (parts[0] || '').trim();
+    landmark2 = (parts[1] || '').trim();
   } else if (landmark.includes('&')) {
     const parts = landmark.split('&');
-    landmark1 = parts[0].trim();
-    landmark2 = parts[1].trim();
+    landmark1 = (parts[0] || '').trim();
+    landmark2 = (parts[1] || '').trim();
   } else if (landmark.includes('and')) {
     const parts = landmark.split(/\band\b/i);
-    landmark1 = parts[0].trim();
-    landmark2 = parts[1].trim();
+    landmark1 = (parts[0] || '').trim();
+    landmark2 = (parts[1] || '').trim();
   } else {
     landmark1 = landmark || `${suburb.name} Hub`;
     landmark2 = `${suburb.name} Community Precinct`;
@@ -396,6 +431,10 @@ export default function App() {
     const match = path.match(/\/(suburbs|bore-drilling)\/([^/]+)/);
     if (match) {
       const slugInput = match[2].toLowerCase();
+      // First, check if it's in SUBURBS_DATA statically
+      const staticMatch = SUBURBS_DATA.find(s => s.slug === slugInput);
+      if (staticMatch) return slugInput;
+      
       // Resolve from 350+ master list so it works for all of WA
       const listMatch = ALL_SUBURBS_LIST.find(s => s.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slugInput);
       if (listMatch) return slugInput;
@@ -410,16 +449,16 @@ export default function App() {
     const urlParams = new URLSearchParams(window.location.search);
     const urlEmail = urlParams.get('admin');
     if (urlEmail) {
-      if (urlEmail.trim().toLowerCase() === 'gabrieljrussell@gmail.com') {
-        safeStorage.setItem('perth_borewater_admin_email', urlEmail.trim());
-        return urlEmail.trim();
+      if ((urlEmail || '').trim().toLowerCase() === 'gabrieljrussell@gmail.com') {
+        safeStorage.setItem('perth_borewater_admin_email', (urlEmail || '').trim());
+        return (urlEmail || '').trim();
       }
     }
     return safeStorage.getItem('perth_borewater_admin_email');
   });
 
   const isAdmin = React.useMemo(() => {
-    return adminEmail.trim().toLowerCase() === 'gabrieljrussell@gmail.com';
+    return (adminEmail || '').trim().toLowerCase() === 'gabrieljrussell@gmail.com';
   }, [adminEmail]);
 
   const [showAdminLogin, setShowAdminLogin] = React.useState(false);
@@ -531,7 +570,7 @@ export default function App() {
     fetch("/api/user-info")
       .then(res => res.json())
       .then(data => {
-        if (data.email && data.email.trim().toLowerCase() === 'gabrieljrussell@gmail.com') {
+        if (data && typeof data.email === 'string' && data.email.trim().toLowerCase() === 'gabrieljrussell@gmail.com') {
           console.log("Auto-authenticated Gabrieljrussell as Admin.");
           setAdminEmail(data.email.trim());
           safeStorage.setItem('perth_borewater_admin_email', data.email.trim());
@@ -592,8 +631,8 @@ export default function App() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user && user.email?.toLowerCase() === 'gabrieljrussell@gmail.com') {
         console.log("Firebase Auth modern sign-in session successfully active:", user.email);
-        setAdminEmail(user.email);
-        safeStorage.setItem('perth_borewater_admin_email', user.email);
+        setAdminEmail(user.email || '');
+        safeStorage.setItem('perth_borewater_admin_email', user.email || '');
       }
     });
 
@@ -605,6 +644,89 @@ export default function App() {
   const [loadingNarrative, setLoadingNarrative] = React.useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
   const [isServicesDropdownOpen, setIsServicesDropdownOpen] = React.useState(false);
+
+  // States for the fast global search shortcut
+  const [isGlobalSearchOpen, setIsGlobalSearchOpen] = React.useState(false);
+  const [globalSearchQuery, setGlobalSearchQuery] = React.useState('');
+  const [globalHighlightedIndex, setGlobalHighlightedIndex] = React.useState(0);
+
+  // Setup keyboard listeners, ref & selection for Header global search bar
+  const searchInputRef = React.useRef<HTMLInputElement>(null);
+
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Toggle search modal with Cmd+K or Ctrl+K
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        setIsGlobalSearchOpen(prev => !prev);
+      }
+      // Close with Escape key
+      if (e.key === 'Escape') {
+        setIsGlobalSearchOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  React.useEffect(() => {
+    if (isGlobalSearchOpen) {
+      setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 50);
+    }
+  }, [isGlobalSearchOpen]);
+
+  const globalSearchTrimmed = globalSearchQuery.trim().toLowerCase();
+  const filteredGlobalSuburbs = React.useMemo(() => {
+    if (!globalSearchTrimmed) return [];
+    const indexSuburbLowerSet = new Set([
+      "baldivis", "rockingham", "canning vale", "mandurah", "secret harbour", 
+      "atwell", "aubin grove", "beeliar", "bertram", "casuarina", 
+      "cockburn central", "cooloongup", "hammond park", "jandakot", "karrakup", 
+      "karnup", "kwinana", "port kennedy", "success", "wellard"
+    ]);
+    return ALL_SUBURBS_LIST.filter(sub => {
+      const matchQuery = sub.name.toLowerCase().includes(globalSearchTrimmed) || 
+                          sub.postcode.includes(globalSearchTrimmed);
+      const isIndexSuburb = indexSuburbLowerSet.has(sub.name.toLowerCase());
+      return matchQuery && isIndexSuburb;
+    }).slice(0, 10);
+  }, [globalSearchTrimmed]);
+
+  React.useEffect(() => {
+    setGlobalHighlightedIndex(0);
+  }, [globalSearchQuery]);
+
+  const handleGlobalSelectSuburb = (subName: string) => {
+    const subSlug = subName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    handleSuburbChange(subSlug);
+    setIsGlobalSearchOpen(false);
+    setGlobalSearchQuery('');
+  };
+
+  const handleSearchKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      setGlobalHighlightedIndex(prev => 
+        filteredGlobalSuburbs.length > 0 
+          ? (prev + 1) % filteredGlobalSuburbs.length 
+          : 0
+      );
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      setGlobalHighlightedIndex(prev => 
+        filteredGlobalSuburbs.length > 0 
+          ? (prev - 1 + filteredGlobalSuburbs.length) % filteredGlobalSuburbs.length 
+          : 0
+      );
+    } else if (e.key === 'Enter') {
+      e.preventDefault();
+      if (filteredGlobalSuburbs.length > 0 && filteredGlobalSuburbs[globalHighlightedIndex]) {
+        handleGlobalSelectSuburb(filteredGlobalSuburbs[globalHighlightedIndex].name);
+      }
+    }
+  };
 
   React.useEffect(() => {
     // Disabled dynamic AI synthesis to respect non-synthesized verified ground truths.
@@ -777,7 +899,7 @@ export default function App() {
 
   const handleUrlSubmit = (url: string, type: 'hero' | 'geology' | 'background' | 'pump') => {
     if (!selectedSuburbSlug) return;
-    const cleanUrl = url.trim();
+    const cleanUrl = (url || '').trim();
     if (type === 'hero') {
       if (!cleanUrl) return;
       const isVideo = cleanUrl.endsWith('.mp4') || 
@@ -1178,8 +1300,8 @@ export default function App() {
                 try {
                   const user = await logInWithGoogle();
                   if (user && user.email?.toLowerCase() === 'gabrieljrussell@gmail.com') {
-                    setAdminEmail(user.email);
-                    safeStorage.setItem('perth_borewater_admin_email', user.email);
+                    setAdminEmail(user.email || '');
+                    safeStorage.setItem('perth_borewater_admin_email', user.email || '');
                     setShowAdminLogin(false);
                     setAdminLoginError('');
                     console.log("Admin successfully logged in with Google Firebase Auth.");
@@ -1229,9 +1351,10 @@ export default function App() {
 
             <form onSubmit={(e) => {
               e.preventDefault();
-              if (adminLoginInput.trim().toLowerCase() === 'gabrieljrussell@gmail.com') {
-                safeStorage.setItem('perth_borewater_admin_email', adminLoginInput.trim());
-                setAdminEmail(adminLoginInput.trim());
+              const trimmedLogin = (adminLoginInput || '').trim();
+              if (trimmedLogin.toLowerCase() === 'gabrieljrussell@gmail.com') {
+                safeStorage.setItem('perth_borewater_admin_email', trimmedLogin);
+                setAdminEmail(trimmedLogin);
                 setAdminLoginError('');
                 setShowAdminLogin(false);
               } else {
@@ -1439,7 +1562,27 @@ export default function App() {
           </nav>
 
           {/* Flashpoint Layout Right Side */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4">
+            
+            {/* Desktop Global Search Pill */}
+            <button 
+              onClick={() => setIsGlobalSearchOpen(true)}
+              className="hidden lg:flex items-center gap-2 bg-slate-100 hover:bg-slate-200/80 text-slate-500 hover:text-slate-800 px-4 py-2 border border-slate-200/50 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 focus:outline-none hover:border-[#007AFF]/35 shadow-2xs hover:scale-[1.01] h-[38px] select-none"
+              title="Search index suburbs (⌘K)"
+            >
+              <Search className="w-3.5 h-3.5 text-slate-400" />
+              <span>Search index...</span>
+              <kbd className="hidden sm:inline-block text-[9px] font-mono text-slate-400 bg-slate-200/60 px-1.5 py-0.5 rounded-md ml-1.5 font-bold">⌘K</kbd>
+            </button>
+
+            {/* Mobile/Tablet Search Circle Button */}
+            <button 
+              onClick={() => setIsGlobalSearchOpen(true)}
+              className="lg:hidden p-2.5 rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all border border-blue-200/30 flex items-center justify-center cursor-pointer focus:outline-none"
+              title="Search Suburb"
+            >
+              <Search className="w-4 h-4 text-[#007AFF] font-bold" />
+            </button>
             
             {/* Desktop right: Admin Session Portal */}
             {isAdmin && (
@@ -1486,7 +1629,7 @@ export default function App() {
             <div className="lg:hidden flex items-center">
               <a 
                 href="tel:0863704982" 
-                className="p-2.5 rounded-full bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-all border border-emerald-200/40 flex items-center justify-center"
+                className="p-2.5 rounded-full bg-emerald-50 text-emerald-700 hover:bg-emerald-100 transition-all border border-emerald-200/40 flex items-center justify-center cursor-pointer"
                 title="Call Now"
               >
                 <Phone className="w-4 h-4 shrink-0 text-emerald-600" />
@@ -2262,56 +2405,13 @@ export default function App() {
           <div className="lg:col-span-6 space-y-6 flex flex-col justify-start">
             
             {/* Top row: Passive Suburb Metrics (Drill Depth & Watering Schedule) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               
-              {/* Card 3: Drill Depth with Vertical Depth Meter Gauge */}
-              <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col items-start justify-between min-h-[220px] text-left">
-                <div className="flex justify-between items-start w-full">
-                  <div className="w-10 h-10 rounded-full bg-[#FFD700] flex items-center justify-center border border-yellow-300 shadow-sm" />
-                  <span className="font-mono text-[9px] font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded border border-amber-100 uppercase tracking-wide">
-                    Stratum Ok
-                  </span>
-                </div>
-                
-                <div className="mt-4 w-full">
-                  <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest block">
-                    DRILL DEPTH
-                  </span>
-                  <p className="text-2xl font-display font-black text-[#0F172A] mt-0.5">
-                    {getDepthRange(selectedSuburb.name).text}
-                  </p>
-                </div>
-
-                {/* Vertical depth gauge block */}
-                <div className="flex items-center gap-3 w-full pt-3 mt-3 border-t border-slate-100 h-[100px] select-none">
-                  <div className="flex flex-col text-[8px] font-mono font-extrabold text-slate-400 justify-between h-full pr-1 select-none leading-none">
-                    <span>0m</span>
-                    <span>15m</span>
-                    <span>30m</span>
-                    <span>45m</span>
-                    <span>60m</span>
-                  </div>
-                  <div className="relative flex-1 h-full bg-slate-50 border border-slate-200/85 rounded-lg p-0.5 overflow-hidden flex flex-col justify-end">
-                    {/* Highlighted aquifer band segment representing the target depth */}
-                    <div 
-                      className="absolute bg-gradient-to-t from-[#007AFF] to-blue-400 rounded-md opacity-80 flex items-center justify-center text-[7px] text-white font-mono font-bold font-sans transition-all duration-700"
-                      style={{
-                        bottom: `${Math.max(5, (60 - getDepthRange(selectedSuburb.name).max) * 1.55)}%`,
-                        height: `${Math.max(15, (getDepthRange(selectedSuburb.name).max - getDepthRange(selectedSuburb.name).min) * 1.55)}%`,
-                        left: '2px',
-                        right: '2px',
-                        minHeight: '14px'
-                      }}
-                    >
-                      <span className="animate-pulse tracking-wide text-[7px] uppercase font-bold">Aquifer</span>
-                    </div>
-                    {/* Visual ground layer labels */}
-                    <div className="absolute top-0 left-0 right-0 h-[25%] border-b border-dashed border-slate-200 pointer-events-none text-[6.5px] font-mono text-slate-400 pl-1 pt-0.5">Sands</div>
-                    <div className="absolute top-[25%] left-0 right-0 h-[35%] border-b border-dashed border-slate-200 pointer-events-none text-[6.5px] font-mono text-slate-400 pl-1 pt-0.5">Limestone</div>
-                    <div className="absolute top-[60%] left-0 right-0 h-[40%] pointer-events-none text-[6.5px] font-mono text-slate-400 pl-1 pt-0.5">Basalt</div>
-                  </div>
-                </div>
-              </div>
+              {/* Card 3: Drill Depth with Interactive SoilProfileDiagram */}
+              <SoilProfileDiagram 
+                soilType={getSoilTypeAndDepthFromSuburbApp(selectedSuburb.name).soilType} 
+                waterDepth={getSoilTypeAndDepthFromSuburbApp(selectedSuburb.name).waterDepth} 
+              />
 
               {/* Card 5: Watering Days Card */}
               <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col items-start justify-between min-h-[220px] text-left">
@@ -2446,8 +2546,9 @@ export default function App() {
                         <button
                           type="button"
                           onClick={() => {
-                            if (pumpUrlVal.trim()) {
-                              handleUrlSubmit(pumpUrlVal.trim(), 'pump');
+                            const trimmedVal = (pumpUrlVal || '').trim();
+                            if (trimmedVal) {
+                              handleUrlSubmit(trimmedVal, 'pump');
                               setShowPumpUrlInput(false);
                             }
                           }}
@@ -2780,6 +2881,142 @@ export default function App() {
 
         </div>
       </footer>
+
+      {/* 6. Gorgeous Command-Palette Style Global Search Modal Overlay */}
+      {isGlobalSearchOpen && (
+        <div 
+          className="fixed inset-0 z-55 flex items-start justify-center p-4 bg-slate-900/60 backdrop-blur-md animate-fade-in"
+          onClick={() => {
+            setIsGlobalSearchOpen(false);
+          }}
+        >
+          <div 
+            className="w-full max-w-2xl bg-white rounded-2xl border border-slate-200/80 shadow-2xl overflow-hidden mt-16 sm:mt-24 transition-all animate-[fadeInUp_0.3s_ease-out_forwards]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Search Header area */}
+            <div className="relative flex items-center border-b border-slate-100 p-4">
+              <span className="text-slate-400 pl-1.5 pr-3 select-none">
+                <Search className="w-5 h-5 text-slate-400" />
+              </span>
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={globalSearchQuery}
+                placeholder="Search South Corridor index suburbs (e.g. Baldivis, Rockingham, Kwinana...)"
+                onChange={(e) => setGlobalSearchQuery(e.target.value)}
+                onKeyDown={handleSearchKeyDown}
+                className="w-full bg-transparent border-none text-slate-800 placeholder-slate-400 text-sm focus:outline-none pr-8 py-1.5"
+              />
+              <button 
+                onClick={() => {
+                  setIsGlobalSearchOpen(false);
+                  setGlobalSearchQuery('');
+                }}
+                className="absolute right-4 p-1 rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-600 transition-all cursor-pointer"
+                title="Close (Esc)"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Results pane */}
+            <div className="max-h-[380px] overflow-y-auto p-2 font-sans space-y-1">
+              {!globalSearchQuery ? (
+                <div className="py-8 px-4 text-center space-y-2">
+                  <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto text-slate-400">
+                    <Search className="w-4.5 h-4.5" />
+                  </div>
+                  <h4 className="text-xs font-bold text-slate-750 font-sans tracking-tight">Search South Corridor Hub</h4>
+                  <p className="text-[11px] text-slate-500 max-w-sm mx-auto leading-relaxed">
+                    Enter any of our twenty index suburbs or postcodes to view specific casing configurations, local water table depths, iron risk levels, and regulatory guidance.
+                  </p>
+                  
+                  {/* Quick-select recommendations */}
+                  <div className="pt-4">
+                    <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2">Index Suburbs</span>
+                    <div className="flex flex-wrap items-center justify-center gap-2 max-w-md mx-auto">
+                      {['Rockingham', 'Baldivis', 'Canning Vale', 'Kwinana', 'Success', 'Atwell'].map(sub => (
+                        <button
+                          key={sub}
+                          onClick={() => handleGlobalSelectSuburb(sub)}
+                          className="bg-slate-50 hover:bg-[#007AFF]/10 hover:text-[#007AFF] text-[11px] font-semibold text-slate-655 px-2.5 py-1 rounded-lg border border-slate-200/50 hover:border-blue-500/10 cursor-pointer transition-all animate-none"
+                        >
+                          {sub}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : filteredGlobalSuburbs.length === 0 ? (
+                <div className="py-12 px-4 text-center space-y-1.5">
+                  <div className="w-10 h-10 rounded-full bg-amber-50 border border-amber-100/50 flex items-center justify-center mx-auto text-amber-500">
+                    <AlertCircle className="w-4.5 h-4.5" />
+                  </div>
+                  <h4 className="text-xs font-bold text-slate-755 font-sans tracking-tight">No Suburb Found</h4>
+                  <p className="text-[11px] text-slate-500 max-w-xs mx-auto leading-relaxed">
+                    No results matched &ldquo;<strong className="text-slate-800 font-bold">{globalSearchQuery}</strong>&rdquo;. Please check the spelling or search for another Perth region.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <div className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest px-3 py-1.5 mb-1 select-none">
+                    Matching Suburbs ({filteredGlobalSuburbs.length})
+                  </div>
+                  {filteredGlobalSuburbs.map((sub, idx) => {
+                    const isHighlighted = idx === globalHighlightedIndex;
+                    return (
+                      <div
+                        key={sub.name}
+                        onClick={() => handleGlobalSelectSuburb(sub.name)}
+                        onMouseEnter={() => setGlobalHighlightedIndex(idx)}
+                        className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all ${
+                          isHighlighted 
+                            ? 'bg-[#007AFF]/5 border border-transparent shadow-[inset_0_0_0_1px_rgba(0,122,255,0.15)] shadow-sm' 
+                            : 'border border-transparent'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors ${
+                            isHighlighted ? 'bg-[#007AFF]/10 text-[#007AFF]' : 'bg-slate-50 border border-slate-200/40 text-slate-400'
+                          }`}>
+                            <MapPin className="w-4 h-4" />
+                          </div>
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs font-bold font-sans text-slate-805">{sub.name}</span>
+                              <span className="text-[10px] font-mono font-bold text-slate-400 font-semibold">Postcode {sub.postcode}</span>
+                            </div>
+                            <span className="text-[10px] text-slate-500 font-sans mt-0.5 block leading-tight">
+                              Geological Sector: <strong className="text-slate-600 capitalize font-semibold">{sub.sector}</strong> • Aquifer: {sub.aquifer}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1.5 font-sans">
+                          {isHighlighted ? (
+                            <span className="text-[10px] font-semibold text-[#007AFF]/90 flex items-center gap-0.5 animate-pulse">
+                              <span>Jump directly</span>
+                              <ChevronRight className="w-3 h-3 text-[#007AFF]" />
+                            </span>
+                          ) : (
+                            <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </>
+              )}
+            </div>
+
+            {/* Sticky Search Footer hint */}
+            <div className="bg-slate-50 px-4 py-2 border-t border-slate-100 flex items-center justify-between text-[9px] font-mono text-slate-400 uppercase tracking-wider">
+              <span>Use <kbd className="bg-white border border-slate-200 shadow-sm px-1.5 py-0.5 rounded text-[8px]">↑↓</kbd> keys, <kbd className="bg-white border border-slate-200 shadow-sm px-1.5 py-0.5 rounded text-[8px]">Enter</kbd> to select</span>
+              <span>Press <kbd className="bg-white border border-slate-200 shadow-sm px-1.5 py-0.5 rounded text-[8px]">Esc</kbd> to clear</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* 5. Highly Elegant, Floating Interactive Booking & Quote Overlay Modal */}
       {isModalOpen && (
