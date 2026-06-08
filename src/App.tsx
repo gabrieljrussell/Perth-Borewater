@@ -1559,14 +1559,6 @@ export default function App() {
             >
               Resources
             </button>
-
-            <button 
-              onClick={() => setIsGlobalSearchOpen(true)}
-              className="text-[#0F2C59] hover:text-[#007AFF] transition-all cursor-pointer focus:outline-none flex items-center justify-center p-1.5 rounded-full hover:bg-slate-100 duration-155"
-              title="Search Index Suburbs (⌘K)"
-            >
-              <Search className="w-4 h-4 text-[#007AFF] animate-none" />
-            </button>
           </nav>
 
           {/* Flashpoint Layout Right Side */}
@@ -1575,7 +1567,7 @@ export default function App() {
             {/* Mobile/Tablet Search Circle Button */}
             <button 
               onClick={() => setIsGlobalSearchOpen(true)}
-              className="lg:hidden p-2.5 rounded-full bg-blue-50 text-blue-700 hover:bg-blue-100 transition-all border border-blue-200/30 flex items-center justify-center cursor-pointer focus:outline-none"
+              className="lg:hidden p-2.5 rounded-full bg-blue-50 text-blue-700 hover:bg-blue-105 transition-all border border-blue-200/30 flex items-center justify-center cursor-pointer focus:outline-none"
               title="Search Suburb"
             >
               <Search className="w-4 h-4 text-[#007AFF] font-bold" />
@@ -1601,6 +1593,14 @@ export default function App() {
 
             {/* Desktop right: Semi-transparent silver phone pill + Emerald Green button */}
             <div className="hidden lg:flex items-center gap-3">
+              <button 
+                onClick={() => setIsGlobalSearchOpen(true)}
+                className="w-10 h-10 rounded-full bg-slate-100 hover:bg-slate-200 hover:text-[#007AFF] text-slate-600 transition-all flex items-center justify-center cursor-pointer focus:outline-none hover:scale-105 duration-150"
+                title="Search Suburbs (⌘K)"
+              >
+                <Search className="w-4 h-4 text-[#007AFF]" />
+              </button>
+
               <a 
                 href="tel:0863704982" 
                 className="bg-[#E2E8F0]/40 hover:bg-[#E2E8F0]/65 text-slate-800 font-sans font-extrabold text-[11px] uppercase tracking-wider px-5 py-2.5 rounded-full shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] transition-all border border-slate-300/40 hover:scale-[1.02] active:scale-[0.98] duration-300 flex items-center gap-2 cursor-pointer h-[38px]"
@@ -2196,7 +2196,7 @@ export default function App() {
           </div>
 
           {/* Card 3: Watering Days Card */}
-          <div className="col-span-1 md:col-span-1 lg:col-span-4 bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col items-start justify-between min-h-[220px] text-left">
+          <div className="col-span-1 md:col-span-1 lg:col-span-6 bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col items-start justify-between min-h-[220px] text-left">
             <div className="flex justify-between items-start w-full">
               <div className="w-10 h-10 rounded-full bg-[#007AFF]/10 flex items-center justify-center border border-[#007AFF]/25 shadow-xs shrink-0">
                 <Calendar className="w-5 h-5 text-[#007AFF]" />
@@ -2224,119 +2224,8 @@ export default function App() {
             </div>
           </div>
 
-          {/* Card 4: Geological Evidence image/gradient block - Active Upload Component */}
-          <div 
-            onClick={() => isAdmin && geologyInputRef.current?.click()}
-            onDragOver={(e) => isAdmin && handleDragOver(e, setIsGeologyDragging)}
-            onDragLeave={(e) => isAdmin && handleDragLeave(e, setIsGeologyDragging)}
-            onDrop={(e) => isAdmin && handleDrop(e, 'geology', setIsGeologyDragging)}
-            className={`col-span-1 md:col-span-1 lg:col-span-4 rounded-3xl relative overflow-hidden min-h-[220px] shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-end p-6 border transition-all duration-300 text-left ${
-              isAdmin 
-                ? 'cursor-pointer group hover:border-amber-500/50 border-slate-800 bg-slate-900' 
-                : 'border-slate-200/60 bg-slate-950/95'
-            } ${
-              isGeologyDragging && isAdmin
-                ? 'border-amber-500 ring-4 ring-amber-500/50 scale-[1.01] bg-amber-950/40' 
-                : ''
-            }`}
-          >
-            {/* Drag and Drop visual feedback */}
-            {isGeologyDragging && isAdmin ? (
-              <div className="absolute inset-0 bg-amber-950/90 backdrop-blur-xs flex flex-col items-center justify-center text-center z-20 p-4 transition-all">
-                <Upload className="w-10 h-10 text-amber-400 mb-1 animate-bounce" />
-                <p className="text-white font-display font-black text-sm">Drop rockingham-geology.jpg here</p>
-                <p className="text-amber-405 text-[10px] font-mono tracking-wider uppercase">Accepts JPG/PNG image</p>
-              </div>
-            ) : isAdmin ? (
-              <div className="absolute top-3 right-3 z-30 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    geologyInputRef.current?.click();
-                  }}
-                  className="bg-black/85 hover:bg-amber-600 border border-white/20 px-2 py-1 rounded text-[9px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 animate-fade-in"
-                >
-                  <Upload className="w-2.5 h-2.5" />
-                  <span>Upload</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowGeologyUrlInput(true);
-                  }}
-                  className="bg-black/85 hover:bg-yellow-600 border border-white/20 px-2 py-1 rounded text-[9px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 animate-fade-in"
-                >
-                  <Link className="w-2.5 h-2.5 text-yellow-500" />
-                  <span>URL</span>
-                </button>
-              </div>
-            ) : null}
-
-            {/* Inline URL Input overlay screen */}
-            {showGeologyUrlInput && (
-              <div 
-                onClick={(e) => e.stopPropagation()} 
-                className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-4 z-45 animate-fade-in"
-              >
-                <div className="w-full space-y-2.5">
-                  <div className="flex items-center justify-between">
-                    <span className="text-white font-sans font-bold text-[10px] uppercase tracking-wider flex items-center gap-1">
-                      <Link className="w-3 h-3 text-amber-400" />
-                      Geology Image URL
-                    </span>
-                    <button
-                      type="button"
-                      onClick={() => setShowGeologyUrlInput(false)}
-                      className="text-slate-400 hover:text-white text-[10px] font-mono bg-white/10 hover:bg-white/20 px-1.5 py-0.5 rounded"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                  <div className="flex gap-1.5">
-                    <input
-                      type="url"
-                      placeholder="https://example.com/geology.jpg"
-                      value={geologyUrlVal}
-                      onChange={(e) => setGeologyUrlVal(e.target.value)}
-                      className="bg-white/10 border border-white/20 text-white rounded px-2 py-1 text-xs flex-grow outline-none focus:ring-1 focus:ring-amber-500"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => {
-                        handleUrlSubmit(geologyUrlVal, 'geology');
-                        setShowGeologyUrlInput(false);
-                      }}
-                      className="bg-amber-600 hover:bg-amber-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded transition-all"
-                    >
-                      OK
-                    </button>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Rock Core spectroscopy image */}
-            <img 
-              src={geologyPhoto || undefined} 
-              alt={`Bore drilling services in ${selectedSuburb.name} - Perth Bore Water`} 
-              className="absolute inset-0 w-full h-full object-cover opacity-75 animate-fade-in"
-              referrerPolicy="no-referrer"
-              key={geologyPhoto || 'geology'}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent animate-fade-in" />
-            
-            <div className="relative z-10 space-y-1 bg-black/45 p-3 rounded-2xl border border-white/10 backdrop-blur-xs">
-              <span className="text-[8px] font-mono font-bold text-[#FFD700] uppercase tracking-wider block">CORE SPECTROSCOPY</span>
-              <h4 className="text-white font-display font-extrabold text-base tracking-tight">
-                Geological Evidence
-              </h4>
-            </div>
-          </div>
-
           {/* Card 5: Staining Risk & Mineral Concentration Gauge */}
-          <div className="col-span-1 md:col-span-1 lg:col-span-4 bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between min-h-[220px] text-left">
+          <div className="col-span-1 md:col-span-1 lg:col-span-6 bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between min-h-[220px] text-left">
             <div>
               <h4 className="font-display font-black text-slate-900 text-base leading-tight">Staining Risk</h4>
               <p className="text-[10px] text-slate-500 mt-0.5 font-sans">
@@ -2377,6 +2266,141 @@ export default function App() {
                 <span className="block mt-1.5 font-semibold text-slate-700 not-italic">
                   Managing {selectedSuburb.soilComposition} aquifers to counter {selectedSuburb.localHeadache}.
                 </span>
+              </p>
+            </div>
+          </div>
+
+          {/* Card 4: Geological Evidence image/gradient block - Active Upload Component */}
+          <div 
+            onClick={() => isAdmin && geologyInputRef.current?.click()}
+            onDragOver={(e) => isAdmin && handleDragOver(e, setIsGeologyDragging)}
+            onDragLeave={(e) => isAdmin && handleDragLeave(e, setIsGeologyDragging)}
+            onDrop={(e) => isAdmin && handleDrop(e, 'geology', setIsGeologyDragging)}
+            className={`col-span-1 md:col-span-2 lg:col-span-12 rounded-3xl relative overflow-hidden min-h-[350px] md:min-h-[460px] lg:min-h-[500px] shadow-[0_12px_40px_rgba(0,0,0,0.06)] flex flex-col justify-end p-8 border transition-all duration-300 text-left ${
+              isAdmin 
+                ? 'cursor-pointer group hover:border-amber-500/50 border-slate-800 bg-slate-900' 
+                : 'border-slate-200/60 bg-slate-950/95'
+            } ${
+              isGeologyDragging && isAdmin
+                ? 'border-amber-500 ring-4 ring-amber-500/50 scale-[1.01] bg-amber-950/40' 
+                : ''
+            }`}
+          >
+            {/* Drag and Drop visual feedback */}
+            {isGeologyDragging && isAdmin ? (
+              <div className="absolute inset-0 bg-amber-950/90 backdrop-blur-xs flex flex-col items-center justify-center text-center z-25 p-4 transition-all animate-fade-in">
+                <Upload className="w-12 h-12 text-amber-400 mb-2 animate-bounce" />
+                <p className="text-white font-display font-black text-base">Drop rockingham-geology.jpg here</p>
+                <p className="text-amber-405 text-xs font-mono tracking-wider uppercase">Accepts JPG/PNG image</p>
+              </div>
+            ) : isAdmin ? (
+              <div className="absolute top-4 right-4 z-40 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    geologyInputRef.current?.click();
+                  }}
+                  className="bg-black/85 hover:bg-amber-600 border border-white/20 px-3 py-1.5 rounded-xl text-[10px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 animate-fade-in cursor-pointer"
+                >
+                  <Upload className="w-3 h-3" />
+                  <span>Upload Image</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowGeologyUrlInput(true);
+                  }}
+                  className="bg-black/85 hover:bg-yellow-600 border border-white/20 px-3 py-1.5 rounded-xl text-[10px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 animate-fade-in cursor-pointer"
+                >
+                  <Link className="w-3 h-3 text-yellow-500" />
+                  <span>URL link</span>
+                </button>
+              </div>
+            ) : null}
+
+            {/* Inline URL Input overlay screen */}
+            {showGeologyUrlInput && (
+              <div 
+                onClick={(e) => e.stopPropagation()} 
+                className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 z-45 animate-fade-in"
+              >
+                <div className="w-full max-w-md space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-white font-sans font-extrabold text-xs uppercase tracking-wider flex items-center gap-1.5">
+                      <Link className="w-3.5 h-3.5 text-amber-400" />
+                      Geology Image URL
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setShowGeologyUrlInput(false)}
+                      className="text-slate-400 hover:text-white text-xs font-mono bg-white/10 hover:bg-white/20 px-2 py-1 rounded"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="url"
+                      placeholder="https://example.com/geology.jpg"
+                      value={geologyUrlVal}
+                      onChange={(e) => setGeologyUrlVal(e.target.value)}
+                      className="bg-white/10 border border-white/20 text-white rounded-xl px-3.5 py-2 text-xs flex-grow outline-none focus:ring-1 focus:ring-amber-500 font-semibold"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleUrlSubmit(geologyUrlVal, 'geology');
+                        setShowGeologyUrlInput(false);
+                      }}
+                      className="bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold px-4 py-2 rounded-xl transition-all"
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Rock Core spectroscopy image */}
+            <img 
+              src={geologyPhoto || undefined} 
+              alt={`Geological core spectroscopy and depth evidence in ${selectedSuburb.name} - Perth Bore Water`} 
+              className="absolute inset-0 w-full h-full object-cover opacity-80 animate-fade-in"
+              referrerPolicy="no-referrer"
+              key={geologyPhoto || 'geology'}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-transparent animate-fade-in pointer-events-none" />
+            
+            {/* Scientific Spectroscopy Overlays for Geological authenticity */}
+            <div className="absolute top-6 left-6 z-20 hidden sm:flex flex-col gap-2.5 pointer-events-none bg-slate-950/75 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/10 text-[10px] font-mono text-slate-350 max-w-sm">
+              <div className="flex items-center gap-2 text-xs text-emerald-400 font-extrabold tracking-wide">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                AQUIFER CALIBRATION ACTIVE
+              </div>
+              <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-left border-t border-white/10 pt-2.5">
+                <div>AQUIFER LAYER:</div> 
+                <div className="text-white font-bold">{selectedSuburb.soilComposition}</div>
+                
+                <div>DIAGNOSTIC TARGET:</div> 
+                <div className="text-white font-bold">{getDepthRange(selectedSuburb.name).text}</div>
+                
+                <div>ESTIMATED STRETCH:</div> 
+                <div className="text-white font-bold">~{selectedSuburb.typicalDepth}</div>
+                
+                <div>STAINING INDEX:</div> 
+                <div className="text-white font-bold uppercase">{selectedSuburb.ironRisk} RISK</div>
+              </div>
+            </div>
+
+            <div className="relative z-10 space-y-1.5 bg-slate-950/60 p-4.5 rounded-2xl border border-white/10 backdrop-blur-xs max-w-sm">
+              <span className="text-[9px] font-mono font-black text-amber-400 uppercase tracking-widest block">CORE SPECTROSCOPY EVIDENCE</span>
+              <h4 className="text-white font-display font-black text-lg tracking-tight leading-tight">
+                Geological Strata Profile
+              </h4>
+              <p className="text-xs text-slate-300 leading-relaxed font-sans">
+                Real evidence tracking borehole core samples to verify drill compaction, water layers, and secure water quality.
               </p>
             </div>
           </div>
