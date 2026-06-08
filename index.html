@@ -29,6 +29,21 @@
         };
 
         window.__showDiagnosticError = function(title, details, isAssetError) {
+          // Check if in admin mode (either query params have 'admin'/'login' or localStorage indicates logged-in admin)
+          var hasAdminUrl = false;
+          var isAdminSaved = false;
+          try {
+            var urlParams = new URLSearchParams(window.location.search);
+            hasAdminUrl = urlParams.has('admin') || urlParams.has('login');
+            var savedAdminEmail = localStorage.getItem('perth_borewater_admin_email') || '';
+            isAdminSaved = savedAdminEmail.trim().toLowerCase() === 'gabrieljrussell@gmail.com';
+          } catch(e) {}
+
+          if (!hasAdminUrl && !isAdminSaved) {
+            // Quietly ignore the diagnostic error overlay presentation on public
+            return;
+          }
+
           if (document.getElementById('pb-error-overlay')) return;
 
           const container = document.createElement('div');

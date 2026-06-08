@@ -476,11 +476,8 @@ export default function App() {
   React.useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     if (!isAdmin && (urlParams.has('login') || urlParams.has('admin'))) {
-      const adminVal = urlParams.get('admin') || '';
-      if (adminVal.toLowerCase() !== 'gabrieljrussell@gmail.com') {
-        setAdminLoginInput(adminVal);
-        setShowAdminLogin(true);
-      }
+      setAdminLoginInput('');
+      setShowAdminLogin(true);
     }
   }, [isAdmin]);
   
@@ -1371,7 +1368,8 @@ export default function App() {
                   <input
                     type="email"
                     required
-                    placeholder="gabrieljrussell@gmail.com"
+                    placeholder="Enter email address"
+                    autoComplete="off"
                     value={adminLoginInput}
                     onChange={(e) => setAdminLoginInput(e.target.value)}
                     className="w-full bg-slate-50 border border-slate-250/70 rounded-xl pl-4 pr-10 py-3 text-xs text-slate-950 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-emerald-550/30 focus:border-emerald-500 focus:bg-white transition-all font-semibold"

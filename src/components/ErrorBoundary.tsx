@@ -79,6 +79,41 @@ export default class ErrorBoundary extends React.Component<Props, State> {
 
   public render() {
     if (this.state.hasError) {
+      let isAdminMode = false;
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const hasAdminUrl = urlParams.has('admin') || urlParams.has('login');
+        const savedAdminEmail = localStorage.getItem('perth_borewater_admin_email') || '';
+        const isAdminSaved = savedAdminEmail.trim().toLowerCase() === 'gabrieljrussell@gmail.com';
+        isAdminMode = hasAdminUrl || isAdminSaved;
+      } catch (e) {}
+
+      if (!isAdminMode) {
+        return (
+          <div className="min-h-screen bg-slate-50 flex items-center justify-center p-6 text-center select-none" id="public-error-view">
+            <div className="max-w-md w-full bg-white border border-slate-200/80 rounded-3xl p-8 sm:p-10 shadow-[0_8px_30px_rgb(0,0,0,0.02)] space-y-6">
+              <div className="w-12 h-12 rounded-2xl bg-[#007AFF]/10 flex items-center justify-center text-[#007AFF] mx-auto text-xl font-bold">
+                💧
+              </div>
+              <div className="space-y-2">
+                <h1 className="text-xl font-display font-black text-slate-900">
+                  Update in Progress
+                </h1>
+                <p className="text-xs text-slate-500 leading-relaxed">
+                  We are updating Perth's local groundwater depth indices. This page will be available again shortly. Thank you for your patience.
+                </p>
+              </div>
+              <button
+                onClick={this.handleReset}
+                className="w-full bg-slate-900 hover:bg-slate-800 text-white font-sans text-xs uppercase tracking-wider py-3 rounded-xl font-bold transition-all shadow-sm cursor-pointer"
+              >
+                Reload Page
+              </button>
+            </div>
+          </div>
+        );
+      }
+
       return (
         <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between p-4 sm:p-6 md:p-8 font-sans selection:bg-rose-500 selection:text-white" id="react-error-boundary-view">
           {/* Header Bar */}
