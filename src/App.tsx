@@ -42,6 +42,13 @@ import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
 import SoilProfileDiagram from './components/SoilProfileDiagram';
 
+export const INDEX_SUBURBS = [
+  "Baldivis", "Rockingham", "Canning Vale", "Mandurah", "Secret Harbour", 
+  "Atwell", "Aubin Grove", "Beeliar", "Bertram", "Casuarina", 
+  "Cockburn Central", "Cooloongup", "Hammond Park", "Jandakot", "Karrakup", 
+  "Karnup", "Kwinana", "Port Kennedy", "Success", "Wellard"
+];
+
 const getSoilTypeAndDepthFromSuburbApp = (suburbName: string) => {
   const depth = getDepthRange(suburbName);
   const midDepth = Math.round((depth.min + depth.max) / 2);
@@ -680,12 +687,7 @@ export default function App() {
   const globalSearchTrimmed = globalSearchQuery.trim().toLowerCase();
   const filteredGlobalSuburbs = React.useMemo(() => {
     if (!globalSearchTrimmed) return [];
-    const indexSuburbLowerSet = new Set([
-      "baldivis", "rockingham", "canning vale", "mandurah", "secret harbour", 
-      "atwell", "aubin grove", "beeliar", "bertram", "casuarina", 
-      "cockburn central", "cooloongup", "hammond park", "jandakot", "karrakup", 
-      "karnup", "kwinana", "port kennedy", "success", "wellard"
-    ]);
+    const indexSuburbLowerSet = new Set(INDEX_SUBURBS.map(s => s.toLowerCase()));
     return ALL_SUBURBS_LIST.filter(sub => {
       const matchQuery = sub.name.toLowerCase().includes(globalSearchTrimmed) || 
                           sub.postcode.includes(globalSearchTrimmed);
@@ -1559,6 +1561,15 @@ export default function App() {
             >
               Resources
             </button>
+
+            <button 
+              onClick={() => setIsGlobalSearchOpen(true)}
+              className="text-[#007AFF] hover:text-[#0051C3] transition-all text-sm font-extrabold tracking-wide cursor-pointer focus:outline-none flex items-center gap-1.5 duration-200 hover:scale-[1.02]"
+              title="Search index suburbs"
+            >
+              <Search className="w-4 h-4 text-[#007AFF] animate-none" />
+              <span>Search Suburb</span>
+            </button>
           </nav>
 
           {/* Flashpoint Layout Right Side */}
@@ -2124,583 +2135,555 @@ export default function App() {
 
       {/* 3. Bento Grid - Formulated to display exactly what is featured in the screenshot */}
       <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-8 py-8 w-full z-10" id="bento-grid-container">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-6 items-stretch justify-center">
           
-          {/* LEFT PARTION COLUMN (Contains Soil info, Geological evidence, and Staining risk cards) */}
-          <div className="lg:col-span-6 space-y-6 flex flex-col justify-start">
+          {/* Card 1: Technical Analysis Bento Box */}
+          <div id="bore-atlas-blueprint" className="col-span-1 md:col-span-2 lg:col-span-6 bg-white border border-slate-200/60 rounded-3xl p-8 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-left flex flex-col justify-start min-h-[350px]">
+            <div className="flex justify-between items-start">
+              <div className="w-12 h-12 rounded-2xl bg-[#007AFF]/10 flex items-center justify-center border border-[#007AFF]/10 shadow-xs">
+                <Layers className="w-6 h-6 text-[#007AFF]" />
+              </div>
+              <span className="font-mono text-[10px] font-bold text-[#007AFF] px-3.5 py-1 bg-[#007AFF]/10 rounded-full uppercase tracking-wider border border-[#007AFF]/15">
+                TECHNICAL BLUEPRINT
+              </span>
+            </div>
             
-            {/* Card 1: Technical Analysis Bento Box */}
-            <div id="bore-atlas-blueprint" className="bg-white border border-slate-200/60 rounded-3xl p-8 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-left flex flex-col justify-start min-h-[350px]">
-              <div className="flex justify-between items-start">
-                <div className="w-12 h-12 rounded-2xl bg-[#007AFF]/10 flex items-center justify-center border border-[#007AFF]/10 shadow-xs">
-                  <Layers className="w-6 h-6 text-[#007AFF]" />
-                </div>
-                <span className="font-mono text-[10px] font-bold text-[#007AFF] px-3.5 py-1 bg-[#007AFF]/10 rounded-full uppercase tracking-wider border border-[#007AFF]/15">
-                  TECHNICAL BLUEPRINT
+            <div className="mt-6 space-y-4 font-mono text-xs">
+              <div>
+                <span className="text-[10px] font-mono tracking-widest text-slate-400 font-bold uppercase block">
+                  LOCAL GEOLOGY TYPE
+                </span>
+                <span className="text-slate-800 font-semibold font-sans text-sm mt-0.5 block">
+                  {selectedSuburb.soilComposition}
+                </span>
+                <span className="text-slate-605 font-medium font-sans text-xs mt-1 block leading-relaxed">
+                  {getConsultantSpeak(selectedSuburb.name).profile}
                 </span>
               </div>
-              
-              <div className="mt-6 space-y-4 font-mono text-xs">
-                <div>
-                  <span className="text-[10px] font-mono tracking-widest text-slate-400 font-bold uppercase block">
-                    LOCAL GEOLOGY TYPE
-                  </span>
-                  <span className="text-slate-800 font-semibold font-sans text-sm mt-0.5 block">
-                    {selectedSuburb.soilComposition}
-                  </span>
-                  <span className="text-slate-600 font-medium font-sans text-xs mt-1 block leading-relaxed">
-                    {getConsultantSpeak(selectedSuburb.name).profile}
-                  </span>
-                </div>
 
-                <div>
-                  <span className="text-[10px] font-mono tracking-widest text-[#007AFF] font-bold uppercase block">
-                    COMMON HYDROLOGIC ISSUE
-                  </span>
-                  <span className="text-[#007AFF] font-extrabold text-xs font-sans mt-0.5 block uppercase">
-                    {selectedSuburb.localHeadache}
-                  </span>
-                  <span className="text-slate-705 font-sans text-xs mt-1 block font-medium leading-relaxed">
-                    {getConsultantSpeak(selectedSuburb.name).priority}
-                  </span>
-                </div>
-
-                <div>
-                  <span className="text-[10px] font-mono tracking-widest text-amber-600 font-bold uppercase block">
-                    MITIGATION STRATEGY
-                  </span>
-                  <span className="text-slate-705 font-sans text-xs mt-0.5 block leading-relaxed font-medium">
-                    {getConsultantSpeak(selectedSuburb.name).mitigation}
-                  </span>
-                </div>
-
-
-
-                <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 font-mono text-[10px] text-slate-500 space-y-1">
-                  <span className="text-slate-400 block font-bold">HOLE CALIBER REPORT</span>
-                  <p className="text-slate-700 font-medium font-sans">
-                    100mm AS-certified high-flow casing column, targeted aquifer zone <strong className="text-[#007AFF]">{getDepthRange(selectedSuburb.name).text}</strong>.
-                  </p>
-                </div>
+              <div>
+                <span className="text-[10px] font-mono tracking-widest text-[#007AFF] font-bold uppercase block">
+                  COMMON HYDROLOGIC ISSUE
+                </span>
+                <span className="text-[#007AFF] font-extrabold text-xs font-sans mt-0.5 block uppercase">
+                  {selectedSuburb.localHeadache}
+                </span>
+                <span className="text-slate-705 font-sans text-xs mt-1 block font-medium leading-relaxed">
+                  {getConsultantSpeak(selectedSuburb.name).priority}
+                </span>
               </div>
 
-              <div className="mt-auto pt-5 border-t border-slate-100 flex items-center justify-between text-[11px]">
-                <span className="text-slate-400 font-semibold font-sans">
-                  {selectedSuburb.name} Geotechnical Model
+              <div>
+                <span className="text-[10px] font-mono tracking-widest text-amber-600 font-bold uppercase block">
+                  MITIGATION STRATEGY
                 </span>
-                <span className="text-[#007AFF] font-bold uppercase font-mono">
-                  ACTIVE SPEC
+                <span className="text-slate-705 font-sans text-xs mt-0.5 block leading-relaxed font-medium">
+                  {getConsultantSpeak(selectedSuburb.name).mitigation}
                 </span>
+              </div>
+
+              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-100 font-mono text-[10px] text-slate-500 space-y-1">
+                <span className="text-slate-400 block font-bold">HOLE CALIBER REPORT</span>
+                <p className="text-slate-705 font-medium font-sans">
+                  100mm AS-certified high-flow casing column, targeted aquifer zone <strong className="text-[#007AFF]">{getDepthRange(selectedSuburb.name).text}</strong>.
+                </p>
               </div>
             </div>
 
-            {/* Split row for Geological Evidence & Staining Risk cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              
-              {/* Card 6: Geological Evidence image/gradient block - Active Upload Component */}
+            <div className="mt-auto pt-5 border-t border-slate-100 flex items-center justify-between text-[11px]">
+              <span className="text-slate-400 font-semibold font-sans">
+                {selectedSuburb.name} Geotechnical Model
+              </span>
+              <span className="text-[#007AFF] font-bold uppercase font-mono">
+                ACTIVE SPEC
+              </span>
+            </div>
+          </div>
+
+          {/* Card 2: Drill Depth with Interactive SoilProfileDiagram */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-6 h-full flex flex-col" id="geological-cross-section-diagram-card">
+            <SoilProfileDiagram 
+              soilType={getSoilTypeAndDepthFromSuburbApp(selectedSuburb.name).soilType} 
+              waterDepth={getSoilTypeAndDepthFromSuburbApp(selectedSuburb.name).waterDepth} 
+            />
+          </div>
+
+          {/* Card 3: Watering Days Card */}
+          <div className="col-span-1 md:col-span-1 lg:col-span-4 bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col items-start justify-between min-h-[220px] text-left">
+            <div className="flex justify-between items-start w-full">
+              <div className="w-10 h-10 rounded-full bg-[#007AFF]/10 flex items-center justify-center border border-[#007AFF]/25 shadow-xs shrink-0">
+                <Calendar className="w-5 h-5 text-[#007AFF]" />
+              </div>
+              <span className="font-mono text-[9px] font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded border border-blue-100 uppercase tracking-wide">
+                ROSTER SCHEDULE
+              </span>
+            </div>
+            
+            <div className="mt-4 w-full">
+              <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest block">
+                WATERING DAYS
+              </span>
+              <p className="text-2xl font-display font-black text-slate-900 mt-0.5">
+                Mon &amp; Fri
+              </p>
+              <p className="text-[10px] text-slate-500 font-sans mt-1 leading-relaxed">
+                Postcode {getPostcode(selectedSuburb.name)} schedule strictly enforced by DWER.
+              </p>
+            </div>
+
+            <div className="w-full pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono text-slate-450 font-bold">
+              <span>SCHEME LIMIT</span>
+              <span className="text-[#007AFF]">2 STATIONS</span>
+            </div>
+          </div>
+
+          {/* Card 4: Geological Evidence image/gradient block - Active Upload Component */}
+          <div 
+            onClick={() => isAdmin && geologyInputRef.current?.click()}
+            onDragOver={(e) => isAdmin && handleDragOver(e, setIsGeologyDragging)}
+            onDragLeave={(e) => isAdmin && handleDragLeave(e, setIsGeologyDragging)}
+            onDrop={(e) => isAdmin && handleDrop(e, 'geology', setIsGeologyDragging)}
+            className={`col-span-1 md:col-span-1 lg:col-span-4 rounded-3xl relative overflow-hidden min-h-[220px] shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-end p-6 border transition-all duration-300 text-left ${
+              isAdmin 
+                ? 'cursor-pointer group hover:border-amber-500/50 border-slate-800 bg-slate-900' 
+                : 'border-slate-200/60 bg-slate-950/95'
+            } ${
+              isGeologyDragging && isAdmin
+                ? 'border-amber-500 ring-4 ring-amber-500/50 scale-[1.01] bg-amber-950/40' 
+                : ''
+            }`}
+          >
+            {/* Drag and Drop visual feedback */}
+            {isGeologyDragging && isAdmin ? (
+              <div className="absolute inset-0 bg-amber-950/90 backdrop-blur-xs flex flex-col items-center justify-center text-center z-20 p-4 transition-all">
+                <Upload className="w-10 h-10 text-amber-400 mb-1 animate-bounce" />
+                <p className="text-white font-display font-black text-sm">Drop rockingham-geology.jpg here</p>
+                <p className="text-amber-405 text-[10px] font-mono tracking-wider uppercase">Accepts JPG/PNG image</p>
+              </div>
+            ) : isAdmin ? (
+              <div className="absolute top-3 right-3 z-30 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    geologyInputRef.current?.click();
+                  }}
+                  className="bg-black/85 hover:bg-amber-600 border border-white/20 px-2 py-1 rounded text-[9px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 animate-fade-in"
+                >
+                  <Upload className="w-2.5 h-2.5" />
+                  <span>Upload</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setShowGeologyUrlInput(true);
+                  }}
+                  className="bg-black/85 hover:bg-yellow-600 border border-white/20 px-2 py-1 rounded text-[9px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 animate-fade-in"
+                >
+                  <Link className="w-2.5 h-2.5 text-yellow-500" />
+                  <span>URL</span>
+                </button>
+              </div>
+            ) : null}
+
+            {/* Inline URL Input overlay screen */}
+            {showGeologyUrlInput && (
               <div 
-                onClick={() => isAdmin && geologyInputRef.current?.click()}
-                onDragOver={(e) => isAdmin && handleDragOver(e, setIsGeologyDragging)}
-                onDragLeave={(e) => isAdmin && handleDragLeave(e, setIsGeologyDragging)}
-                onDrop={(e) => isAdmin && handleDrop(e, 'geology', setIsGeologyDragging)}
-                className={`rounded-3xl relative overflow-hidden h-[200px] shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-end p-6 border transition-all duration-300 text-left ${
+                onClick={(e) => e.stopPropagation()} 
+                className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-4 z-45 animate-fade-in"
+              >
+                <div className="w-full space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-white font-sans font-bold text-[10px] uppercase tracking-wider flex items-center gap-1">
+                      <Link className="w-3 h-3 text-amber-400" />
+                      Geology Image URL
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setShowGeologyUrlInput(false)}
+                      className="text-slate-400 hover:text-white text-[10px] font-mono bg-white/10 hover:bg-white/20 px-1.5 py-0.5 rounded"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                  <div className="flex gap-1.5">
+                    <input
+                      type="url"
+                      placeholder="https://example.com/geology.jpg"
+                      value={geologyUrlVal}
+                      onChange={(e) => setGeologyUrlVal(e.target.value)}
+                      className="bg-white/10 border border-white/20 text-white rounded px-2 py-1 text-xs flex-grow outline-none focus:ring-1 focus:ring-amber-500"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleUrlSubmit(geologyUrlVal, 'geology');
+                        setShowGeologyUrlInput(false);
+                      }}
+                      className="bg-amber-600 hover:bg-amber-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded transition-all"
+                    >
+                      OK
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Rock Core spectroscopy image */}
+            <img 
+              src={geologyPhoto || undefined} 
+              alt={`Bore drilling services in ${selectedSuburb.name} - Perth Bore Water`} 
+              className="absolute inset-0 w-full h-full object-cover opacity-75 animate-fade-in"
+              referrerPolicy="no-referrer"
+              key={geologyPhoto || 'geology'}
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent animate-fade-in" />
+            
+            <div className="relative z-10 space-y-1 bg-black/45 p-3 rounded-2xl border border-white/10 backdrop-blur-xs">
+              <span className="text-[8px] font-mono font-bold text-[#FFD700] uppercase tracking-wider block">CORE SPECTROSCOPY</span>
+              <h4 className="text-white font-display font-extrabold text-base tracking-tight">
+                Geological Evidence
+              </h4>
+            </div>
+          </div>
+
+          {/* Card 5: Staining Risk & Mineral Concentration Gauge */}
+          <div className="col-span-1 md:col-span-1 lg:col-span-4 bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between min-h-[220px] text-left">
+            <div>
+              <h4 className="font-display font-black text-slate-900 text-base leading-tight">Staining Risk</h4>
+              <p className="text-[10px] text-slate-500 mt-0.5 font-sans">
+                Aquifer mineral profiling
+              </p>
+            </div>
+            
+            {/* The Risk Gauge */}
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center text-[9px] font-mono font-bold">
+                <span className="text-slate-400">MINERAL CONC.</span>
+                <span className={`px-2 py-0.5 rounded-full text-[8px] uppercase font-bold ${
+                  selectedSuburb.name === 'Rockingham' ? 'bg-amber-100 text-amber-700' :
+                  selectedSuburb.ironRisk === 'Severe' ? 'bg-red-100 text-red-700' :
+                  selectedSuburb.ironRisk === 'High' ? 'bg-orange-100 text-orange-700' :
+                  selectedSuburb.ironRisk === 'Moderate' ? 'bg-yellow-105 text-yellow-850' :
+                  'bg-blue-100 text-blue-700'
+                }`}>
+                  {getIronRiskLabel(selectedSuburb.name)}
+                </span>
+              </div>
+              
+              {/* Visual gauge bar */}
+              <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden relative">
+                <div 
+                  className={`h-full rounded-full transition-all duration-700 ${
+                    selectedSuburb.name === 'Rockingham' ? 'bg-amber-500 w-[45%]' :
+                    selectedSuburb.ironRisk === 'Severe' ? 'bg-red-500 w-[95%]' :
+                    selectedSuburb.ironRisk === 'High' ? 'bg-orange-500 w-[75%]' :
+                    selectedSuburb.ironRisk === 'Moderate' ? 'bg-yellow-500 w-[45%]' :
+                    'bg-blue-500 w-[15%]'
+                  }`}
+                />
+              </div>
+              
+              <p className="text-[10.5px] text-slate-500 italic leading-snug">
+                {getIronRiskExplanation(selectedSuburb.name)}
+                <span className="block mt-1.5 font-semibold text-slate-700 not-italic">
+                  Managing {selectedSuburb.soilComposition} aquifers to counter {selectedSuburb.localHeadache}.
+                </span>
+              </p>
+            </div>
+          </div>
+
+          {/* Card 6: Aquifer Health Check & Maintenance Checklist */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-12 bg-white border border-slate-200/60 rounded-3xl p-7 sm:p-8 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between text-left shrink-0" id="maintenance-checklist-card">
+            <div className="space-y-4">
+              <div className="flex justify-between items-start">
+                <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
+                  <ShieldCheck className="w-6 h-6 text-amber-600" />
+                </div>
+                <span className="font-mono text-[9px] font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full uppercase tracking-wider border border-amber-100">
+                  HEALTH CHECKLIST
+                </span>
+              </div>
+              
+              <div className="space-y-3.5">
+                <h3 className="font-display font-black text-slate-900 text-base">Bore Common Failures &amp; Upkeep</h3>
+                <p className="text-xs text-slate-500 leading-relaxed font-sans">
+                  Most water bores do not require fully new drill layouts — they are restored through routine capacitor, relay, and valve maintenance. Before booking a costly full rebuild, review our checklist:
+                </p>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs font-semibold text-slate-600 font-sans pt-1">
+                  <div className="flex items-center gap-2.5 bg-slate-50 p-3 rounded-2xl border border-slate-200/55 shadow-xs">
+                     <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                     <span>Testing Start Capacitors &amp; Relays</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 bg-slate-50 p-3 rounded-2xl border border-slate-200/55 shadow-xs">
+                     <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                     <span>Solenoid Valve Resistance Checks</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 bg-slate-50 p-3 rounded-2xl border border-slate-200/55 shadow-xs">
+                     <span className="w-2 h-2 rounded-full bg-[#007AFF] shrink-0" />
+                     <span>Iron Stain Prevention Treatments</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 bg-slate-50 p-3 rounded-2xl border border-slate-200/55 shadow-xs">
+                     <span className="w-2 h-2 rounded-full bg-[#007AFF] shrink-0" />
+                     <span>Motor Insulation Megger Tests</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="pt-4 mt-4 border-t border-slate-100 text-[10.5px] text-slate-500 italic font-sans flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-2">
+              <span>💡 Maintaining the health of your existing pump &amp; capacitors saves homeowners thousands on average.</span>
+              <span className="font-mono text-[9px] font-bold text-emerald-600 uppercase bg-emerald-50 px-2.5 py-0.5 rounded border border-emerald-100">PREVENTATIVE OPTIMIZATION</span>
+            </div>
+          </div>
+
+          {/* TIER 1: THE FORENSIC REPAIR (Emergency) */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-4 bg-white border border-slate-200/60 rounded-3xl p-6.5 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between min-h-[480px] text-left relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-rose-500 text-white font-mono font-bold text-[8px] px-3.5 py-1 rounded-bl-xl uppercase tracking-wider flex items-center gap-1 z-10">
+              <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
+              EMERGENCY DISPATCH
+            </div>
+            
+            <div>
+              <div className="flex items-center gap-2 mb-2.5">
+                <span className="text-[9px] font-mono font-bold text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded border border-rose-100 uppercase tracking-wider">
+                  Tier I: Forensic
+                </span>
+              </div>
+              <h4 className="font-display font-black text-slate-900 text-lg leading-tight animate-fade-in-up">Bore Diagnostics & Recovery</h4>
+              
+              {/* Technical Pump Image Showcase */}
+              <div 
+                onClick={() => isAdmin && pumpInputRef.current?.click()}
+                onDragOver={(e) => isAdmin && handleDragOver(e, setIsPumpDragging)}
+                onDragLeave={(e) => isAdmin && handleDragLeave(e, setIsPumpDragging)}
+                onDrop={(e) => isAdmin && handleDrop(e, 'pump', setIsPumpDragging)}
+                className={`mt-4 w-full h-36 rounded-2xl overflow-hidden border relative flex-shrink-0 transition-all duration-300 ${
                   isAdmin 
-                    ? 'cursor-pointer group hover:border-amber-500/50 border-slate-800 bg-slate-900' 
-                    : 'border-slate-200/60 bg-slate-950/95'
+                    ? 'cursor-pointer group hover:border-rose-500/50 border-slate-200/60 bg-slate-900' 
+                    : 'border-slate-100 bg-slate-50'
                 } ${
-                  isGeologyDragging && isAdmin
-                    ? 'border-amber-500 ring-4 ring-amber-500/50 scale-[1.01] bg-amber-950/40' 
+                  isPumpDragging && isAdmin
+                    ? 'border-rose-500 ring-4 ring-rose-500/30 scale-[1.01] bg-rose-950/10' 
                     : ''
                 }`}
               >
-                {/* Drag and Drop visual feedback */}
-                {isGeologyDragging && isAdmin ? (
-                  <div className="absolute inset-0 bg-amber-950/90 backdrop-blur-xs flex flex-col items-center justify-center text-center z-20 p-4 transition-all">
-                    <Upload className="w-10 h-10 text-amber-400 mb-1 animate-bounce" />
-                    <p className="text-white font-display font-black text-sm">Drop rockingham-geology.jpg here</p>
-                    <p className="text-amber-405 text-[10px] font-mono tracking-wider uppercase">Accepts JPG/PNG image</p>
+                {isPumpDragging && isAdmin ? (
+                  <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex flex-col items-center justify-center pointer-events-none p-3 text-center">
+                    <Upload className="w-8 h-8 text-rose-500 mb-1 animate-bounce" />
+                    <p className="text-white font-display font-black text-xs">Drop pump image here</p>
+                    <p className="text-rose-405 text-[8px] font-mono tracking-wider uppercase">Accepts JPG/PNG image</p>
                   </div>
-                ) : isAdmin ? (
-                  <div className="absolute top-3 right-3 z-30 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-1.5">
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        geologyInputRef.current?.click();
+                ) : (
+                  <>
+                    <img 
+                      src={pumpPhoto || undefined} 
+                      alt={`Bore drilling services in ${selectedSuburb.name} - Perth Bore Water`} 
+                      className="w-full h-full object-cover transition-all animate-fade-in"
+                      referrerPolicy="no-referrer"
+                      key={pumpPhoto || 'pump'}
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80";
                       }}
-                      className="bg-black/85 hover:bg-amber-600 border border-white/20 px-2 py-1 rounded text-[9px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 animate-fade-in"
-                    >
-                      <Upload className="w-2.5 h-2.5" />
-                      <span>Upload</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setShowGeologyUrlInput(true);
-                      }}
-                      className="bg-black/85 hover:bg-yellow-600 border border-white/20 px-2 py-1 rounded text-[9px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 animate-fade-in"
-                    >
-                      <Link className="w-2.5 h-2.5 text-yellow-500" />
-                      <span>URL</span>
-                    </button>
-                  </div>
-                ) : null}
-
-                {/* Inline URL Input overlay screen */}
-                {showGeologyUrlInput && (
-                  <div 
-                    onClick={(e) => e.stopPropagation()} 
-                    className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-4 z-45 animate-fade-in"
-                  >
-                    <div className="w-full space-y-2.5">
-                      <div className="flex items-center justify-between">
-                        <span className="text-white font-sans font-bold text-[10px] uppercase tracking-wider flex items-center gap-1">
-                          <Link className="w-3 h-3 text-amber-400" />
-                          Geology Image URL
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => setShowGeologyUrlInput(false)}
-                          className="text-slate-400 hover:text-white text-[10px] font-mono bg-white/10 hover:bg-white/20 px-1.5 py-0.5 rounded"
-                        >
-                          ✕
-                        </button>
-                      </div>
-                      <div className="flex gap-1.5">
-                        <input
-                          type="url"
-                          placeholder="https://example.com/geology.jpg"
-                          value={geologyUrlVal}
-                          onChange={(e) => setGeologyUrlVal(e.target.value)}
-                          className="bg-white/10 border border-white/20 text-white rounded px-2 py-1 text-xs flex-grow outline-none focus:ring-1 focus:ring-amber-500"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            handleUrlSubmit(geologyUrlVal, 'geology');
-                            setShowGeologyUrlInput(false);
-                          }}
-                          className="bg-amber-600 hover:bg-amber-500 text-white text-[10px] font-semibold px-2.5 py-1 rounded transition-all"
-                        >
-                          OK
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Rock Core spectroscopy image */}
-                <img 
-                  src={geologyPhoto || undefined} 
-                  alt={`Bore drilling services in ${selectedSuburb.name} - Perth Bore Water`} 
-                  className="absolute inset-0 w-full h-full object-cover opacity-75 animate-fade-in"
-                  referrerPolicy="no-referrer"
-                  key={geologyPhoto || 'geology'}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/50 to-transparent animate-fade-in" />
-                
-                <div className="relative z-10 space-y-1">
-                  <span className="text-[8px] font-mono font-bold text-[#FFD700] uppercase tracking-wider block">CORE SPECTROSCOPY</span>
-                  <h4 className="text-white font-display font-extrabold text-base tracking-tight">
-                    Geological Evidence
-                  </h4>
-                </div>
-              </div>
-
-              {/* Card 7: Staining Risk & Mineral Concentration Gauge */}
-              <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between h-[200px] text-left">
-                <div>
-                  <h4 className="font-display font-black text-slate-900 text-base leading-tight">Staining Risk</h4>
-                  <p className="text-[10px] text-slate-500 mt-0.5 font-sans">
-                    Aquifer mineral profiling
-                  </p>
-                </div>
-                
-                {/* The Risk Gauge */}
-                <div className="space-y-1.5">
-                  <div className="flex justify-between items-center text-[9px] font-mono font-bold">
-                    <span className="text-slate-400">MINERAL CONC.</span>
-                    <span className={`px-2 py-0.5 rounded-full text-[8px] uppercase font-bold ${
-                      selectedSuburb.name === 'Rockingham' ? 'bg-amber-100 text-amber-700' :
-                      selectedSuburb.ironRisk === 'Severe' ? 'bg-red-100 text-red-700' :
-                      selectedSuburb.ironRisk === 'High' ? 'bg-orange-100 text-orange-700' :
-                      selectedSuburb.ironRisk === 'Moderate' ? 'bg-yellow-100 text-yellow-800' :
-                      'bg-blue-100 text-blue-700'
-                    }`}>
-                      {getIronRiskLabel(selectedSuburb.name)}
-                    </span>
-                  </div>
-                  
-                  {/* Visual gauge bar */}
-                  <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden relative">
-                    <div 
-                      className={`h-full rounded-full transition-all duration-700 ${
-                        selectedSuburb.name === 'Rockingham' ? 'bg-amber-500 w-[45%]' :
-                        selectedSuburb.ironRisk === 'Severe' ? 'bg-red-500 w-[95%]' :
-                        selectedSuburb.ironRisk === 'High' ? 'bg-orange-500 w-[75%]' :
-                        selectedSuburb.ironRisk === 'Moderate' ? 'bg-yellow-500 w-[45%]' :
-                        'bg-blue-500 w-[15%]'
-                      }`}
                     />
-                  </div>
-                  
-                  <p className="text-[10px] text-slate-500 italic leading-snug line-clamp-3">
-                    {getIronRiskExplanation(selectedSuburb.name)}
-                    <span className="block mt-1 font-semibold text-slate-700 not-italic">
-                      Managing {selectedSuburb.soilComposition} aquifers to counter {selectedSuburb.localHeadache}.
-                    </span>
+                    <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[8.5px] text-white font-mono uppercase tracking-widest font-bold">
+                      DIAGNOSTICS RIG
+                    </div>
+                    
+                    {isAdmin && (
+                      <div className="absolute top-2 right-2 z-30 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            pumpInputRef.current?.click();
+                          }}
+                          className="bg-black/85 hover:bg-rose-600 border border-white/20 px-2 py-1 rounded text-[8.5px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 whitespace-nowrap"
+                        >
+                          <Upload className="w-2.5 h-2.5" />
+                          <span>Upload</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowPumpUrlInput(!showPumpUrlInput);
+                          }}
+                          className="bg-black/85 hover:bg-[#007AFF] border border-white/25 px-1.5 py-1 rounded text-[8.5px] font-bold text-white uppercase tracking-wider flex items-center gap-0.5 shadow-md transition-all active:scale-95"
+                        >
+                          <span>URL</span>
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* URL Input Box inside Card */}
+              {showPumpUrlInput && isAdmin && (
+                <div className="mt-2.5 p-3.5 bg-slate-50 border border-slate-100 rounded-2xl space-y-2 animate-fade-in text-left">
+                  <p className="text-[10px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
+                    <span>PUMP SPECIFICATION ASSET URL:</span>
                   </p>
-                </div>
-              </div>
-
-            </div>
-
-            {/* Card 8: Aquifer Health Check & Maintenance Checklist (quantifying maintenance & common failures checklist - Suggestion C) */}
-            <div className="bg-white border border-slate-200/60 rounded-3xl p-7 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between text-left" id="maintenance-checklist-card">
-              <div className="space-y-4">
-                <div className="flex justify-between items-start">
-                  <div className="w-12 h-12 rounded-2xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
-                    <ShieldCheck className="w-6 h-6 text-amber-600" />
-                  </div>
-                  <span className="font-mono text-[9px] font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full uppercase tracking-wider border border-amber-100">
-                    HEALTH CHECKLIST
-                  </span>
-                </div>
-                
-                <div className="space-y-3">
-                  <h3 className="font-display font-black text-slate-900 text-base">Bore Common Failures &amp; Upkeep</h3>
-                  <p className="text-xs text-slate-500 leading-relaxed font-sans">
-                    Most bore systems don&apos;t need replacing — they need simple maintenance mechanics. Before investing in a costly new install, run our modular health checks.
-                  </p>
-                  
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs font-semibold text-slate-600 font-sans pt-1">
-                    <div className="flex items-center gap-2">
-                       <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                       <span>Testing Start Capacitors &amp; Relays</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                       <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
-                       <span>Solenoid Valve Resistance Checks</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                       <span className="w-2 h-2 rounded-full bg-[#007AFF] shrink-0" />
-                       <span>Iron Stain Prevention Treatments</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                       <span className="w-2 h-2 rounded-full bg-[#007AFF] shrink-0" />
-                       <span>Motor Insulation Megger Tests</span>
-                    </div>
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      value={pumpUrlVal}
+                      onChange={(e) => setPumpUrlVal(e.target.value)}
+                      placeholder="https://example.com/asset-pump.jpg"
+                      className="flex-1 bg-white border border-slate-200 px-3 py-1.5 rounded-xl text-[11px] font-sans text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#007AFF]/25"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const trimmedVal = (pumpUrlVal || '').trim();
+                        if (trimmedVal) {
+                          handleUrlSubmit(trimmedVal, 'pump');
+                          setShowPumpUrlInput(false);
+                        }
+                      }}
+                      className="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase transition-all"
+                    >
+                      Save
+                    </button>
                   </div>
                 </div>
-              </div>
-              <div className="pt-4 mt-4 border-t border-slate-100 text-[10.5px] text-slate-500 italic font-sans">
-                💡 Maintaining the health of your existing pump &amp; capacitors saves homeowners thousands on average.
-              </div>
-            </div>
+              )}
 
+              <p className="text-xs text-slate-500 mt-4 leading-relaxed border-b border-slate-100 pb-2.5">
+                High-priority dispatch focusing on mechanical, electrical, and flow faults downhole.
+              </p>
+
+              {/* Response Times */}
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-red-50 border border-red-200 text-red-705 rounded text-[8.5px] font-mono font-bold uppercase tracking-wider animate-pulse">
+                  <span className="w-1 h-1 rounded-full bg-red-650 shrink-0"></span>
+                  24-48 HR Dispatch
+                </span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-amber-50 border border-amber-200 text-amber-705 rounded text-[8.5px] font-mono font-bold uppercase tracking-wider">
+                  ⚡ Same-Day Faults
+                </span>
+              </div>
+              
+              <ul className="mt-4 space-y-2 text-[11px] text-slate-650 font-medium font-sans">
+                <li className="flex items-center gap-1.5">
+                  <span className="text-rose-500 font-bold text-xs select-none">✓</span>
+                  <span>Submersible pump diagnosis &amp; complete borehole recovery</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <span className="text-rose-500 font-bold text-xs select-none">✓</span>
+                  <span>Fused motor diagnostics &amp; insulation testing</span>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between gap-4">
+              <div className="flex flex-col">
+                <span className="text-[8px] font-mono text-slate-400 font-bold uppercase tracking-widest">CALLOUT ESTIMATE</span>
+                <span className="text-[11px] font-bold text-rose-600 font-mono">PRIORITY SPEED</span>
+              </div>
+              <button 
+                onClick={() => handleOpenModal('Request Immediate Diagnostic Report')}
+                className="bg-emerald-600 hover:bg-emerald-500 text-white text-[10.5px] font-bold px-4 py-2 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-sm border border-emerald-500/20 text-center font-sans tracking-wide duration-300 hover:shadow-emerald-500/20 shrink-0"
+              >
+                Diagnostic Report
+              </button>
+            </div>
           </div>
 
-          {/* RIGHT PARTITION COLUMN (Contains Passive Metrics Grid and the 3 Technical Tiers Service Stack) */}
-          <div className="lg:col-span-6 space-y-6 flex flex-col justify-start">
+          {/* TIER 2: THE SYSTEM OPTIMIZER (Maintenance) */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-4 bg-white border-2 border-[#007AFF] rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgba(0,122,255,0.03)] flex flex-col justify-between min-h-[480px] text-left relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-[#007AFF] text-white font-mono font-bold text-[8px] px-3.5 py-1 rounded-bl-xl uppercase tracking-wider">
+              SYSTEM ECO-RATING
+            </div>
             
-            {/* Top row: Passive Suburb Metrics (Drill Depth & Watering Schedule) */}
-            <div className="grid grid-cols-1 gap-6">
+            <div>
+              <div className="flex items-center gap-2 mb-2.5">
+                <span className="text-[9px] font-mono font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded border border-blue-100 uppercase tracking-wider">
+                  Tier II: Optimization
+                </span>
+              </div>
+              <h4 className="font-display font-black text-slate-900 text-lg leading-tight animate-fade-in-up">Reticulation & Flow Optimization</h4>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed border-b border-slate-100 pb-2.5">
+                Precision flow balancing and wireless automation retrofitting for modern water conservation.
+              </p>
               
-              {/* Card 3: Drill Depth with Interactive SoilProfileDiagram */}
-              <SoilProfileDiagram 
-                soilType={getSoilTypeAndDepthFromSuburbApp(selectedSuburb.name).soilType} 
-                waterDepth={getSoilTypeAndDepthFromSuburbApp(selectedSuburb.name).waterDepth} 
-              />
-
-              {/* Card 5: Watering Days Card */}
-              <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col items-start justify-between min-h-[220px] text-left">
-                <div className="flex justify-between items-start w-full">
-                  <div className="w-10 h-10 rounded-full bg-[#007AFF]/10 flex items-center justify-center border border-[#007AFF]/25 shadow-xs shrink-0">
-                    <Calendar className="w-5 h-5 text-[#007AFF]" />
-                  </div>
-                  <span className="font-mono text-[9px] font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded border border-blue-100 uppercase tracking-wide">
-                    ROSTER SCHEDULE
-                  </span>
-                </div>
-                
-                <div className="mt-4 w-full">
-                  <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest block">
-                    WATERING DAYS
-                  </span>
-                  <p className="text-2xl font-display font-black text-slate-900 mt-0.5">
-                    Mon &amp; Fri
-                  </p>
-                  <p className="text-[10px] text-slate-500 font-sans mt-1 leading-relaxed">
-                    Postcode {getPostcode(selectedSuburb.name)} schedule strictly enforced by DWER.
-                  </p>
-                </div>
-
-                <div className="w-full pt-3 mt-3 border-t border-slate-100 flex items-center justify-between text-[11px] font-mono text-slate-450 font-bold">
-                  <span>SCHEME LIMIT</span>
-                  <span className="text-[#007AFF]">2 STATIONS</span>
-                </div>
-              </div>
-
+              <ul className="mt-4 space-y-2 text-[11px] text-slate-650 font-medium font-sans">
+                <li className="flex items-center gap-1.5">
+                  <span className="text-[#007AFF] font-bold text-xs select-none">✓</span>
+                  <span>Smart Controller retrofitting (Hydrawise / WiFi weather schedules)</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <span className="text-[#007AFF] font-bold text-xs select-none">✓</span>
+                  <span>Blocked sprinkler remediation &amp; nozzle calibration</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <span className="text-[#007AFF] font-bold text-xs select-none">✓</span>
+                  <span>Water-wise system audits to maximize zone drawing performance</span>
+                </li>
+              </ul>
             </div>
+            
+            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between gap-4">
+              <div className="flex flex-col">
+                <span className="text-[8px] font-mono text-slate-400 font-bold uppercase tracking-widest">SAVINGS RATING</span>
+                <span className="text-[11px] font-bold text-blue-600 font-mono font-sans">WATER-WISE APPR.</span>
+              </div>
+              <button 
+                onClick={() => handleOpenModal('Improve My System Efficiency')}
+                className="bg-emerald-600 hover:bg-emerald-500 text-white text-[10.5px] font-bold px-4 py-2 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-sm border border-emerald-500/20 text-center font-sans tracking-wide duration-300 hover:shadow-emerald-500/20 shrink-0"
+              >
+                Improve Efficiency
+              </button>
+            </div>
+          </div>
 
-            {/* The Three Distinct Technical Tiers (The Premium Service Stack) */}
-            <div className="space-y-6">
+          {/* TIER 3: THE STAIN SCIENTIST (Remediation) */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-4 bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between min-h-[480px] text-left relative overflow-hidden">
+            <div className="absolute top-0 right-0 bg-amber-500 text-white font-mono font-bold text-[8px] px-3.5 py-1 rounded-bl-xl uppercase tracking-wider">
+              CHEMISTRY DEPOT
+            </div>
+            
+            <div>
+              <div className="flex items-center gap-2 mb-2.5">
+                <span className="text-[9px] font-mono font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded border border-amber-100 uppercase tracking-wider">
+                  Tier III: Remediation
+                </span>
+              </div>
+              <h4 className="font-display font-black text-slate-900 text-lg leading-tight animate-fade-in-up">Mineral & Iron Oxide Management</h4>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed border-b border-slate-100 pb-2.5">
+                Mitigate mineral oxidation staining and treat aquifer chemical hazards before they impact surface brickwork.
+              </p>
               
-              {/* TIER 1: THE FORENSIC REPAIR (Emergency) */}
-              <div className="bg-white border border-slate-200/60 rounded-3xl p-6.5 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between min-h-[210px] text-left relative overflow-hidden">
-                <div className="absolute top-0 right-0 bg-rose-500 text-white font-mono font-bold text-[8px] px-3.5 py-1 rounded-bl-xl uppercase tracking-wider flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span>
-                  EMERGENCY DISPATCH
-                </div>
-                
-                <div>
-                  <div className="flex items-center gap-2 mb-2.5">
-                    <span className="text-[9px] font-mono font-bold text-rose-600 bg-rose-50 px-2.5 py-0.5 rounded border border-rose-100 uppercase tracking-wider">
-                      Tier I: Forensic
-                    </span>
-                  </div>
-                  <h4 className="font-display font-black text-slate-900 text-lg leading-tight">Bore Diagnostics & Recovery</h4>
-                  
-                  {/* Technical Pump Image Showcase */}
-                  <div 
-                    onClick={() => isAdmin && pumpInputRef.current?.click()}
-                    onDragOver={(e) => isAdmin && handleDragOver(e, setIsPumpDragging)}
-                    onDragLeave={(e) => isAdmin && handleDragLeave(e, setIsPumpDragging)}
-                    onDrop={(e) => isAdmin && handleDrop(e, 'pump', setIsPumpDragging)}
-                    className={`mt-3.5 w-full h-36 rounded-2xl overflow-hidden border relative flex-shrink-0 transition-all duration-300 ${
-                      isAdmin 
-                        ? 'cursor-pointer group hover:border-rose-500/50 border-slate-200/60 bg-slate-900' 
-                        : 'border-slate-100 bg-slate-50'
-                    } ${
-                      isPumpDragging && isAdmin
-                        ? 'border-rose-500 ring-4 ring-rose-500/30 scale-[1.01] bg-rose-950/10' 
-                        : ''
-                    }`}
-                  >
-                    {isPumpDragging && isAdmin ? (
-                      <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex flex-col items-center justify-center pointer-events-none p-3 text-center">
-                        <Upload className="w-8 h-8 text-rose-500 mb-1 animate-bounce" />
-                        <p className="text-white font-display font-black text-xs">Drop pump image here</p>
-                        <p className="text-rose-400 text-[8px] font-mono tracking-wider uppercase">Accepts JPG/PNG image</p>
-                      </div>
-                    ) : (
-                      <>
-                        <img 
-                          src={pumpPhoto || undefined} 
-                          alt={`Bore drilling services in ${selectedSuburb.name} - Perth Bore Water`} 
-                          className="w-full h-full object-cover transition-all"
-                          referrerPolicy="no-referrer"
-                          key={pumpPhoto || 'pump'}
-                          onError={(e) => {
-                            e.currentTarget.src = "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80";
-                          }}
-                        />
-                        <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[8.5px] text-white font-mono uppercase tracking-widest font-bold">
-                          DIAGNOSTICS RIG
-                        </div>
-                        
-                        {isAdmin && (
-                          <div className="absolute top-2 right-2 z-30 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-1.5">
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                pumpInputRef.current?.click();
-                              }}
-                              className="bg-black/85 hover:bg-rose-600 border border-white/20 px-2 py-1 rounded text-[8.5px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95"
-                            >
-                              <Upload className="w-2.5 h-2.5" />
-                              <span>Upload</span>
-                            </button>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setShowPumpUrlInput(!showPumpUrlInput);
-                              }}
-                              className="bg-black/85 hover:bg-[#007AFF] border border-white/25 px-1.5 py-1 rounded text-[8.5px] font-bold text-white uppercase tracking-wider flex items-center gap-0.5 shadow-md transition-all active:scale-95"
-                            >
-                              <span>URL</span>
-                            </button>
-                          </div>
-                        )}
-                      </>
-                    )}
-                  </div>
-
-                  {/* URL Input Box inside Card */}
-                  {showPumpUrlInput && isAdmin && (
-                    <div className="mt-2.5 p-3.5 bg-slate-50 border border-slate-100 rounded-2xl space-y-2 animate-fade-in text-left">
-                      <p className="text-[10px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
-                        <span>PUMP SPECIFICATION ASSET URL:</span>
-                      </p>
-                      <div className="flex gap-2">
-                        <input 
-                          type="text" 
-                          value={pumpUrlVal}
-                          onChange={(e) => setPumpUrlVal(e.target.value)}
-                          placeholder="https://example.com/asset-pump.jpg"
-                          className="flex-1 bg-white border border-slate-200 px-3 py-1.5 rounded-xl text-[11px] font-sans text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#007AFF]/25"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => {
-                            const trimmedVal = (pumpUrlVal || '').trim();
-                            if (trimmedVal) {
-                              handleUrlSubmit(trimmedVal, 'pump');
-                              setShowPumpUrlInput(false);
-                            }
-                          }}
-                          className="bg-rose-600 hover:bg-rose-500 text-white px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase transition-all"
-                        >
-                          Save
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  <p className="text-xs text-slate-500 mt-3.5 leading-relaxed border-b border-slate-100 pb-2.5">
-                    High-priority dispatch focusing on mechanical, electrical, and flow faults downhole.
-                  </p>
-
-                  {/* Quantified Response Times addressing Suggestion B */}
-                  <div className="mt-3.5 flex flex-wrap gap-2">
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-red-50 border border-red-200 text-red-700 rounded-lg text-[9px] font-mono font-bold uppercase tracking-wider animate-pulse">
-                      <span className="w-1.5 h-1.5 rounded-full bg-red-650 shrink-0"></span>
-                      24-48 Hour Emergency Dispatch
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-200 text-amber-700 rounded-lg text-[9px] font-mono font-bold uppercase tracking-wider">
-                      ⚡ Same-Day Fault Finding Available
-                    </span>
-                  </div>
-                  
-                  <ul className="mt-3.5 space-y-2 text-[11px] text-slate-600 font-medium font-sans">
-                    <li className="flex items-center gap-1.5">
-                      <span className="text-rose-500 font-bold text-xs select-none">✓</span>
-                      <span>Submersible pump diagnostics &amp; advanced deep borehole recovery</span>
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <span className="text-rose-500 font-bold text-xs select-none">✓</span>
-                      <span>Fused motor replacements &amp; insulation resistance diagnostics</span>
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <span className="text-rose-500 font-bold text-xs select-none">✓</span>
-                      <span>Solenoid circuit tracking &amp; underground cable fault location</span>
-                    </li>
-                  </ul>
-                </div>
-                
-                <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between gap-4">
-                  <div className="flex flex-col">
-                    <span className="text-[8px] font-mono text-slate-400 font-bold uppercase tracking-widest">CALLOUT ESTIMATE</span>
-                    <span className="text-[11px] font-bold text-rose-600 font-mono">PRIORITY SPEED</span>
-                  </div>
-                  <button 
-                    onClick={() => handleOpenModal('Request Immediate Diagnostic Report')}
-                    className="bg-emerald-600 hover:bg-emerald-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.45),inset_0_1.5px_0_rgba(255,255,255,0.3)] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.3)] border border-emerald-500/20 text-center font-sans tracking-wide duration-300"
-                  >
-                    Request Immediate Diagnostic Report
-                  </button>
-                </div>
-              </div>
-
-              {/* TIER 2: THE SYSTEM OPTIMIZER (Maintenance) */}
-              <div className="bg-white border-2 border-[#007AFF] rounded-3xl p-6.5 hover:shadow-xl transition-all shadow-[0_8px_30px_rgba(0,122,255,0.03)] flex flex-col justify-between min-h-[210px] text-left relative overflow-hidden">
-                <div className="absolute top-0 right-0 bg-[#007AFF] text-white font-mono font-bold text-[8px] px-3.5 py-1 rounded-bl-xl uppercase tracking-wider">
-                  SYSTEM ECO-RATING
-                </div>
-                
-                <div>
-                  <div className="flex items-center gap-2 mb-2.5">
-                    <span className="text-[9px] font-mono font-bold text-blue-600 bg-blue-50 px-2.5 py-0.5 rounded border border-blue-100 uppercase tracking-wider">
-                      Tier II: Optimization
-                    </span>
-                  </div>
-                  <h4 className="font-display font-black text-slate-900 text-lg leading-tight">Reticulation & Flow Optimization</h4>
-                  <p className="text-xs text-slate-500 mt-1.5 leading-relaxed border-b border-slate-100 pb-2.5">
-                    Precision flow balancing and wireless automation retrofitting for modern water conservation.
-                  </p>
-                  
-                  <ul className="mt-3.5 space-y-2 text-[11px] text-slate-600 font-medium font-sans">
-                    <li className="flex items-center gap-1.5">
-                      <span className="text-[#007AFF] font-bold text-xs select-none">✓</span>
-                      <span>Smart Controller retrofitting (Hydrawise / WiFi predictive weather schedules)</span>
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <span className="text-[#007AFF] font-bold text-xs select-none">✓</span>
-                      <span>Blocked sprinkler remediation &amp; customizable high-efficiency nozzle calibration</span>
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <span className="text-[#007AFF] font-bold text-xs select-none">✓</span>
-                      <span>Water-wise system audits to maximize zone-by-zone drawing performance</span>
-                    </li>
-                  </ul>
-                </div>
-                
-                <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between gap-4">
-                  <div className="flex flex-col">
-                    <span className="text-[8px] font-mono text-slate-400 font-bold uppercase tracking-widest">SAVINGS RATING</span>
-                    <span className="text-[11px] font-bold text-blue-600 font-mono">WATER-WISE APPR.</span>
-                  </div>
-                  <button 
-                    onClick={() => handleOpenModal('Improve My System Efficiency')}
-                    className="bg-emerald-600 hover:bg-emerald-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.45),inset_0_1.5px_0_rgba(255,255,255,0.3)] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.3)] border border-emerald-500/20 text-center font-sans tracking-wide duration-300"
-                  >
-                    Improve My System Efficiency
-                  </button>
-                </div>
-              </div>
-
-              {/* TIER 3: THE STAIN SCIENTIST (Remediation) */}
-              <div className="bg-white border border-slate-200/60 rounded-3xl p-6.5 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] flex flex-col justify-between min-h-[210px] text-left relative overflow-hidden">
-                <div className="absolute top-0 right-0 bg-amber-500 text-white font-mono font-bold text-[8px] px-3.5 py-1 rounded-bl-xl uppercase tracking-wider">
-                  CHEMISTRY DEPOT
-                </div>
-                
-                <div>
-                  <div className="flex items-center gap-2 mb-2.5">
-                    <span className="text-[9px] font-mono font-bold text-amber-600 bg-amber-50 px-2.5 py-0.5 rounded border border-amber-100 uppercase tracking-wider">
-                      Tier III: Remediation
-                    </span>
-                  </div>
-                  <h4 className="font-display font-black text-slate-900 text-lg leading-tight">Mineral & Iron Oxide Management</h4>
-                  <p className="text-xs text-slate-500 mt-1.5 leading-relaxed border-b border-slate-100 pb-2.5">
-                    Mitigate mineral oxidation staining and treat aquifer chemical hazards before they impact surface brickwork.
-                  </p>
-                  
-                  <ul className="mt-3.5 space-y-2 text-[11px] text-slate-600 font-medium font-sans">
-                    <li className="flex items-center gap-1.5">
-                      <span className="text-amber-500 font-bold text-xs select-none">✓</span>
-                      <span>Chemical bio-friendly iron-stain removal on masonry &amp; concrete</span>
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <span className="text-amber-500 font-bold text-xs select-none">✓</span>
-                      <span>Automated 'Stain-Stopper' inline filtration systems and chemical dosing</span>
-                    </li>
-                    <li className="flex items-center gap-1.5">
-                      <span className="text-amber-500 font-bold text-xs select-none">✓</span>
-                      <span>Precision downhole chemical washing &amp; scale descaling</span>
-                    </li>
-                  </ul>
-                </div>
-                
-                <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between gap-4">
-                  <div className="flex flex-col">
-                    <span className="text-[8px] font-mono text-slate-400 font-bold uppercase tracking-widest">MINERAL EXPOSURE</span>
-                    <span className="text-[11px] font-bold text-amber-600 font-mono">SPEC ACCURATE</span>
-                  </div>
-                  <button 
-                    onClick={() => handleOpenModal('Book a Water Quality Test')}
-                    className="bg-emerald-600 hover:bg-emerald-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.45),inset_0_1.5px_0_rgba(255,255,255,0.3)] text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.3)] border border-emerald-500/20 text-center font-sans tracking-wide duration-300"
-                  >
-                    Book a Water Quality Test
-                  </button>
-                </div>
-              </div>
-
+              <ul className="mt-4 space-y-2 text-[11px] text-slate-650 font-medium font-sans">
+                <li className="flex items-center gap-1.5">
+                  <span className="text-amber-500 font-bold text-xs select-none">✓</span>
+                  <span>Chemical bio-friendly iron-stain removal on masonry &amp; concrete</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <span className="text-amber-500 font-bold text-xs select-none">✓</span>
+                  <span>Automated 'Stain-Stopper' inline filtration &amp; chemical dosing</span>
+                </li>
+                <li className="flex items-center gap-1.5">
+                  <span className="text-amber-500 font-bold text-xs select-none">✓</span>
+                  <span>Precision downhole chemical washing &amp; descaling</span>
+                </li>
+              </ul>
             </div>
-
+            
+            <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between gap-4">
+              <div className="flex flex-col">
+                <span className="text-[8px] font-mono text-slate-400 font-bold uppercase tracking-widest">MINERAL EXPOSURE</span>
+                <span className="text-[11px] font-bold text-amber-600 font-mono">SPEC ACCURATE</span>
+              </div>
+              <button 
+                onClick={() => handleOpenModal('Book a Water Quality Test')}
+                className="bg-emerald-600 hover:bg-emerald-500 text-white text-[10.5px] font-bold px-4 py-2 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-sm border border-emerald-500/20 text-center font-sans tracking-wide duration-300 hover:shadow-emerald-500/20 shrink-0"
+              >
+                Book Water Test
+              </button>
+            </div>
           </div>
 
         </div>
@@ -2934,13 +2917,13 @@ export default function App() {
                   
                   {/* Quick-select recommendations */}
                   <div className="pt-4">
-                    <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2">Index Suburbs</span>
-                    <div className="flex flex-wrap items-center justify-center gap-2 max-w-md mx-auto">
-                      {['Rockingham', 'Baldivis', 'Canning Vale', 'Kwinana', 'Success', 'Atwell'].map(sub => (
+                    <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest block mb-2 font-semibold">Index Suburbs</span>
+                    <div className="flex flex-wrap items-center justify-center gap-2 max-w-xl mx-auto">
+                      {INDEX_SUBURBS.map(sub => (
                         <button
                           key={sub}
                           onClick={() => handleGlobalSelectSuburb(sub)}
-                          className="bg-slate-50 hover:bg-[#007AFF]/10 hover:text-[#007AFF] text-[11px] font-semibold text-slate-655 px-2.5 py-1 rounded-lg border border-slate-200/50 hover:border-blue-500/10 cursor-pointer transition-all animate-none"
+                          className="bg-slate-50 hover:bg-[#007AFF]/10 hover:text-[#007AFF] text-[11px] font-semibold text-slate-655 px-2.5 py-1 rounded-lg border border-slate-200/50 hover:border-blue-500/10 cursor-pointer transition-all duration-150 animate-none"
                         >
                           {sub}
                         </button>

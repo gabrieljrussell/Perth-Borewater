@@ -268,11 +268,12 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
           <h2 className="text-2xl sm:text-3xl font-display font-black text-slate-900 tracking-tight">Technical Drilling Blueprint</h2>
         </div>
 
-        {/* Dynamic Bento Box Matrix - 4 Column Layout */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-stretch">
+        {/* Dynamic Bento Box Matrix - Responsive 4 Column Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
           
-          {/* Card 1: Soil Composition (2x1 Column block) */}
-          <div className="md:col-span-2 bento-card p-7 sm:p-9 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left">
+          {/* TIER 1: GEOLOGY SECTION */}
+          {/* Card 1: Soil Composition (Spans 2 columns on desktop) */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-2 bento-card p-7 sm:p-9 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left">
             <div className="flex justify-between items-start">
               <div className="w-12 h-12 rounded-full bg-[#007AFF]/10 flex items-center justify-center border border-[#007AFF]/20 shadow-xs">
                 <Layers className="w-6 h-6 text-[#007AFF]" />
@@ -294,15 +295,42 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
               )}
             </div>
 
-            <div className="mt-8 pt-6 border-t border-slate-20F/10">
+            <div className="mt-8 pt-6 border-t border-slate-200/10">
               <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
                 Localized data matrix mapping for extraction parameters in the {suburb.name} ground corridor.
               </p>
             </div>
           </div>
 
-          {/* Card 2: The Explorer (1x1 column block) */}
-          <div className="md:col-span-1 bento-card p-6 sm:p-8 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left">
+          {/* Card 5: Geological Cross-Section Diagram block (Spans 2 columns on desktop) */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-2 h-full flex flex-col" id="geological-cross-section-diagram-card">
+            <SoilProfileDiagram soilType={soilType} waterDepth={waterDepth} />
+          </div>
+
+          {/* TIER 2: SERVICES & PARAMETERS SECTION */}
+          {/* Card 4: The Restorer (RECOMMENDED banner - Spans 2 columns on desktop) */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-2 bento-accent-card p-6 sm:p-8 flex items-center justify-between relative overflow-hidden bg-white hover:scale-[1.01] transition-transform duration-300 text-left">
+            <div className="absolute top-0 right-0 bg-[#007AFF] text-white font-mono font-bold text-[9px] px-3.5 py-1 rounded-bl-xl uppercase tracking-wider">
+              RECOMMENDED
+            </div>
+            <div className="max-w-[65%]">
+              <h3 className="font-display font-bold text-slate-900 text-lg flex items-center gap-1.5">
+                <span>The Restorer</span>
+              </h3>
+              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
+                Submersible iron hazard capture & advanced water filtration systems suited for {suburb.ironRisk} risk pockets.
+              </p>
+            </div>
+            <button 
+              onClick={scrollQuoteFormIntoView}
+              className="bg-[#007AFF] hover:bg-[#007AFF]/95 text-white text-xs font-bold px-5 py-3 rounded-xl transition-colors cursor-pointer inline-flex items-center gap-1 shrink-0 ml-4"
+            >
+              <span>Get Pricing</span>
+            </button>
+          </div>
+
+          {/* Card 2: The Explorer (Spans 1 column on desktop, 1 column on tablet) */}
+          <div className="col-span-1 md:col-span-1 lg:col-span-1 bento-card p-6 sm:p-8 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left">
             <div>
               <h3 className="font-display font-bold text-slate-900 text-lg">The Explorer</h3>
               <p className="text-xs text-slate-500 mt-1 leading-relaxed">
@@ -317,65 +345,42 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
             </button>
           </div>
 
-          {/* Card 3: Drill Depth (1x1 column block) */}
-          <div className="md:col-span-1 bento-card p-6 sm:p-8 flex flex-col items-start justify-between hover:scale-[1.01] transition-transform duration-300 text-left">
-            <div className="w-10 h-10 rounded-full bg-[#FFD700]/15 flex items-center justify-center border border-[#FFD700]/25">
-              <Droplet className="w-5 h-5 text-amber-600 fill-amber-500/20" />
+          {/* Stacked Specifications Track (Spans 1 column on desktop/tablet, holding Card 3 and Card 6) */}
+          <div className="col-span-1 md:col-span-1 lg:col-span-1 flex flex-col gap-6 justify-stretch">
+            {/* Card 3: Drill Depth */}
+            <div className="flex-1 bento-card p-5 flex flex-col items-start justify-center hover:scale-[1.01] transition-transform duration-300 text-left">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-[#FFD700]/15 flex items-center justify-center border border-[#FFD700]/25">
+                  <Droplet className="w-4 h-4 text-amber-600 fill-amber-500/20" />
+                </div>
+                <h3 className="font-mono text-[9px] font-bold text-slate-400 uppercase tracking-widest">Typical Drill Depth</h3>
+              </div>
+              <p className="text-xl sm:text-2xl font-display font-black text-slate-900 mt-2.5">{suburb.typicalDepth}</p>
             </div>
-            <div className="mt-6">
-              <h3 className="font-mono text-[9px] font-bold text-slate-400 mb-1 uppercase tracking-widest">Typical Drill Depth</h3>
-              <p className="text-xl sm:text-2xl font-display font-black text-slate-900">{suburb.typicalDepth}</p>
+
+            {/* Card 6: Watering Days */}
+            <div className="flex-1 bento-card p-5 flex items-center gap-4 hover:scale-[1.01] transition-transform duration-300 text-left">
+              <div className="w-10 h-10 rounded-full bg-[#007AFF]/10 flex items-center justify-center border border-[#007AFF]/20 shadow-2xs shrink-0">
+                <Calendar className="w-5 h-5 text-[#007AFF]" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-mono text-[8px] font-bold text-slate-400 uppercase tracking-widest block leading-3">Water Roster</h3>
+                <p className="text-xs sm:text-sm font-display font-black text-slate-900 truncate mt-0.5 leading-tight">
+                  Monday &amp; Friday
+                </p>
+              </div>
             </div>
           </div>
 
-          {/* Card 4: The Restorer (2x1 column block) - RECOMMENDED banner */}
-          <div className="md:col-span-2 bento-accent-card p-6 sm:p-8 flex items-center justify-between relative overflow-hidden bg-white hover:scale-[1.01] transition-transform duration-300 text-left">
-            <div className="absolute top-0 right-0 bg-[#007AFF] text-white font-mono font-bold text-[9px] px-3.5 py-1 rounded-bl-xl uppercase tracking-wider">
-              RECOMMENDED
-            </div>
-            <div className="max-w-[65%]">
-              <h3 className="font-display font-bold text-slate-900 text-lg flex items-center gap-1.5">
-                <span>The Restorer</span>
-              </h3>
-              <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-                Submersible iron hazard capture & advanced water filtration systems suited for {suburb.ironRisk} risk pockets.
-              </p>
-            </div>
-            <button 
-              onClick={scrollQuoteFormIntoView}
-              className="bg-[#007AFF] hover:bg-[#007AFF]/95 text-white text-xs font-bold px-5 py-3 rounded-xl transition-colors cursor-pointer inline-flex items-center gap-1"
-            >
-              <span>Get Pricing</span>
-            </button>
-          </div>
-
-          {/* Card 5: Geological Cross-Section Diagram (2x2 Column block) */}
-          <div className="md:col-span-2 md:row-span-2" id="geological-cross-section-diagram-card">
-            <SoilProfileDiagram soilType={soilType} waterDepth={waterDepth} />
-          </div>
-
-          {/* Card 6: Watering Days (2x1 Column block) */}
-          <div className="md:col-span-2 bento-card p-6 flex items-center gap-5 hover:scale-[1.01] transition-transform duration-300 text-left">
-            <div className="w-12 h-12 rounded-full bg-[#007AFF]/10 flex items-center justify-center border border-[#007AFF]/20 shadow-2xs shrink-0">
-              <Calendar className="w-6 h-6 text-[#007AFF]" />
-            </div>
-            <div>
-              <h3 className="font-mono text-[9px] font-bold text-slate-400 mb-1 uppercase tracking-widest">Watering Days</h3>
-              <p className="text-base sm:text-lg font-display font-black text-slate-900 leading-tight">
-                Monday &amp; Friday Roster
-              </p>
-              <p className="text-[10px] text-slate-500 mt-1">Based on Water Corporation 2-day-per-week scheme for postcode {postcode}.</p>
-            </div>
-          </div>
-
-          {/* Card 7: Bore Diagnostics & Service Speed (2x1 Column block - addressing Suggestion B) */}
-          <div className="md:col-span-2 bento-card p-6 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left" id="service-speed-diagnostics-card">
+          {/* TIER 3: OPERATIONS & UNCHECKED FAILURES */}
+          {/* Card 7: Bore Diagnostics & Service Speed (Spans 2 columns on desktop) */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-2 bento-card p-6 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left" id="service-speed-diagnostics-card">
             <div className="space-y-4">
               <div className="flex justify-between items-start">
                 <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600">
                   <Wrench className="w-5 h-5 text-orange-600" />
                 </div>
-                <span className="font-mono text-[9px] font-bold text-orange-650 px-2.5 py-1 bg-orange-50 rounded-full uppercase tracking-wider border border-orange-100 animate-pulse">
+                <span className="font-mono text-[9px] font-bold text-orange-655 px-2.5 py-1 bg-orange-50 rounded-full uppercase tracking-wider border border-orange-100 animate-pulse">
                   24-48 HOUR EMERGENCY DISPATCH
                 </span>
               </div>
@@ -392,8 +397,8 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
             </div>
           </div>
 
-          {/* Card 8: Aquifer Health Check & Maintenance Checklist (2x1 Column block - addressing Suggestion C) */}
-          <div className="md:col-span-2 bento-card p-6 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left" id="maintenance-checklist-card">
+          {/* Card 8: Aquifer Health Check & Maintenance Checklist (Spans 2 columns on desktop) */}
+          <div className="col-span-1 md:col-span-2 lg:col-span-2 bento-card p-6 flex flex-col justify-between hover:scale-[1.01] transition-transform duration-300 text-left" id="maintenance-checklist-card">
             <div className="space-y-4">
               <div className="flex justify-between items-start">
                 <div className="w-10 h-10 rounded-xl bg-[#007AFF]/10 border border-[#007AFF]/20 flex items-center justify-center text-[#007AFF]">

@@ -44,14 +44,17 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
   const [selectedProfileSuburb, setSelectedProfileSuburb] = useState<string>('Baldivis');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Filter suburbs list for searchable selector dropdown
+  // Filter suburbs list for searchable selector dropdown (restricted to 20 index suburbs)
   const filteredSuburbs = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
     if (!query) return [];
-    return ALL_SUBURBS_LIST.filter(sub => 
-      sub.name.toLowerCase().includes(query) || 
-      sub.postcode.includes(query)
-    ).slice(0, 6);
+    const southSet = new Set(SOUTH_CORRIDOR_SUBURBS.map(s => s.toLowerCase()));
+    return ALL_SUBURBS_LIST.filter(sub => {
+      const matchQuery = sub.name.toLowerCase().includes(query) || 
+                          sub.postcode.includes(query);
+      const isIndexSuburb = southSet.has(sub.name.toLowerCase());
+      return matchQuery && isIndexSuburb;
+    }).slice(0, 6);
   }, [searchQuery]);
 
   // Click outside listener for dropdown
