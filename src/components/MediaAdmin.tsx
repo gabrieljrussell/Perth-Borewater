@@ -592,9 +592,10 @@ export default function MediaAdmin({ mediaOverrides, onSaveOverrides, onClose }:
                         <video 
                           src={activeData.video}
                           autoPlay 
-                          loop 
                           muted 
+                          loop 
                           playsInline 
+                          preload="auto"
                           className="w-full h-full object-cover"
                           onError={(e) => {
                             const t = e.target as HTMLVideoElement;

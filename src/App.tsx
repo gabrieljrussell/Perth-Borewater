@@ -1562,28 +1562,16 @@ export default function App() {
 
             <button 
               onClick={() => setIsGlobalSearchOpen(true)}
-              className="text-[#007AFF] hover:text-[#0051C3] transition-all text-sm font-extrabold tracking-wide cursor-pointer focus:outline-none flex items-center gap-1.5 duration-200 hover:scale-[1.02]"
-              title="Search index suburbs"
+              className="text-[#0F2C59] hover:text-[#007AFF] transition-all cursor-pointer focus:outline-none flex items-center justify-center p-1.5 rounded-full hover:bg-slate-100 duration-155"
+              title="Search Index Suburbs (⌘K)"
             >
               <Search className="w-4 h-4 text-[#007AFF] animate-none" />
-              <span>Search Suburb</span>
             </button>
           </nav>
 
           {/* Flashpoint Layout Right Side */}
           <div className="flex items-center gap-3 sm:gap-4">
             
-            {/* Desktop Global Search Pill */}
-            <button 
-              onClick={() => setIsGlobalSearchOpen(true)}
-              className="hidden lg:flex items-center gap-2 bg-slate-100 hover:bg-slate-200/80 text-slate-500 hover:text-slate-800 px-4 py-2 border border-slate-200/50 rounded-full text-xs font-semibold cursor-pointer transition-all duration-200 focus:outline-none hover:border-[#007AFF]/35 shadow-2xs hover:scale-[1.01] h-[38px] select-none"
-              title="Search index suburbs (⌘K)"
-            >
-              <Search className="w-3.5 h-3.5 text-slate-400" />
-              <span>Search index...</span>
-              <kbd className="hidden sm:inline-block text-[9px] font-mono text-slate-400 bg-slate-200/60 px-1.5 py-0.5 rounded-md ml-1.5 font-bold">⌘K</kbd>
-            </button>
-
             {/* Mobile/Tablet Search Circle Button */}
             <button 
               onClick={() => setIsGlobalSearchOpen(true)}
@@ -2053,9 +2041,10 @@ export default function App() {
                   key={heroVideo}
                   src={heroVideo || undefined}
                   autoPlay 
-                  loop 
                   muted 
+                  loop 
                   playsInline 
+                  preload="auto"
                   poster={heroPhoto || undefined}
                   className="w-full h-full object-cover"
                   onError={() => {

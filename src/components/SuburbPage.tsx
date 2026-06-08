@@ -172,9 +172,10 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
               <div className="absolute inset-0 w-full h-full overflow-hidden">
                 <video 
                   autoPlay 
-                  loop 
                   muted 
+                  loop 
                   playsInline 
+                  preload="auto"
                   className="w-full h-full object-cover opacity-60"
                 >
                   <source src={suburb.slug === 'rockingham' ? 'https://perthborewater.com.au/serve-image.php?file=Rockingham.mp4' : `https://perthborewater.com.au/serve-image.php?file=${suburb.slug}-hero.mp4`} type="video/mp4" />
