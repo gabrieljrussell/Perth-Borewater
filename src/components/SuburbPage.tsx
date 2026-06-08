@@ -167,16 +167,16 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
         <div className="glass-panel border border-white/25 rounded-[2rem] p-6 sm:p-10 md:p-12 max-w-7xl w-full mx-auto relative z-10 text-center cloud-shadow flex flex-col justify-between">
           
           {/* Top Video / Media aspect-video container */}
-          <div className="w-full aspect-[21/9] sm:aspect-[16/7] rounded-2xl overflow-hidden relative mb-8 border border-white/30 bg-slate-900/50 shadow-inner">
+          <div className="w-full max-w-4xl mx-auto aspect-video rounded-3xl overflow-hidden relative mb-8 border border-white/35 bg-[#0a0a0a] shadow-inner">
             {isPlayingVideo ? (
-              <div className="absolute inset-0 w-full h-full overflow-hidden">
+              <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#0a0a0a]">
                 <video 
                   autoPlay 
                   muted 
                   loop 
                   playsInline 
                   preload="auto"
-                  className="w-full h-full object-cover opacity-60"
+                  className="w-full h-full object-contain mx-auto opacity-85"
                 >
                   <source src={suburb.slug === 'rockingham' ? 'https://perthborewater.com.au/serve-image.php?file=Rockingham.mp4' : `https://perthborewater.com.au/serve-image.php?file=${suburb.slug}-hero.mp4`} type="video/mp4" />
                 </video>

@@ -422,9 +422,9 @@
   "rockingham": {
     "video": "https://assets.perthborewater.com.au/Rockingham.mp4",
     "photo": "",
-    "geology": "https://perthborewater.com.au/serve-image.php?file=RockinghamSoil.jpg",
     "pump": "https://perthborewater.com.au/serve-image.php?file=RockinghamDrilling.mp4",
-    "background": "https://perthborewater.com.au/serve-image.php?file=Rockingham.png"
+    "background": "https://perthborewater.com.au/serve-image.php?file=Rockingham.png",
+    "geology": "https://assets.perthborewater.com.au/Rockingham_home_Bore_202606081818.jpeg"
   },
   "safety-bay": {
     "video": "https://perthborewater.com.au/serve-image.php?file=",
