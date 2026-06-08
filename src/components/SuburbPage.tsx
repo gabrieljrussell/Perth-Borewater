@@ -167,7 +167,7 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
         <div className="glass-panel border border-white/25 rounded-[2rem] p-6 sm:p-10 md:p-12 max-w-7xl w-full mx-auto relative z-10 text-center cloud-shadow flex flex-col justify-between">
           
           {/* Top Video / Media aspect-video container */}
-          <div className="w-full max-w-4xl mx-auto aspect-video rounded-3xl overflow-hidden relative mb-8 border border-white/35 bg-[#0a0a0a] shadow-inner">
+          <div className="w-full max-w-2xl mx-auto aspect-video rounded-3xl overflow-hidden relative mb-8 border border-white/35 bg-[#0a0a0a] shadow-inner">
             {isPlayingVideo ? (
               <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#0a0a0a]">
                 <video 

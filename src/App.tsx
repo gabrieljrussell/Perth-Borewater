@@ -1927,7 +1927,7 @@ export default function App() {
             onDragOver={(e) => isAdmin && handleDragOver(e, setIsHeroDragging)}
             onDragLeave={(e) => isAdmin && handleDragLeave(e, setIsHeroDragging)}
             onDrop={(e) => isAdmin && handleDrop(e, 'hero', setIsHeroDragging)}
-            className={`w-full h-[220px] sm:h-[320px] rounded-2xl overflow-hidden relative mb-8 border bg-slate-900 shadow-md transition-all duration-300 ${
+            className={`w-full max-w-2xl mx-auto aspect-video rounded-3xl overflow-hidden relative mb-8 border bg-[#0a0a0a] shadow-inner transition-all duration-300 ${
               isAdmin 
                 ? 'cursor-pointer group hover:border-emerald-500 hover:ring-2 hover:ring-emerald-500/20' 
                 : 'border-white/40'
@@ -2046,7 +2046,7 @@ export default function App() {
                   playsInline 
                   preload="auto"
                   poster={heroPhoto || undefined}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain mx-auto bg-[#0a0a0a]"
                   onError={() => {
                     console.warn("Video failed to play or media event warning.");
                   }}
@@ -2056,7 +2056,7 @@ export default function App() {
               <img 
                 src={heroPhoto || undefined} 
                 alt={`Bore drilling services in ${selectedSuburb.name} - Perth Bore Water`} 
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain mx-auto bg-[#0a0a0a]"
                 referrerPolicy="no-referrer"
               />
             )}
@@ -2270,25 +2270,25 @@ export default function App() {
             </div>
           </div>
 
-          {/* Card 4: Geological Evidence image/gradient block - Active Upload Component */}
+          {/* Card 4: Geological Evidence layout - Split Grid Layout */}
           <div 
             onClick={() => isAdmin && geologyInputRef.current?.click()}
             onDragOver={(e) => isAdmin && handleDragOver(e, setIsGeologyDragging)}
             onDragLeave={(e) => isAdmin && handleDragLeave(e, setIsGeologyDragging)}
             onDrop={(e) => isAdmin && handleDrop(e, 'geology', setIsGeologyDragging)}
-            className={`col-span-1 md:col-span-2 lg:col-span-12 rounded-3xl relative overflow-hidden min-h-[350px] md:min-h-[460px] lg:min-h-[500px] shadow-[0_12px_40px_rgba(0,0,0,0.06)] flex flex-col justify-end p-8 border transition-all duration-300 text-left ${
+            className={`col-span-1 md:col-span-2 lg:col-span-12 rounded-3xl relative overflow-hidden shadow-[0_12px_40px_rgba(0,0,0,0.06)] border transition-all duration-300 text-left ${
               isAdmin 
-                ? 'cursor-pointer group hover:border-amber-500/50 border-slate-800 bg-slate-900' 
-                : 'border-slate-200/60 bg-slate-950/95'
+                ? 'cursor-pointer group hover:border-amber-500/50 border-slate-800 bg-slate-950/95' 
+                : 'border-slate-800 bg-slate-950/95'
             } ${
               isGeologyDragging && isAdmin
-                ? 'border-amber-500 ring-4 ring-amber-500/50 scale-[1.01] bg-amber-950/40' 
+                ? 'border-amber-500 ring-4 ring-amber-500/50 scale-[1.01] bg-amber-955' 
                 : ''
             }`}
           >
             {/* Drag and Drop visual feedback */}
             {isGeologyDragging && isAdmin ? (
-              <div className="absolute inset-0 bg-amber-950/90 backdrop-blur-xs flex flex-col items-center justify-center text-center z-25 p-4 transition-all animate-fade-in">
+              <div className="absolute inset-0 bg-amber-955/90 backdrop-blur-xs flex flex-col items-center justify-center text-center z-45 p-4 transition-all animate-fade-in font-sans">
                 <Upload className="w-12 h-12 text-amber-400 mb-2 animate-bounce" />
                 <p className="text-white font-display font-black text-base">Drop rockingham-geology.jpg here</p>
                 <p className="text-amber-405 text-xs font-mono tracking-wider uppercase">Accepts JPG/PNG image</p>
@@ -2363,45 +2363,62 @@ export default function App() {
               </div>
             )}
 
-            {/* Rock Core spectroscopy image */}
-            <img 
-              src={geologyPhoto || undefined} 
-              alt={`Geological core spectroscopy and depth evidence in ${selectedSuburb.name} - Perth Bore Water`} 
-              className="absolute inset-0 w-full h-full object-cover opacity-80 animate-fade-in"
-              referrerPolicy="no-referrer"
-              key={geologyPhoto || 'geology'}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/45 to-transparent animate-fade-in pointer-events-none" />
-            
-            {/* Scientific Spectroscopy Overlays for Geological authenticity */}
-            <div className="absolute top-6 left-6 z-20 hidden sm:flex flex-col gap-2.5 pointer-events-none bg-slate-950/75 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/10 text-[10px] font-mono text-slate-350 max-w-sm">
-              <div className="flex items-center gap-2 text-xs text-emerald-400 font-extrabold tracking-wide">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                AQUIFER CALIBRATION ACTIVE
-              </div>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-left border-t border-white/10 pt-2.5">
-                <div>AQUIFER LAYER:</div> 
-                <div className="text-white font-bold">{selectedSuburb.soilComposition}</div>
-                
-                <div>DIAGNOSTIC TARGET:</div> 
-                <div className="text-white font-bold">{getDepthRange(selectedSuburb.name).text}</div>
-                
-                <div>ESTIMATED STRETCH:</div> 
-                <div className="text-white font-bold">~{selectedSuburb.typicalDepth}</div>
-                
-                <div>STAINING INDEX:</div> 
-                <div className="text-white font-bold uppercase">{selectedSuburb.ironRisk} RISK</div>
-              </div>
-            </div>
+            {/* Split layout: Text on one side, Image on the other */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 p-6 sm:p-8 md:p-10 relative z-10 w-full items-stretch">
+              
+              {/* Left Column: text and overlays */}
+              <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+                <div className="space-y-4">
+                  <span className="text-[9px] font-mono font-black text-amber-400 uppercase tracking-widest block">
+                    CORE SPECTROSCOPY EVIDENCE
+                  </span>
+                  <h4 className="text-white font-display font-black text-xl md:text-2xl tracking-tight leading-tight">
+                    Geological Strata Profile
+                  </h4>
+                  <p className="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans">
+                    Real evidence tracking borehole core samples to verify drill compaction, water layers, and secure water quality. Our core spectroscopy reports outline the physical composition of aquifer access pathways in {selectedSuburb.name}.
+                  </p>
+                </div>
 
-            <div className="relative z-10 space-y-1.5 bg-slate-950/60 p-4.5 rounded-2xl border border-white/10 backdrop-blur-xs max-w-sm">
-              <span className="text-[9px] font-mono font-black text-amber-400 uppercase tracking-widest block">CORE SPECTROSCOPY EVIDENCE</span>
-              <h4 className="text-white font-display font-black text-lg tracking-tight leading-tight">
-                Geological Strata Profile
-              </h4>
-              <p className="text-xs text-slate-300 leading-relaxed font-sans">
-                Real evidence tracking borehole core samples to verify drill compaction, water layers, and secure water quality.
-              </p>
+                {/* Scientific Spectroscopy Overlays for Geological authenticity */}
+                <div className="flex flex-col gap-3 pointer-events-none bg-slate-900/95 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-white/10 text-[10px] sm:text-[11px] font-mono text-slate-300 w-full">
+                  <div className="flex items-center gap-2 text-xs text-emerald-400 font-extrabold tracking-wide">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    AQUIFER DIAGNOSTIC ACTIVE
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-left border-t border-white/10 pt-3">
+                    <div className="text-slate-400">AQUIFER LAYER:</div> 
+                    <div className="text-white font-bold">{selectedSuburb.soilComposition}</div>
+                    
+                    <div className="text-slate-400">DIAGNOSTIC TARGET:</div> 
+                    <div className="text-white font-bold">{getDepthRange(selectedSuburb.name).text}</div>
+                    
+                    <div className="text-slate-400">ESTIMATED STRETCH:</div> 
+                    <div className="text-white font-bold">~{selectedSuburb.typicalDepth}</div>
+                    
+                    <div className="text-slate-400">STAINING INDEX:</div> 
+                    <div className="text-white font-bold uppercase">{selectedSuburb.ironRisk} RISK</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right Column: Contained Image with perfectly clean aspect-ratio and custom alignment */}
+              <div className="lg:col-span-7 flex flex-col justify-center w-full min-h-[280px] sm:min-h-[350px] lg:min-h-[385px]">
+                <div className="w-full h-full relative rounded-2xl overflow-hidden bg-[#0a0a0a] border border-white/10 shadow-inner flex items-center justify-center">
+                  <img 
+                    src={geologyPhoto || undefined} 
+                    alt={`Geological core spectroscopy and depth evidence in ${selectedSuburb.name} - Perth Bore Water`} 
+                    className="w-full h-full object-contain mx-auto opacity-95 animate-fade-in max-h-[385px]"
+                    referrerPolicy="no-referrer"
+                    key={geologyPhoto || 'geology'}
+                  />
+                  <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 to-transparent p-3.5 pointer-events-none flex justify-between items-center text-[9px] font-mono text-slate-400">
+                    <span>IMAGE SPECIMEN FILER</span>
+                    <span>100% SCALE DISPLAY</span>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
 
