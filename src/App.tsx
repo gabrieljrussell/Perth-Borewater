@@ -1478,16 +1478,46 @@ export default function App() {
     setModalSuburb(selectedSuburbSlug ? selectedSuburb.name : '');
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!fullName || !phone || !modalSuburb) return;
 
     setFormLoading(true);
-    setTimeout(() => {
+    const receiptCode = 'AD-' + Math.floor(100000 + Math.random() * 900000);
+
+    try {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          fullName,
+          phone,
+          email: emailAddress || '',
+          suburb: modalSuburb,
+          serviceType: modalTitle,
+          notes: additionalNotes || '',
+          urgency: modalTitle.toLowerCase().includes('diagnostic') || modalTitle.toLowerCase().includes('emergency') ? 'emergency' : 'standard',
+          ticketId: receiptCode,
+          source: `Modal Intake Form: ${modalTitle}`
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setReceiptNumber(data.ticketId || receiptCode);
+      } else {
+        console.error('Server rejected lead intake', await response.text());
+        setReceiptNumber(receiptCode);
+      }
+    } catch (err) {
+      console.error('Network failure submitting lead:', err);
+      setReceiptNumber(receiptCode);
+    } finally {
       setFormLoading(false);
       setFormSubmitted(true);
-      setReceiptNumber('AD-' + Math.floor(100000 + Math.random() * 900000));
-    }, 1000);
+    }
   };
 
   return (
@@ -1779,7 +1809,7 @@ export default function App() {
                   </button>
                   <button 
                     onClick={() => {
-                      handleOpenModal('Request Immediate Diagnostic Report');
+                      handleOpenModal('Book Site Audit');
                       setIsServicesDropdownOpen(false);
                     }}
                     className="w-full text-left px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-700 hover:text-rose-600 hover:bg-slate-50 transition-colors cursor-pointer"
@@ -1887,14 +1917,14 @@ export default function App() {
               </a>
 
               <button 
-                onClick={() => handleOpenModal('Request Immediate Diagnostic Report')}
-                className="bg-emerald-600 hover:bg-emerald-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.45),inset_0_1.5px_0_rgba(255,255,255,0.3)] text-white font-sans text-[11px] uppercase tracking-wider px-5 py-2.5 rounded-full font-black hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-[0_0_15px_rgba(16,185,129,0.3)] border border-emerald-500/20 duration-300 flex items-center gap-1.5 h-[38px]"
+                onClick={() => handleOpenModal('Book Site Audit')}
+                className="bg-[#007AFF] hover:bg-blue-600 hover:shadow-[0_0_20px_rgba(0,122,255,0.45),inset_0_1.5px_0_rgba(255,255,255,0.3)] text-white font-sans text-[11px] uppercase tracking-wider px-5 py-2.5 rounded-full font-black hover:scale-[1.02] active:scale-[0.98] transition-all cursor-pointer shadow-[0_0_15px_rgba(0,122,255,0.3)] border border-blue-500/20 duration-300 flex items-center gap-1.5 h-[38px]"
               >
                 <span className="relative flex h-1.5 w-1.5 shrink-0">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
                 </span>
-                <span>Request Diagnostic</span>
+                <span>Book Site Audit</span>
               </button>
             </div>
 
@@ -2020,16 +2050,16 @@ export default function App() {
               <div className="pt-2 px-1">
                 <button 
                   onClick={() => {
-                    handleOpenModal('Request Immediate Diagnostic Report');
+                    handleOpenModal('Book Site Audit');
                     setIsMobileMenuOpen(false);
                   }}
-                  className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-sans text-xs uppercase tracking-wider py-3.5 rounded-full font-black text-center shadow-[0_0_15px_rgba(16,185,129,0.25)] transition-all flex items-center justify-center gap-1.5"
+                  className="w-full bg-[#007AFF] hover:bg-blue-600 text-white font-sans text-xs uppercase tracking-wider py-3.5 rounded-full font-black text-center shadow-[0_0_15px_rgba(0,122,255,0.25)] transition-all flex items-center justify-center gap-1.5"
                 >
                   <span className="relative flex h-1.5 w-1.5">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
                   </span>
-                  Request Diagnostic
+                  Book Site Audit
                 </button>
               </div>
 
@@ -2899,10 +2929,10 @@ export default function App() {
                 <span className="text-[11px] font-bold text-rose-600 font-mono">PRIORITY SPEED</span>
               </div>
               <button 
-                onClick={() => handleOpenModal('Request Immediate Diagnostic Report')}
+                onClick={() => handleOpenModal('Book Site Audit')}
                 className="bg-emerald-600 hover:bg-emerald-500 text-white text-[10.5px] font-bold px-4 py-2 rounded-xl transition-all hover:scale-[1.01] active:scale-[0.99] cursor-pointer shadow-sm border border-emerald-500/20 text-center font-sans tracking-wide duration-300 hover:shadow-emerald-500/20 shrink-0"
               >
-                Diagnostic Report
+                Book Site Audit
               </button>
             </div>
           </div>
@@ -3796,7 +3826,7 @@ export default function App() {
                     </strong>
                   </div>
                   <p className="text-[11px] text-slate-405 font-medium">
-                    An on-call bore engineer will phone you at <strong className="text-slate-800">{phone}</strong> within 30 minutes.
+                    An on-call bore engineer will phone you at <strong className="text-slate-800">{phone}</strong> to discuss your site checklist and booking details.
                   </p>
                   <p className="text-[10px] text-slate-500 font-mono">
                     Copy dispatched to: support@perthborewater.com.au

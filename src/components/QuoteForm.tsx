@@ -29,19 +29,48 @@ export default function QuoteForm({ initialSuburb = '' }: QuoteFormProps) {
     }
   }, [initialSuburb]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.fullName || !form.phone || !form.suburb) {
       return;
     }
 
     setLoading(true);
-    setTimeout(() => {
+    const uuid = 'WA-' + Math.floor(100000 + Math.random() * 900000);
+
+    try {
+      const response = await fetch('/api/leads', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          fullName: form.fullName,
+          phone: form.phone,
+          email: form.email || '',
+          suburb: form.suburb,
+          serviceType: getServiceLabel(form.serviceType),
+          notes: form.notes || '',
+          urgency: form.urgency,
+          ticketId: uuid,
+          source: 'Sidebar Quote & Emergency Repair Form'
+        })
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setTicketId(data.ticketId || uuid);
+      } else {
+        console.error('Failed to submit lead to server', await response.text());
+        setTicketId(uuid);
+      }
+    } catch (err) {
+      console.error('Network error submitting lead:', err);
+      setTicketId(uuid);
+    } finally {
       setSubmitted(true);
       setLoading(false);
-      const uuid = 'WA-' + Math.floor(100000 + Math.random() * 900000);
-      setTicketId(uuid);
-    }, 900);
+    }
   };
 
   const getServiceLabel = (type: string) => {

@@ -40,5 +40,22 @@ service cloud.firestore {
       allow delete: if isAdmin() && 
                        isValidId(suburbSlug);
     }
+
+    function isValidLead(data) {
+      return (data.fullName is string && data.fullName.size() <= 200)
+             && (data.phone is string && data.phone.size() <= 50)
+             && (data.get('email', '') is string && data.get('email', '').size() <= 200)
+             && (data.suburb is string && data.suburb.size() <= 205)
+             && (data.get('serviceType', '') is string && data.get('serviceType', '').size() <= 200)
+             && (data.get('notes', '') is string && data.get('notes', '').size() <= 2000)
+             && (data.get('urgency', '') is string && data.get('urgency', '').size() <= 50)
+             && (data.get('ticketId', '') is string && data.get('ticketId', '').size() <= 100);
+    }
+
+    // Customer Leads submissions
+    match /leads/{leadId} {
+      allow read, update, delete: if isAdmin() && isValidId(leadId);
+      allow create: if isValidId(leadId) && isValidLead(request.resource.data);
+    }
   }
 }

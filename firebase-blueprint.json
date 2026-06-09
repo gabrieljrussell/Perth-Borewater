@@ -12,12 +12,34 @@
         "background": { "type": "string", "description": "URL for suburb background photo" },
         "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp of last update" }
       }
+    },
+    "Lead": {
+      "title": "Lead Submission",
+      "description": "Lead requests submitted by property owners wanting water bores, diagnostics, or repairs",
+      "type": "object",
+      "properties": {
+        "fullName": { "type": "string", "description": "Full name of the prospect" },
+        "phone": { "type": "string", "description": "Phone number of the prospect" },
+        "email": { "type": "string", "description": "Email address of the prospect" },
+        "suburb": { "type": "string", "description": "Perth suburb target site" },
+        "serviceType": { "type": "string", "description": "Type of service requested" },
+        "notes": { "type": "string", "description": "Site details/symptoms notes" },
+        "urgency": { "type": "string", "description": "Urgency speed tier" },
+        "source": { "type": "string", "description": "Name of the CTA form or location" },
+        "ticketId": { "type": "string", "description": "Unique confirmation receipt code" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp of creation" }
+      },
+      "required": ["fullName", "phone", "suburb"]
     }
   },
   "firestore": {
     "/media_overrides/{suburbSlug}": {
       "schema": "MediaOverride",
       "description": "Suburbs media asset overrides map"
+    },
+    "/leads/{leadId}": {
+      "schema": "Lead",
+      "description": "Customer lead submissions list"
     }
   }
 }

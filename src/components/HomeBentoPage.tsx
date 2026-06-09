@@ -143,20 +143,23 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
         
         {/* HERO CARD: Spans 8 of 12 columns, 2 rows */}
-        <div className="lg:col-span-8 lg:row-span-2 bg-[#00142A] text-white border border-[#002147]/50 rounded-[2rem] p-8 sm:p-10 flex flex-col justify-between shadow-2xl relative overflow-hidden group min-h-[480px]">
-          {/* High-impact Video Montage active background */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-20 z-0 pointer-events-none mix-blend-lighten"
-          >
-            <source src="https://assets.perthborewater.com.au/Coogee.mp4" type="video/mp4" />
-          </video>
+        <div className="lg:col-span-8 lg:row-span-2 bg-[#00142A] text-white border border-[#002147]/50 rounded-[2rem] p-8 sm:p-10 flex flex-col justify-between shadow-2xl relative group min-h-[480px]">
+          {/* Background Wrapper keeping overflow constrained for background video and gradients */}
+          <div className="absolute inset-0 rounded-[2rem] overflow-hidden pointer-events-none z-0">
+            {/* High-impact Video Montage active background */}
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover opacity-20 z-0 pointer-events-none mix-blend-lighten"
+            >
+              <source src="https://assets.perthborewater.com.au/Coogee.mp4" type="video/mp4" />
+            </video>
 
-          {/* Subtle water schematic overlay gradient */}
-          <div className="absolute inset-0 bg-radial-gradient(ellipse_at_center,rgba(0,33,71,0.4),rgba(0,10,25,0.95)) z-0 pointer-events-none" />
+            {/* Subtle water schematic overlay gradient */}
+            <div className="absolute inset-0 bg-radial-gradient(ellipse_at_center,rgba(0,33,71,0.4),rgba(0,10,25,0.95)) z-0 pointer-events-none" />
+          </div>
           
           <div className="space-y-6 relative z-10 w-full">
             {/* Top Badge Indicators for compliance & DWER licence */}
@@ -185,100 +188,70 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
 
           {/* CTA & Single-Field Zip / Suburb Search box */}
           <div className="mt-8 pt-6 border-t border-white/10 relative z-20 space-y-4">
-            <div className="relative w-full max-w-md" ref={heroDropdownRef}>
+            <div className="relative w-full max-w-md">
               <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-[#00B4D8] mb-2.5">
                 Find your local water table expert:
               </label>
               
-              <div className="relative flex items-center bg-slate-950/80 hover:bg-slate-900 border border-white/20 focus-within:border-[#00B4D8] focus-within:ring-2 focus-within:ring-[#00B4D8]/10 rounded-xl px-3.5 py-1 transition-all">
-                <Search className="w-4 h-4 text-[#00B4D8] shrink-0" />
-                <input
-                  type="text"
-                  value={heroSearchQuery}
-                  onFocus={() => setShowHeroDropdown(true)}
+              <div className="relative flex items-center bg-slate-950/85 hover:bg-slate-900 border border-white/20 focus-within:border-[#00B4D8] focus-within:ring-2 focus-within:ring-[#00B4D8]/10 rounded-xl px-3.5 transition-all">
+                <MapPin className="w-4 h-4 text-[#00B4D8] shrink-0" />
+                <select
                   onChange={(e) => {
-                    setHeroSearchQuery(e.target.value);
-                    setShowHeroDropdown(true);
+                    const subSlug = e.target.value;
+                    if (subSlug) {
+                      onSelectSuburb(subSlug);
+                    }
                   }}
-                  placeholder="Enter Suburb (e.g. Rockingham, Baldivis)..."
-                  className="w-full bg-transparent text-white placeholder-slate-400 text-xs py-2.5 pl-3 border-none outline-none focus:outline-none focus:ring-0"
-                />
-                {heroSearchQuery && (
-                  <button 
-                    onClick={() => setHeroSearchQuery('')}
-                    className="text-[10px] text-slate-400 hover:text-white px-1 font-mono font-bold"
-                  >
-                    Clear
-                  </button>
-                )}
+                  className="w-full bg-transparent text-white text-xs py-3.5 pl-3 pr-8 border-none outline-none focus:outline-none focus:ring-0 cursor-pointer appearance-none font-sans font-semibold"
+                  defaultValue=""
+                >
+                  <option value="" disabled className="bg-[#0A0F1D] text-slate-400">
+                    Choose Specific Suburb...
+                  </option>
+                  {ALL_SUBURBS_LIST.slice().sort((a,b) => a.name.localeCompare(b.name)).map((sub) => {
+                    const subSlug = sub.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                    return (
+                      <option key={sub.name} value={subSlug} className="bg-[#0A0F1D] text-white py-2">
+                        {sub.name} (Postcode {sub.postcode})
+                      </option>
+                    );
+                  })}
+                </select>
+                <div className="absolute right-4.5 top-5 pointer-events-none border-l-4 border-r-4 border-t-4 border-transparent border-t-[#00B4D8] w-0 h-0" />
               </div>
 
-              {/* Suburb Search Dropdown */}
-              {showHeroDropdown && (
-                <div className="absolute top-[4.2rem] left-0 right-0 bg-[#0A0F1D] border border-slate-800 rounded-xl overflow-hidden z-50 shadow-2xl divide-y divide-slate-850/60 max-h-60 overflow-y-auto">
-                  {filteredHeroSuburbs.length > 0 ? (
-                    filteredHeroSuburbs.map((sub) => {
-                      const subSlug = sub.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-                      return (
-                        <button
-                          key={sub.name}
-                          type="button"
-                          onClick={() => {
-                            onSelectSuburb(subSlug);
-                            setHeroSearchQuery('');
-                            setShowHeroDropdown(false);
-                          }}
-                          className="w-full text-left px-4 py-3 hover:bg-slate-800 text-xs text-slate-200 hover:text-white font-medium flex justify-between items-center transition-colors font-sans"
-                        >
-                          <span className="font-bold">{sub.name}</span>
-                          <span className="text-[10px] text-[#00B4D8] font-mono font-bold">Postcode {sub.postcode} →</span>
-                        </button>
-                      );
-                    })
-                  ) : heroSearchQuery.trim().length > 0 ? (
-                    <div className="p-3.5 text-center text-xs text-slate-500 font-sans">
-                      No matching operational suburbs found under sitemap.
-                    </div>
-                  ) : (
-                    <div className="p-1 px-1.5 py-2">
-                      <span className="text-[9px] font-mono font-bold text-slate-500 uppercase tracking-widest block mb-1.5 px-2">
-                        Browse High-Priority Sites
-                      </span>
-                      {['Baldivis', 'Rockingham', 'Canning Vale', 'Piara Waters', 'Wellard'].map((subName) => {
-                        const subSlug = subName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
-                        return (
-                          <button
-                            key={subName}
-                            type="button"
-                            onClick={() => {
-                              onSelectSuburb(subSlug);
-                              setHeroSearchQuery('');
-                              setShowHeroDropdown(false);
-                            }}
-                            className="w-full text-left px-2.5 py-2 hover:bg-slate-850 rounded-lg text-xs text-slate-350 hover:text-slate-100 font-semibold flex justify-between items-center transition-all"
-                          >
-                            <span>{subName}</span>
-                            <span className="text-[9px] text-[#00B4D8] font-mono font-bold">Select Site →</span>
-                          </button>
-                        );
-                      })}
-                    </div>
-                  )}
-                </div>
-              )}
+              {/* Instant-select Priority Suburb Pills */}
+              <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                <span className="text-[9px] font-mono font-bold text-slate-400 uppercase tracking-widest mr-1">
+                  Quick Select:
+                </span>
+                {['Baldivis', 'Rockingham', 'Canning Vale', 'Piara Waters', 'Wellard'].map((subName) => {
+                  const subSlug = subName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                  return (
+                    <button
+                      key={subName}
+                      type="button"
+                      onClick={() => onSelectSuburb(subSlug)}
+                      className="px-2.5 py-1 rounded-full bg-white/5 hover:bg-[#00B4D8]/15 border border-white/10 hover:border-[#00B4D8]/30 text-[10px] text-slate-350 hover:text-white transition-all cursor-pointer font-sans font-medium"
+                    >
+                      {subName}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             {/* Soft contact buttons below the instant search block */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
               <button
-                onClick={() => onOpenModal('Book Site Assessment')}
-                className="bg-[#00B4D8] hover:bg-white text-[#002147] font-sans text-xs uppercase tracking-wider font-black px-5 py-3.5 rounded-xl cursor-pointer transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-[#00B4D8]/10"
+                onClick={() => onOpenModal('Book Site Audit')}
+                className="bg-[#00B4D8] hover:bg-white text-[#002147] font-sans text-xs uppercase tracking-wider font-black px-6 py-4 rounded-xl cursor-pointer transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-[#00B4D8]/20"
               >
-                Book site audit
+                Book Site Audit
               </button>
               <a 
                 href="tel:0863704982"
-                className="px-4 py-3 border border-white/20 hover:border-white/40 text-white font-mono text-xs font-bold rounded-xl flex items-center gap-2 transition-all hover:bg-white/5 cursor-pointer"
+                className="px-5 py-4 border border-white/20 hover:border-white/40 text-white font-mono text-xs font-bold rounded-xl flex items-center gap-2 transition-all hover:bg-white/5 cursor-pointer"
               >
                 <Phone className="w-3.5 h-3.5 text-[#00B4D8]" />
                 <span>(08) 6370 4982</span>
@@ -477,16 +450,40 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
 
       {/* 2b. The 3-Step Authority Section */}
       <div className="bg-slate-50 border border-slate-200/50 rounded-[2rem] p-8 sm:p-10 text-left space-y-8">
-        <div className="max-w-3xl space-y-2">
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#00B4D8]/10 border border-[#00B4D8]/20 rounded-full text-[9px] font-mono font-bold text-[#008BB2] uppercase tracking-wider">
-            <span>Our Transparent Installation Workflow</span>
+        <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between border-b border-slate-200/60 pb-6">
+          <div className="max-w-2xl space-y-2">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#00B4D8]/10 border border-[#00B4D8]/20 rounded-full text-[9px] font-mono font-bold text-[#008BB2] uppercase tracking-wider">
+              <span>Our Transparent Installation Workflow</span>
+            </div>
+            <h2 className="text-2xl sm:text-3.5xl font-display font-black text-slate-900 tracking-tight leading-tight">
+              Our 3-Step Authority Blueprint
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-505 max-w-xl">
+              Home water drilling is a significant lifestyle asset. We make the entire process smooth, secure, and completely transparent from regulatory checks to active service.
+            </p>
           </div>
-          <h2 className="text-2xl sm:text-3.5xl font-display font-black text-slate-900 tracking-tight leading-tight">
-            Our 3-Step Authority Blueprint
-          </h2>
-          <p className="text-xs sm:text-sm text-slate-500 max-w-2xl">
-            Home water drilling is a significant lifestyle asset. We make the entire process smooth, secure, and completely transparent from regulatory checks to active service.
-          </p>
+
+          {/* Lead Engineer Bio Box (Human Trust Signal) */}
+          <div className="bg-white border border-slate-200/80 rounded-2xl p-4 flex items-center gap-4 shadow-xs w-full lg:max-w-md shrink-0">
+            <div className="relative w-14 h-14 rounded-full overflow-hidden border border-slate-200 shrink-0 bg-slate-50">
+              <img 
+                src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=180&h=180&q=80" 
+                alt="Michael Russell, Lead Director" 
+                className="w-full h-full object-cover grayscale font-sans text-[8px]"
+                referrerPolicy="no-referrer"
+              />
+            </div>
+            <div className="text-left space-y-0.5">
+              <div className="flex items-center gap-1.5">
+                <span className="text-[8.5px] font-mono font-black text-[#00B4D8] uppercase tracking-widest leading-none">Lead Site Director</span>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              </div>
+              <h4 className="text-xs font-display font-extrabold text-slate-800">Michael &quot;Mike&quot; Russell</h4>
+              <p className="text-[10px] text-slate-500 italic leading-snug">
+                &quot;We don&apos;t just drill holes. We map your subsoil, design custom slot casing, and guarantee lifetime flow.&quot;
+              </p>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
@@ -627,57 +624,46 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           </div>
 
           {/* Calculation Table & Return details: Spans 7 columns */}
-          <div className="lg:col-span-7 bg-slate-900 text-white rounded-2xl p-6 sm:p-8 flex flex-col justify-between border border-slate-800 shadow-xl min-h-[380px]">
-            <div className="space-y-5">
-              <div className="flex justify-between items-center border-b border-slate-800 pb-4">
+          <div className="lg:col-span-7 bg-slate-900 border border-slate-800 text-white rounded-[2rem] p-6 sm:p-8 flex flex-col justify-between shadow-xl min-h-[380px]">
+            <div className="space-y-6">
+              <div className="flex justify-between items-center bg-slate-950/40 p-3.5 rounded-xl border border-slate-800/60 pb-3.5">
                 <div>
                   <span className="text-[9px] font-mono text-[#00B4D8] font-bold uppercase tracking-widest block">
                     HYDROGEOLOGY ESTIMATION
                   </span>
-                  <p className="text-sm font-display font-medium text-slate-200">
+                  <p className="text-xs font-sans font-medium text-slate-400 mt-0.5">
                     Calculated Annual Water Consumption:
                   </p>
                 </div>
                 <div className="text-right">
-                  <strong className="text-xl sm:text-2xl font-mono text-white tracking-tight block">
-                    {annualWaterVolumeKL} <span className="text-xs text-slate-400">kL/yr</span>
+                  <strong className="text-lg sm:text-xl font-mono text-white tracking-tight block">
+                    {annualWaterVolumeKL} <span className="text-xs text-slate-400 font-normal">kL/yr</span>
                   </strong>
                 </div>
               </div>
 
-              {/* TCO Table comparison over 5 years */}
-              <div className="space-y-3 pt-1">
-                <div className="grid grid-cols-4 text-[9px] font-mono text-slate-400 uppercase tracking-wider font-bold text-left border-b border-slate-800/40 pb-2">
-                  <span>Timeline</span>
-                  <span>Mains cost</span>
-                  <span>Bore Cost</span>
-                  <span className="text-[#00B4D8] text-right">Net Savings</span>
+              {/* Major instant financial win callout - High impact */}
+              <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-5 text-center space-y-2">
+                <span className="text-[10px] font-mono text-emerald-400 font-black uppercase tracking-widest block">
+                  Your Net Savings Per Year
+                </span>
+                <div className="text-3xl sm:text-4.5xl font-mono font-black text-emerald-400 tracking-tight leading-none">
+                  ${annualSavings.toLocaleString()}<span className="text-xs sm:text-sm font-sans font-medium text-emerald-500 ml-1">/ year</span>
                 </div>
-                
-                {/* 1 Year */}
-                <div className="grid grid-cols-4 items-center text-xs font-mono py-1.5 border-b border-slate-800/20">
-                  <span className="text-slate-300">Year 1</span>
-                  <span className="text-slate-400">${annualMainsCost.toLocaleString()}</span>
-                  <span className="text-slate-400">${annualBoreCost.toLocaleString()}</span>
-                  <strong className="text-emerald-400 font-bold text-right">${annualSavings.toLocaleString()}</strong>
-                </div>
+                <p className="text-xs text-slate-300 max-w-md mx-auto pt-1 leading-normal font-sans">
+                  Switching to a bore instantly chops up to 80% off your reticulation charges. You will save <strong className="text-white">${(annualSavings * 3).toLocaleString()}</strong> in just your first 3 seasons.
+                </p>
+              </div>
 
-                {/* 3 Years */}
-                <div className="grid grid-cols-4 items-center text-xs font-mono py-1.5 border-b border-slate-800/20">
-                  <span className="text-slate-300 text-slate-200 font-semibold">Year 3</span>
-                  <span className="text-slate-400">${(annualMainsCost * 3).toLocaleString()}</span>
-                  <span className="text-slate-400">${(annualBoreCost * 3).toLocaleString()}</span>
-                  <strong className="text-emerald-400 font-bold text-right">${(annualSavings * 3).toLocaleString()}</strong>
+              {/* Softened data comparisons */}
+              <div className="grid grid-cols-2 gap-4 text-xs">
+                <div className="bg-slate-950/30 border border-slate-850/60 p-3 rounded-xl text-left">
+                  <span className="text-[9px] font-mono text-slate-500 block uppercase font-bold">Standard Mains (1yr)</span>
+                  <span className="text-slate-300 font-semibold block mt-1">${annualMainsCost.toLocaleString()}</span>
                 </div>
-
-                {/* 5 Years Cumulative */}
-                <div className="grid grid-cols-4 items-center text-xs font-mono py-3 border-b border-slate-800/40 bg-slate-950/40 px-2 -mx-2 rounded-lg">
-                  <span className="text-white font-bold">5yr Cumulative</span>
-                  <span className="text-slate-450 font-medium">${(annualMainsCost * 5).toLocaleString()}</span>
-                  <span className="text-slate-450 font-medium">${(annualBoreCost * 5).toLocaleString()}</span>
-                  <span className="text-emerald-400 font-black text-right text-sm">
-                    ${(annualSavings * 5).toLocaleString()}
-                  </span>
+                <div className="bg-slate-950/30 border border-slate-850/60 p-3 rounded-xl text-left">
+                  <span className="text-[9px] font-mono text-slate-500 block uppercase font-bold">Bore Power (1yr)</span>
+                  <span className="text-slate-300 font-semibold block mt-1">${annualBoreCost.toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -685,19 +671,19 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
             {/* Payback period and call-to-action block */}
             <div className="mt-6 pt-5 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="text-left">
-                <span className="text-[8px] font-mono text-slate-505 font-bold uppercase tracking-widest block">
-                  AMORTIZATION FORECAST
+                <span className="text-[8px] font-mono text-slate-500 font-bold uppercase tracking-widest block">
+                  AMORTIZATION TIMELINE
                 </span>
-                <span className="text-sm font-sans font-medium text-slate-300">
-                  Estimated Payback Period: <strong className="text-white font-mono text-base font-bold text-[#00B4D8]">{paybackYears} Years</strong>
+                <span className="text-xs font-sans text-slate-400">
+                  Estimated Payback period: <strong className="text-slate-200 font-mono text-xs">{paybackYears} Years</strong> (Subtle asset hedge)
                 </span>
               </div>
               <button
-                onClick={() => onOpenModal(`Request {lawnSize}m² Yield Quote`)}
-                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[10px] tracking-wider uppercase px-4 py-3 rounded-xl transition-all cursor-pointer flex items-center gap-1 hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto justify-center"
+                onClick={() => onOpenModal('Book Site Audit')}
+                className="bg-[#00B4D8] hover:bg-white text-[#002147] font-sans text-xs uppercase tracking-wider font-extrabold px-6 py-3.5 rounded-xl cursor-pointer transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-[#00B4D8]/10 flex items-center gap-1.5"
               >
-                <TrendingUp className="w-3.5 h-3.5" />
-                <span>Calculate My Site</span>
+                <span>Book Site Audit</span>
+                <ChevronRight className="w-4 h-4 shrink-0" />
               </button>
             </div>
           </div>
@@ -914,10 +900,10 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           </p>
         </div>
         <button
-          onClick={() => onOpenModal('Secure My Drill Date')}
+          onClick={() => onOpenModal('Book Site Audit')}
           className="bg-[#00B4D8] hover:bg-white text-[#002147] font-semibold text-xs uppercase tracking-wider px-6 py-4 rounded-xl transition-all duration-300 shadow-lg cursor-pointer flex items-center gap-1.5 font-bold h-12 w-full md:w-auto justify-center hover:scale-[1.02] active:scale-[0.98]"
         >
-          <span>Book Site Assessment</span>
+          <span>Book Site Audit</span>
           <span>→</span>
         </button>
       </div>
