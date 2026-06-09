@@ -1462,6 +1462,7 @@ export default function App() {
   const [phone, setPhone] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
   const [additionalNotes, setAdditionalNotes] = useState('');
+  const [modalSuburb, setModalSuburb] = useState('');
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
   const [receiptNumber, setReceiptNumber] = useState('');
@@ -1474,11 +1475,12 @@ export default function App() {
     setPhone('');
     setEmailAddress('');
     setAdditionalNotes('');
+    setModalSuburb(selectedSuburbSlug ? selectedSuburb.name : '');
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!fullName || !phone) return;
+    if (!fullName || !phone || !modalSuburb) return;
 
     setFormLoading(true);
     setTimeout(() => {
@@ -3782,7 +3784,7 @@ export default function App() {
                   <div className="space-y-1">
                     <h4 className="text-slate-900 font-display font-black text-xl">Request Lodged Securely</h4>
                     <p className="text-xs text-slate-500">
-                      Our Rockingham priority dispatch has reserved this slot.
+                      Our dispatch system has sent this ticket to <strong className="text-slate-800">support@perthborewater.com.au</strong> for {modalSuburb}.
                     </p>
                   </div>
                   <div className="p-4 bg-slate-50 border border-slate-100 rounded-xl space-y-1 inline-block">
@@ -3793,8 +3795,11 @@ export default function App() {
                       {receiptNumber}
                     </strong>
                   </div>
-                  <p className="text-[11px] text-slate-400 font-medium">
+                  <p className="text-[11px] text-slate-405 font-medium">
                     An on-call bore engineer will phone you at <strong className="text-slate-800">{phone}</strong> within 30 minutes.
+                  </p>
+                  <p className="text-[10px] text-slate-500 font-mono">
+                    Copy dispatched to: support@perthborewater.com.au
                   </p>
                   <button
                     onClick={() => setIsModalOpen(false)}
@@ -3806,6 +3811,31 @@ export default function App() {
               ) : (
                 <form onSubmit={handleFormSubmit} className="space-y-4 text-left">
                   
+                  <div className="space-y-1">
+                    <label className="block text-[10px] font-mono font-bold text-slate-450 uppercase tracking-wider">
+                      Your Suburb *
+                    </label>
+                    <div className="relative">
+                      <span className="absolute left-3 top-3.5 text-slate-405">
+                        <MapPin className="w-4 h-4 text-[#007AFF]" />
+                      </span>
+                      <select 
+                        required 
+                        value={modalSuburb}
+                        onChange={(e) => setModalSuburb(e.target.value)}
+                        className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-[#007AFF] focus:bg-white rounded-xl pl-10 pr-10 py-3 text-xs text-slate-800 outline-none transition-all appearance-none cursor-pointer"
+                      >
+                        <option value="" disabled>Select your Suburb</option>
+                        {INDEX_SUBURBS.slice().sort().map((subName) => (
+                          <option key={subName} value={subName}>
+                            {subName}
+                          </option>
+                        ))}
+                      </select>
+                      <div className="absolute right-3.5 top-5 pointer-events-none border-l-4 border-r-4 border-t-4 border-transparent border-t-[#007AFF] w-0 h-0" />
+                    </div>
+                  </div>
+
                   <div className="space-y-1">
                     <label className="block text-[10px] font-mono font-bold text-slate-450 uppercase tracking-wider">
                       Your Full Name

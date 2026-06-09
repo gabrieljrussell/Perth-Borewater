@@ -12,7 +12,9 @@ import {
   Phone,
   Layers,
   ChevronRight,
-  Database
+  Database,
+  Coins,
+  TrendingUp
 } from 'lucide-react';
 import { ALL_SUBURBS_LIST } from '../allSuburbs';
 
@@ -44,6 +46,41 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
   const [selectedProfileSuburb, setSelectedProfileSuburb] = useState<string>('Baldivis');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  // States for Hero Zip Code / Suburb Search box
+  const [heroSearchQuery, setHeroSearchQuery] = useState('');
+  const [showHeroDropdown, setShowHeroDropdown] = useState(false);
+  const heroDropdownRef = useRef<HTMLDivElement>(null);
+
+  // States for Mains vs Bore Calculator
+  const [lawnSize, setLawnSize] = useState<number>(250); // m²
+  const [wateringWeeks, setWateringWeeks] = useState<number>(30); // 30 active weeks in Perth's dry season
+  
+  const mainsCostPerKL = 3.10; // high house usage tier in WA
+  const borePowerCostPerKL = 0.05; // standard Grundfos energy use
+  
+  const annualWaterVolumeKL = useMemo(() => {
+    // 10mm per watering session, 2 sessions per week, over wateringWeeks
+    return Math.round((lawnSize * 10 * 2 * wateringWeeks) / 1000);
+  }, [lawnSize, wateringWeeks]);
+  
+  const annualMainsCost = useMemo(() => {
+    return Math.round(annualWaterVolumeKL * mainsCostPerKL);
+  }, [annualWaterVolumeKL]);
+  
+  const annualBoreCost = useMemo(() => {
+    return Math.round((annualWaterVolumeKL * borePowerCostPerKL) + 40); // $40 safety buffer
+  }, [annualWaterVolumeKL]);
+  
+  const annualSavings = useMemo(() => {
+    return annualMainsCost - annualBoreCost;
+  }, [annualMainsCost, annualBoreCost]);
+  
+  const paybackYears = useMemo(() => {
+    // Average cost of a high-quality shallow Bore installation in Perth is approx $5,400
+    const estBoreInstallCost = 5200;
+    return (estBoreInstallCost / (annualSavings || 1)).toFixed(1);
+  }, [annualSavings]);
+
   // Filter suburbs list for searchable selector dropdown (restricted to 20 index suburbs)
   const filteredSuburbs = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
@@ -57,11 +94,27 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
     }).slice(0, 6);
   }, [searchQuery]);
 
-  // Click outside listener for dropdown
+  // Filter suburbs list for the Hero Search box (restricted to 20 index suburbs)
+  const filteredHeroSuburbs = useMemo(() => {
+    const query = heroSearchQuery.trim().toLowerCase();
+    if (!query) return [];
+    const southSet = new Set(SOUTH_CORRIDOR_SUBURBS.map(s => s.toLowerCase()));
+    return ALL_SUBURBS_LIST.filter(sub => {
+      const matchQuery = sub.name.toLowerCase().includes(query) || 
+                          sub.postcode.includes(query);
+      const isIndexSuburb = southSet.has(sub.name.toLowerCase());
+      return matchQuery && isIndexSuburb;
+    }).slice(0, 6);
+  }, [heroSearchQuery]);
+
+  // Click outside listener for dropdowns
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setShowDropdown(false);
+      }
+      if (heroDropdownRef.current && !heroDropdownRef.current.contains(event.target as Node)) {
+        setShowHeroDropdown(false);
       }
     }
     document.addEventListener('mousedown', handleClickOutside);
@@ -90,12 +143,22 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 relative z-10">
         
         {/* HERO CARD: Spans 8 of 12 columns, 2 rows */}
-        <div className="lg:col-span-8 lg:row-span-2 bg-[#002147] text-white border border-[#002147]/50 rounded-[2rem] p-8 sm:p-10 flex flex-col justify-between shadow-2xl relative overflow-hidden group min-h-[460px]">
-          {/* Subtle water schematic design accent */}
-          <div className="absolute inset-0 bg-[#00B4D8]/5 mix-blend-overlay pointer-events-none" />
-          <div className="absolute -right-24 -bottom-24 w-96 h-96 bg-[#00B4D8]/10 rounded-full blur-3xl pointer-events-none group-hover:bg-[#00B4D8]/15 transition-all duration-700" />
+        <div className="lg:col-span-8 lg:row-span-2 bg-[#00142A] text-white border border-[#002147]/50 rounded-[2rem] p-8 sm:p-10 flex flex-col justify-between shadow-2xl relative overflow-hidden group min-h-[480px]">
+          {/* High-impact Video Montage active background */}
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover opacity-20 z-0 pointer-events-none mix-blend-lighten"
+          >
+            <source src="https://assets.perthborewater.com.au/Coogee.mp4" type="video/mp4" />
+          </video>
+
+          {/* Subtle water schematic overlay gradient */}
+          <div className="absolute inset-0 bg-radial-gradient(ellipse_at_center,rgba(0,33,71,0.4),rgba(0,10,25,0.95)) z-0 pointer-events-none" />
           
-          <div className="space-y-6">
+          <div className="space-y-6 relative z-10 w-full">
             {/* Top Badge Indicators for compliance & DWER licence */}
             <div className="flex flex-wrap gap-2">
               <span className="flex items-center gap-1.5 px-3 py-1 bg-[#00B4D8]/20 border border-[#00B4D8]/30 rounded-full text-[#00B4D8] font-mono text-[10px] font-bold uppercase tracking-wider">
@@ -108,37 +171,119 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               </span>
             </div>
 
-            {/* Headline and Narrative */}
+            {/* Headline and Wallet-targeting Hook */}
             <div className="space-y-3.5">
               <h1 className="text-3xl sm:text-4.5xl font-display font-black tracking-tight leading-tight text-white">
-                Perth&apos;s Local Bore &amp;<br />
-                <span className="text-[#00B4D8]">Reticulation Experts</span>
+                Slash Your Water Bills <br className="hidden sm:inline" />
+                with a <span className="text-[#00B4D8]">Custom-Engineered Bore.</span>
               </h1>
-              <p className="text-[#E2E8F0] font-sans font-medium text-sm sm:text-base leading-relaxed max-w-2xl">
-                Specialized drilling, preventative maintenance, and smart state-of-the-art irrigation models across the South Corridor. 100% West Australian owned and operated.
+              <p className="text-[#E2E8F0]/90 font-sans font-medium text-sm sm:text-md leading-relaxed max-w-2xl">
+                Perth&apos;s leading engineers in the underground. Save up to 80% on retic water charges and garden maintenance with class-1 drilling.
               </p>
             </div>
           </div>
 
-          {/* Primary CTA and response metrics */}
-          <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-4 pt-6 border-t border-white/10">
-            <button
-              onClick={() => onOpenModal('Book Site Assessment')}
-              className="bg-[#00B4D8] hover:bg-[#00B4D8]/90 text-[#002147] font-sans text-xs uppercase tracking-wider font-black px-6 py-4 rounded-xl flex items-center justify-center gap-2 group cursor-pointer transition-all duration-300 shadow-lg shadow-[#00B4D8]/25 hover:scale-[1.01] active:scale-[0.99] relative"
-            >
-              {/* Pulse ripple effect */}
-              <span className="absolute inset-0 rounded-xl bg-[#00B4D8]/30 animate-ping -z-10 opacity-75" />
-              <span>Book a Site Assessment</span>
-              <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </button>
-            
-            <a 
-              href="tel:0863704982"
-              className="px-5 py-4 border border-white/20 hover:border-white/40 text-white font-mono text-xs font-bold rounded-xl flex items-center justify-center gap-2 transition-all hover:bg-white/5 cursor-pointer"
-            >
-              <Phone className="w-4 h-4 text-[#00B4D8]" />
-              <span>(08) 6370 4982</span>
-            </a>
+          {/* CTA & Single-Field Zip / Suburb Search box */}
+          <div className="mt-8 pt-6 border-t border-white/10 relative z-20 space-y-4">
+            <div className="relative w-full max-w-md" ref={heroDropdownRef}>
+              <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-[#00B4D8] mb-2.5">
+                Find your local water table expert:
+              </label>
+              
+              <div className="relative flex items-center bg-slate-950/80 hover:bg-slate-900 border border-white/20 focus-within:border-[#00B4D8] focus-within:ring-2 focus-within:ring-[#00B4D8]/10 rounded-xl px-3.5 py-1 transition-all">
+                <Search className="w-4 h-4 text-[#00B4D8] shrink-0" />
+                <input
+                  type="text"
+                  value={heroSearchQuery}
+                  onFocus={() => setShowHeroDropdown(true)}
+                  onChange={(e) => {
+                    setHeroSearchQuery(e.target.value);
+                    setShowHeroDropdown(true);
+                  }}
+                  placeholder="Enter Suburb (e.g. Rockingham, Baldivis)..."
+                  className="w-full bg-transparent text-white placeholder-slate-400 text-xs py-2.5 pl-3 border-none outline-none focus:outline-none focus:ring-0"
+                />
+                {heroSearchQuery && (
+                  <button 
+                    onClick={() => setHeroSearchQuery('')}
+                    className="text-[10px] text-slate-400 hover:text-white px-1 font-mono font-bold"
+                  >
+                    Clear
+                  </button>
+                )}
+              </div>
+
+              {/* Suburb Search Dropdown */}
+              {showHeroDropdown && (
+                <div className="absolute top-[4.2rem] left-0 right-0 bg-[#0A0F1D] border border-slate-800 rounded-xl overflow-hidden z-50 shadow-2xl divide-y divide-slate-850/60 max-h-60 overflow-y-auto">
+                  {filteredHeroSuburbs.length > 0 ? (
+                    filteredHeroSuburbs.map((sub) => {
+                      const subSlug = sub.name.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                      return (
+                        <button
+                          key={sub.name}
+                          type="button"
+                          onClick={() => {
+                            onSelectSuburb(subSlug);
+                            setHeroSearchQuery('');
+                            setShowHeroDropdown(false);
+                          }}
+                          className="w-full text-left px-4 py-3 hover:bg-slate-800 text-xs text-slate-200 hover:text-white font-medium flex justify-between items-center transition-colors font-sans"
+                        >
+                          <span className="font-bold">{sub.name}</span>
+                          <span className="text-[10px] text-[#00B4D8] font-mono font-bold">Postcode {sub.postcode} →</span>
+                        </button>
+                      );
+                    })
+                  ) : heroSearchQuery.trim().length > 0 ? (
+                    <div className="p-3.5 text-center text-xs text-slate-500 font-sans">
+                      No matching operational suburbs found under sitemap.
+                    </div>
+                  ) : (
+                    <div className="p-1 px-1.5 py-2">
+                      <span className="text-[9px] font-mono font-bold text-slate-500 uppercase tracking-widest block mb-1.5 px-2">
+                        Browse High-Priority Sites
+                      </span>
+                      {['Baldivis', 'Rockingham', 'Canning Vale', 'Piara Waters', 'Wellard'].map((subName) => {
+                        const subSlug = subName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                        return (
+                          <button
+                            key={subName}
+                            type="button"
+                            onClick={() => {
+                              onSelectSuburb(subSlug);
+                              setHeroSearchQuery('');
+                              setShowHeroDropdown(false);
+                            }}
+                            className="w-full text-left px-2.5 py-2 hover:bg-slate-850 rounded-lg text-xs text-slate-350 hover:text-slate-100 font-semibold flex justify-between items-center transition-all"
+                          >
+                            <span>{subName}</span>
+                            <span className="text-[9px] text-[#00B4D8] font-mono font-bold">Select Site →</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Soft contact buttons below the instant search block */}
+            <div className="flex flex-wrap items-center gap-4 pt-2">
+              <button
+                onClick={() => onOpenModal('Book Site Assessment')}
+                className="bg-[#00B4D8] hover:bg-white text-[#002147] font-sans text-xs uppercase tracking-wider font-black px-5 py-3.5 rounded-xl cursor-pointer transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-[#00B4D8]/10"
+              >
+                Book site audit
+              </button>
+              <a 
+                href="tel:0863704982"
+                className="px-4 py-3 border border-white/20 hover:border-white/40 text-white font-mono text-xs font-bold rounded-xl flex items-center gap-2 transition-all hover:bg-white/5 cursor-pointer"
+              >
+                <Phone className="w-3.5 h-3.5 text-[#00B4D8]" />
+                <span>(08) 6370 4982</span>
+              </a>
+            </div>
           </div>
         </div>
 
@@ -188,12 +333,34 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           
           {/* Card A: Drilling */}
-          <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-lg transition-shadow duration-300 text-left flex flex-col justify-between">
+          <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-lg transition-shadow duration-300 text-left flex flex-col justify-between group">
             <div className="space-y-3">
-              <div className="w-9 h-9 rounded-lg bg-[#002147]/5 border border-[#002147]/10 flex items-center justify-center text-[#002147]">
-                <Layers className="w-5 h-5 text-[#002147]" />
+              <div className="flex items-center justify-between">
+                <div className="w-9 h-9 rounded-lg bg-[#002147]/5 border border-[#002147]/10 flex items-center justify-center text-[#002147]">
+                  <Layers className="w-5 h-5 text-[#002147]" />
+                </div>
+                <span className="text-[8px] font-mono font-bold tracking-widest text-[#007AFF] uppercase bg-[#007AFF]/10 border border-[#007AFF]/15 px-2.5 py-0.5 rounded-full">
+                  Tier I
+                </span>
               </div>
               <h4 className="font-display font-black text-[#002147] text-sm">New Water Bores</h4>
+              
+              {/* Image holder for New Water Bores */}
+              <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
+                <img 
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAS9LmvO7mawncwLdjxtZvYiFRtsNcXYv_94qu6ByOeZpKC_DpMT1BJh3SXGLDVzfp5kjvH8bFJ8fJq13Qla3cr3Juvr5x7i4kUiFrptGWMgqmmnp5pRo0yizIO0ewmhP1XbQ3vWAEMy79_7G-w0Vc-wCpkIa41CKErQiDCDpPLaQfzT6mBNEUxQaR0V3QVZpmvH6qS-jNTOj4neyC5lLBhzen03c3hh2BkaFw5KDY7pjGJxBOayRdNd4npeabUG0S9eGZ2YYMrmr2W" 
+                  alt="New water bore drilling rig and installation" 
+                  className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80";
+                  }}
+                />
+                <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-[8px] text-white font-mono uppercase tracking-widest font-bold">
+                  DRILLING RIG
+                </div>
+              </div>
+
               <p className="text-xs text-slate-500 leading-relaxed">
                 Precision water bore installations using engineered food-safe casing and uncompromised regulatory guidelines.
               </p>
@@ -201,12 +368,34 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           </div>
 
           {/* Card B: Repairs */}
-          <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-lg transition-shadow duration-300 text-left flex flex-col justify-between">
+          <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-lg transition-shadow duration-300 text-left flex flex-col justify-between group">
             <div className="space-y-3">
-              <div className="w-9 h-9 rounded-lg bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600">
-                <Wrench className="w-5 h-5" />
+              <div className="flex items-center justify-between">
+                <div className="w-9 h-9 rounded-lg bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600">
+                  <Wrench className="w-5 h-5" />
+                </div>
+                <span className="text-[8px] font-mono font-bold tracking-widest text-rose-600 uppercase bg-rose-50 border border-rose-100 px-2.5 py-0.5 rounded-full">
+                  Tier II
+                </span>
               </div>
               <h4 className="font-display font-black text-slate-800 text-sm">Pump &amp; Bore Repairs</h4>
+
+              {/* Image holder for Repairs */}
+              <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
+                <img 
+                  src="https://assets.perthborewater.com.au/Water_bore_diagnostic_repair_202606090937.jpeg" 
+                  alt="Water bore diagnostic repair and technicians" 
+                  className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80";
+                  }}
+                />
+                <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-[8px] text-white font-mono uppercase tracking-widest font-bold">
+                  DIAGNOSTICS RIG
+                </div>
+              </div>
+
               <p className="text-xs text-slate-500 leading-relaxed">
                 Same-day electrical troubleshooting, diagnostics, downhole camera tracking, and rapid pump changeouts.
               </p>
@@ -214,28 +403,302 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           </div>
 
           {/* Card C: Filtration */}
-          <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-lg transition-shadow duration-300 text-left flex flex-col justify-between">
+          <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-lg transition-shadow duration-300 text-left flex flex-col justify-between group">
             <div className="space-y-3">
-              <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
-                <Droplets className="w-5 h-5 text-blue-500" />
+              <div className="flex items-center justify-between">
+                <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+                  <Droplets className="w-5 h-5 text-blue-500" />
+                </div>
+                <span className="text-[8px] font-mono font-bold tracking-widest text-[#007AFF] uppercase bg-[#007AFF]/10 border border-[#007AFF]/15 px-2.5 py-0.5 rounded-full">
+                  Tier III
+                </span>
               </div>
               <h4 className="font-display font-black text-slate-800 text-sm">Iron Stain Filtration</h4>
+
+              {/* Image holder for Filtration */}
+              <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
+                <img 
+                  src="https://assets.perthborewater.com.au/Water_bore_stain_removal_system.jpeg" 
+                  alt="Water bore iron stain filtration and mineral treatment" 
+                  className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&w=600&q=80";
+                  }}
+                />
+                <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-[8px] text-white font-mono uppercase tracking-widest font-bold">
+                  MINERAL FILTER
+                </div>
+              </div>
+
               <p className="text-xs text-slate-500 leading-relaxed">
                 Anti-scaling waterwise treatments to eliminate brown iron-rich staining from walls, driveways, and plants.
               </p>
             </div>
           </div>
 
-          {/* Card D: Retic */}
-          <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-lg transition-shadow duration-300 text-left flex flex-col justify-between">
+          {/* Card D: Retic / Smart Irrigation */}
+          <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-lg transition-shadow duration-300 text-left flex flex-col justify-between group">
             <div className="space-y-3">
-              <div className="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
-                <Smartphone className="w-5 h-5" />
+              <div className="flex items-center justify-between">
+                <div className="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+                  <Smartphone className="w-5 h-5" />
+                </div>
+                <span className="text-[8px] font-mono font-bold tracking-widest text-emerald-600 uppercase bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded-full">
+                  Tier IV
+                </span>
               </div>
               <h4 className="font-display font-black text-[#002147] text-sm">Smart Irrigation</h4>
+
+              {/* Image holder for Smart Irrigation */}
+              <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
+                <img 
+                  src="https://assets.perthborewater.com.au/Smart_reticulation.jpeg" 
+                  alt="Smart Reticulation and waterwise irrigation layout" 
+                  className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1563514227346-a3b14a2bf1de?auto=format&fit=crop&w=600&q=80";
+                  }}
+                />
+                <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-[8px] text-white font-mono uppercase tracking-widest font-bold">
+                  FLOW OPTIMIZER
+                </div>
+              </div>
+
               <p className="text-xs text-slate-500 leading-relaxed">
                 Wi-Fi controller setups, weather-synchronized reticulation, and water-wise solenoid diagnostics.
               </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      {/* 2b. The 3-Step Authority Section */}
+      <div className="bg-slate-50 border border-slate-200/50 rounded-[2rem] p-8 sm:p-10 text-left space-y-8">
+        <div className="max-w-3xl space-y-2">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#00B4D8]/10 border border-[#00B4D8]/20 rounded-full text-[9px] font-mono font-bold text-[#008BB2] uppercase tracking-wider">
+            <span>Our Transparent Installation Workflow</span>
+          </div>
+          <h2 className="text-2xl sm:text-3.5xl font-display font-black text-slate-900 tracking-tight leading-tight">
+            Our 3-Step Authority Blueprint
+          </h2>
+          <p className="text-xs sm:text-sm text-slate-500 max-w-2xl">
+            Home water drilling is a significant lifestyle asset. We make the entire process smooth, secure, and completely transparent from regulatory checks to active service.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          {/* Step 1 */}
+          <div className="space-y-4 relative bg-white border border-slate-200/50 p-6 rounded-2xl shadow-[0_4px_20px_rgba(0,180,216,0.01)] hover:shadow-md transition-all group">
+            <span className="absolute -top-3 right-4 text-6xl font-sans font-black text-slate-100/50 pointer-events-none select-none z-0 group-hover:text-[#00B4D8]/10 transition-colors">01</span>
+            <div className="relative z-10 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
+                <Database className="w-5.5 h-5.5 text-[#007AFF]" />
+              </div>
+              <h3 className="text-base font-display font-black text-slate-800">1. Geological Site Map</h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-sans">
+                We analyze the Perth Basin under your property. Our GIS satellite dataset accurately maps depth levels and strata layers before any machinery unloads.
+              </p>
+              <div className="text-[9px] font-mono text-slate-400 font-bold uppercase tracking-wider pt-2 border-t border-slate-100">
+                ✦ PRIOR CORRIDOR ANALYSIS
+              </div>
+            </div>
+          </div>
+
+          {/* Step 2 */}
+          <div className="space-y-4 relative bg-white border border-slate-200/50 p-6 rounded-2xl shadow-[0_4px_20px_rgba(0,180,216,0.01)] hover:shadow-md transition-all group">
+            <span className="absolute -top-3 right-4 text-6xl font-sans font-black text-slate-100/50 pointer-events-none select-none z-0 group-hover:text-orange-500/10 transition-colors">02</span>
+            <div className="relative z-10 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600">
+                <Layers className="w-5.5 h-5.5 text-orange-500" />
+              </div>
+              <h3 className="text-base font-display font-black text-slate-800">2. Precision Drill</h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-sans">
+                Our compact class-1 rigs handle everything from coastal white sand to tough Darling Scarp coffee clay without digging up your entire garden.
+              </p>
+              <div className="text-[9px] font-mono text-orange-600 font-bold uppercase tracking-wider pt-2 border-t border-slate-100">
+                ✦ DUST & COMPACTION SHIELDED
+              </div>
+            </div>
+          </div>
+
+          {/* Step 3 */}
+          <div className="space-y-4 relative bg-white border border-slate-200/50 p-6 rounded-2xl shadow-[0_4px_20px_rgba(0,180,216,0.01)] hover:shadow-md transition-all group">
+            <span className="absolute -top-3 right-4 text-6xl font-sans font-black text-slate-100/50 pointer-events-none select-none z-0 group-hover:text-emerald-500/10 transition-colors">03</span>
+            <div className="relative z-10 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+                <Droplets className="w-5.5 h-5.5 text-emerald-500" />
+              </div>
+              <h3 className="text-base font-display font-black text-slate-800">3. Lifetime Water</h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-sans">
+                We lower premium stainless-steel, high-efficiency Grundfos submersible pumps. Coupled with our 24/7 maintenance support and full warranty peace of mind.
+              </p>
+              <div className="text-[9px] font-mono text-emerald-600 font-bold uppercase tracking-wider pt-2 border-t border-slate-100">
+                ✦ GRUNDFOS GOLD SEALED
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* 2c. The "Mains vs. Bore" Calculator Section */}
+      <div className="bg-white border border-slate-200/70 rounded-[2.2rem] p-8 sm:p-10 text-left shadow-md relative overflow-hidden">
+        {/* Decorative background visual elements */}
+        <div className="absolute right-0 top-0 w-80 h-80 bg-blue-500/[0.02] rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute left-10 bottom-0 w-60 h-60 bg-[#00B4D8]/[0.02] rounded-full blur-2xl pointer-events-none" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-stretch relative z-10">
+          
+          {/* Controls & Inputs: Spans 5 columns */}
+          <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
+            <div className="space-y-3">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-100 rounded-full text-[10px] font-mono font-bold text-emerald-600 uppercase tracking-wider">
+                <Coins className="w-3.5 h-3.5" />
+                <span>Interactive Yield Tool</span>
+              </span>
+              <h3 className="text-xl sm:text-2.5xl font-display font-black text-slate-900 tracking-tight">
+                Mains vs. Bore Calculator
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed font-sans font-medium">
+                Adjust your lawn dimensions and active irrigation weeks to calculate the true Water Corporation mains tariff costs compared to a self-sufficient bore.
+              </p>
+            </div>
+
+            {/* Slider Inputs */}
+            <div className="space-y-6 pt-2">
+              {/* Slider 1: Lawn/Garden Size */}
+              <div className="space-y-2">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-600 font-bold">Lawn &amp; Garden Area:</span>
+                  <span className="font-mono text-slate-900 font-bold text-sm bg-slate-100 px-2.5 py-1 rounded-lg">
+                    {lawnSize} m²
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="50"
+                  max="1500"
+                  step="25"
+                  value={lawnSize}
+                  onChange={(e) => setLawnSize(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-100 hover:bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#00B4D8] transition-all"
+                />
+                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                  <span>Small Courtyard (50m²)</span>
+                  <span>Estate (1500m²)</span>
+                </div>
+              </div>
+
+              {/* Slider 2: Irrigation active weeks */}
+              <div className="space-y-2">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-slate-600 font-bold">Watering Season Duration:</span>
+                  <span className="font-mono text-slate-900 font-bold text-sm bg-slate-100 px-2.5 py-1 rounded-lg">
+                    {wateringWeeks} Active Weeks
+                  </span>
+                </div>
+                <input
+                  type="range"
+                  min="15"
+                  max="45"
+                  step="1"
+                  value={wateringWeeks}
+                  onChange={(e) => setWateringWeeks(Number(e.target.value))}
+                  className="w-full h-2 bg-slate-100 hover:bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#00B4D8] transition-all"
+                />
+                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                  <span>Spring/Summer (15w)</span>
+                  <span>All-Year Maintenance (45w)</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Quick Insights Accent Card */}
+            <div className="p-4 bg-blue-50/50 border border-blue-100/60 rounded-2xl flex items-start gap-3">
+              <span className="text-[#00B4D8] mt-0.5 shrink-0">
+                <Sparkles className="w-4 h-4 shrink-0" />
+              </span>
+              <p className="text-[11px] text-slate-605 leading-relaxed font-sans font-medium">
+                <strong>Bores allow 3 watering days a week</strong> under permanent Perth metropolitan exemption clauses, whereas Mains connections are strictly restricted to 2 days on the municipal roster!
+              </p>
+            </div>
+          </div>
+
+          {/* Calculation Table & Return details: Spans 7 columns */}
+          <div className="lg:col-span-7 bg-slate-900 text-white rounded-2xl p-6 sm:p-8 flex flex-col justify-between border border-slate-800 shadow-xl min-h-[380px]">
+            <div className="space-y-5">
+              <div className="flex justify-between items-center border-b border-slate-800 pb-4">
+                <div>
+                  <span className="text-[9px] font-mono text-[#00B4D8] font-bold uppercase tracking-widest block">
+                    HYDROGEOLOGY ESTIMATION
+                  </span>
+                  <p className="text-sm font-display font-medium text-slate-200">
+                    Calculated Annual Water Consumption:
+                  </p>
+                </div>
+                <div className="text-right">
+                  <strong className="text-xl sm:text-2xl font-mono text-white tracking-tight block">
+                    {annualWaterVolumeKL} <span className="text-xs text-slate-400">kL/yr</span>
+                  </strong>
+                </div>
+              </div>
+
+              {/* TCO Table comparison over 5 years */}
+              <div className="space-y-3 pt-1">
+                <div className="grid grid-cols-4 text-[9px] font-mono text-slate-400 uppercase tracking-wider font-bold text-left border-b border-slate-800/40 pb-2">
+                  <span>Timeline</span>
+                  <span>Mains cost</span>
+                  <span>Bore Cost</span>
+                  <span className="text-[#00B4D8] text-right">Net Savings</span>
+                </div>
+                
+                {/* 1 Year */}
+                <div className="grid grid-cols-4 items-center text-xs font-mono py-1.5 border-b border-slate-800/20">
+                  <span className="text-slate-300">Year 1</span>
+                  <span className="text-slate-400">${annualMainsCost.toLocaleString()}</span>
+                  <span className="text-slate-400">${annualBoreCost.toLocaleString()}</span>
+                  <strong className="text-emerald-400 font-bold text-right">${annualSavings.toLocaleString()}</strong>
+                </div>
+
+                {/* 3 Years */}
+                <div className="grid grid-cols-4 items-center text-xs font-mono py-1.5 border-b border-slate-800/20">
+                  <span className="text-slate-300 text-slate-200 font-semibold">Year 3</span>
+                  <span className="text-slate-400">${(annualMainsCost * 3).toLocaleString()}</span>
+                  <span className="text-slate-400">${(annualBoreCost * 3).toLocaleString()}</span>
+                  <strong className="text-emerald-400 font-bold text-right">${(annualSavings * 3).toLocaleString()}</strong>
+                </div>
+
+                {/* 5 Years Cumulative */}
+                <div className="grid grid-cols-4 items-center text-xs font-mono py-3 border-b border-slate-800/40 bg-slate-950/40 px-2 -mx-2 rounded-lg">
+                  <span className="text-white font-bold">5yr Cumulative</span>
+                  <span className="text-slate-450 font-medium">${(annualMainsCost * 5).toLocaleString()}</span>
+                  <span className="text-slate-450 font-medium">${(annualBoreCost * 5).toLocaleString()}</span>
+                  <span className="text-emerald-400 font-black text-right text-sm">
+                    ${(annualSavings * 5).toLocaleString()}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Payback period and call-to-action block */}
+            <div className="mt-6 pt-5 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <div className="text-left">
+                <span className="text-[8px] font-mono text-slate-505 font-bold uppercase tracking-widest block">
+                  AMORTIZATION FORECAST
+                </span>
+                <span className="text-sm font-sans font-medium text-slate-300">
+                  Estimated Payback Period: <strong className="text-white font-mono text-base font-bold text-[#00B4D8]">{paybackYears} Years</strong>
+                </span>
+              </div>
+              <button
+                onClick={() => onOpenModal(`Request {lawnSize}m² Yield Quote`)}
+                className="bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-[10px] tracking-wider uppercase px-4 py-3 rounded-xl transition-all cursor-pointer flex items-center gap-1 hover:scale-[1.02] active:scale-[0.98] w-full sm:w-auto justify-center"
+              >
+                <TrendingUp className="w-3.5 h-3.5" />
+                <span>Calculate My Site</span>
+              </button>
             </div>
           </div>
 

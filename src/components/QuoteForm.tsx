@@ -280,7 +280,7 @@ export default function QuoteForm({ initialSuburb = '' }: QuoteFormProps) {
               Request Received
             </h4>
             <p className="text-xs text-slate-500 max-w-sm mx-auto">
-              Soil geology profile loaded. Our lead technician is checking pressure constraints for {form.suburb}.
+              Our dispatch system has sent this ticket to <strong className="text-slate-800">support@perthborewater.com.au</strong> for {form.suburb}.
             </p>
           </div>
 
@@ -336,7 +336,7 @@ export default function QuoteForm({ initialSuburb = '' }: QuoteFormProps) {
               Submit Another Request
             </button>
             <p className="text-[10px] text-slate-500">
-              A copy of diagnostic dispatch ticket #{ticketId} was configured for {form.email || 'your phone number'}.
+              A copy of diagnostic dispatch ticket #{ticketId} has been sent to our desk at support@perthborewater.com.au.
             </p>
           </div>
         </div>
