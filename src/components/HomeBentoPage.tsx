@@ -18,10 +18,10 @@ import { ALL_SUBURBS_LIST } from '../allSuburbs';
 
 // 20 primary pSEO South Corridor Suburbs
 const SOUTH_CORRIDOR_SUBURBS = [
-  "Baldivis", "Rockingham", "Canning Vale", "Mandurah", "Secret Harbour", 
-  "Atwell", "Aubin Grove", "Beeliar", "Bertram", "Casuarina", 
-  "Cockburn Central", "Cooloongup", "Hammond Park", "Jandakot", "Karrakup", 
-  "Karnup", "Kwinana", "Port Kennedy", "Success", "Wellard"
+  "Rockingham", "Baldivis", "Piara Waters", "Canning Vale", "Wellard",
+  "Bertram", "Atwell", "Aubin Grove", "Success", "Beeliar",
+  "Coogee", "Cockburn Central", "Hammond Park", "Harrisdale", "Southern River",
+  "Armadale", "Kelmscott", "Kwinana", "Spearwood", "Byford"
 ];
 
 // Local water profile information as requested by layout logic
@@ -263,9 +263,11 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
             </div>
 
             {/* Dense, Beautiful Grid of Suburbs */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pt-3">
               {SOUTH_CORRIDOR_SUBURBS.map((subName) => {
                 const subSlug = subName.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+                const subEntry = ALL_SUBURBS_LIST.find(s => s.name.toLowerCase() === subName.toLowerCase());
+                const postcode = subEntry ? subEntry.postcode : '';
                 return (
                   <a
                     key={subName}
@@ -276,7 +278,9 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
                     }}
                     className="flex items-center justify-between bg-slate-50 border border-slate-200/50 hover:bg-[#002147] hover:border-[#002147] p-3 rounded-xl hover:text-white transition-all shadow-[inset_0_1px_1px_rgba(255,255,255,0.4)] group cursor-pointer"
                   >
-                    <span className="text-xs font-bold text-slate-700 group-hover:text-white transition-colors">{subName}</span>
+                    <span className="text-xs font-bold text-slate-700 group-hover:text-white transition-colors">
+                      {subName} Bore Analysis ({postcode || '6000'})
+                    </span>
                     <span className="text-[#00B4D8] opacity-60 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all text-xs font-bold">→</span>
                   </a>
                 );

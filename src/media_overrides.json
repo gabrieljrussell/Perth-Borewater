@@ -667,10 +667,11 @@
     "pump": "https://perthborewater.com.au/serve-image.php?file="
   },
   "kelmscott": {
-    "pump": "https://perthborewater.com.au/serve-image.php?file=",
+    "pump": "https://assets.perthborewater.com.au/Water_bore_diagnostic_repair_202606090937.jpeg",
     "background": "https://assets.perthborewater.com.au/Kelmscotthill.jpeg",
-    "video": "https://assets.perthborewater.com.au/Kelmscott.mp4",
-    "geology": "https://assets.perthborewater.com.au/Kelmscott_202606081959.jpeg"
+    "video": "https://assets.perthborewater.com.au/Kelmscott%201.mp4",
+    "geology": "https://assets.perthborewater.com.au/Kelmscott_202606081959.jpeg",
+    "benefits": "https://assets.perthborewater.com.au/Kelmscott.mp4"
   },
   "byford": {
     "video": "https://perthborewater.com.au/serve-image.php?file=",

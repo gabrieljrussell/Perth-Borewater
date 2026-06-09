@@ -20,12 +20,13 @@ import {
   FileJson,
   Shield,
   Trash2,
-  Undo
+  Undo,
+  Award
 } from 'lucide-react';
 import { SUBURBS_DATA } from '../data';
 
 interface MediaAdminProps {
-  mediaOverrides: Record<string, { video?: string; photo?: string; geology?: string; pump?: string; background?: string; drilling?: string }>;
+  mediaOverrides: Record<string, { video?: string; photo?: string; geology?: string; pump?: string; background?: string; drilling?: string; benefits?: string }>;
   onSaveOverrides: (updated: Record<string, any>) => void;
   onClose: () => void;
 }
@@ -73,6 +74,13 @@ const ASSET_FIELDS = [
     description: 'Direct MP4 link of the borehole drilling operation for this suburb displayed in Card 1.',
     icon: Video,
     accept: 'video/mp4,video/*'
+  },
+  {
+    key: 'benefits' as const,
+    label: 'Benefits or Results Media URL',
+    description: 'Image or direct MP4 link of the home bore water system benefits under the "Why Homeowners Choose Us" section.',
+    icon: Award,
+    accept: 'image/*,video/mp4,video/*'
   }
 ];
 
@@ -106,12 +114,12 @@ export default function MediaAdmin({ mediaOverrides, onSaveOverrides, onClose }:
 
   // Active inputs state for selected suburb keys
   const activeData = useMemo(() => {
-    const defaultData = { video: '', photo: '', geology: '', pump: '', background: '', drilling: '' };
+    const defaultData = { video: '', photo: '', geology: '', pump: '', background: '', drilling: '', benefits: '' };
     return { ...defaultData, ...(localOverrides[selectedSlug] || {}) };
   }, [localOverrides, selectedSlug]);
 
   // Handle manual input updates
-  const handleFieldChange = (key: 'video' | 'photo' | 'geology' | 'pump' | 'background' | 'drilling', value: string) => {
+  const handleFieldChange = (key: 'video' | 'photo' | 'geology' | 'pump' | 'background' | 'drilling' | 'benefits', value: string) => {
     setLocalOverrides(prev => {
       const currentSuburbData = { ...(prev[selectedSlug] || {}) };
       
@@ -134,7 +142,7 @@ export default function MediaAdmin({ mediaOverrides, onSaveOverrides, onClose }:
   };
 
   // Convert uploaded file to base64 inline and save
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, key: 'video' | 'photo' | 'geology' | 'pump' | 'background' | 'drilling') => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, key: 'video' | 'photo' | 'geology' | 'pump' | 'background' | 'drilling' | 'benefits') => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -624,7 +632,7 @@ export default function MediaAdmin({ mediaOverrides, onSaveOverrides, onClose }:
                   </div>
 
                   {/* Other images preview thumbnails row */}
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-4 gap-2">
                     
                     {/* Geology thumbnail */}
                     <div className="bg-slate-950/40 rounded-lg p-2 border border-slate-900 flex flex-col justify-between h-[110px] text-left">
@@ -659,7 +667,23 @@ export default function MediaAdmin({ mediaOverrides, onSaveOverrides, onClose }:
                           <BookOpen className="w-4 h-4 text-slate-700" />
                         )}
                       </div>
-                      <span className="text-[7.5px] font-mono text-slate-400 font-bold uppercase tracking-wider block mt-1.5 truncate">Panorama Blur</span>
+                      <span className="text-[7.5px] font-mono text-slate-400 font-bold uppercase tracking-wider block mt-1.5 truncate">Panorama</span>
+                    </div>
+
+                    {/* Benefits thumbnail */}
+                    <div className="bg-slate-950/40 rounded-lg p-2 border border-slate-900 flex flex-col justify-between h-[110px] text-left">
+                      <div className="h-[75px] w-full rounded bg-slate-900 overflow-hidden flex items-center justify-center">
+                        {activeData.benefits && isRealUrl(activeData.benefits) ? (
+                          activeData.benefits.endsWith('.mp4') || activeData.benefits.toLowerCase().includes('.mp4') || activeData.benefits.includes('/video/') ? (
+                            <Video className="w-4 h-4 text-emerald-500 animate-pulse" />
+                          ) : (
+                            <img src={activeData.benefits} alt="Benefits asset preview" className="w-full h-full object-cover" />
+                          )
+                        ) : (
+                          <Award className="w-4 h-4 text-slate-700" />
+                        )}
+                      </div>
+                      <span className="text-[7.5px] font-mono text-slate-400 font-bold uppercase tracking-wider block mt-1.5 truncate">Benefits</span>
                     </div>
 
                   </div>

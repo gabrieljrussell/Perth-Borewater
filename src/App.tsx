@@ -43,10 +43,10 @@ import { onAuthStateChanged } from 'firebase/auth';
 import SoilProfileDiagram from './components/SoilProfileDiagram';
 
 export const INDEX_SUBURBS = [
-  "Baldivis", "Rockingham", "Canning Vale", "Mandurah", "Secret Harbour", 
-  "Atwell", "Aubin Grove", "Beeliar", "Bertram", "Casuarina", 
-  "Cockburn Central", "Cooloongup", "Hammond Park", "Jandakot", "Karrakup", 
-  "Karnup", "Kwinana", "Port Kennedy", "Success", "Wellard"
+  "Rockingham", "Baldivis", "Piara Waters", "Canning Vale", "Wellard",
+  "Bertram", "Atwell", "Aubin Grove", "Success", "Beeliar",
+  "Coogee", "Cockburn Central", "Hammond Park", "Harrisdale", "Southern River",
+  "Armadale", "Kelmscott", "Kwinana", "Spearwood", "Byford"
 ];
 
 const getSoilTypeAndDepthFromSuburbApp = (suburbName: string) => {
@@ -511,21 +511,26 @@ export default function App() {
   const [heroVideo, setHeroVideo] = React.useState('');
   const [geologyPhoto, setGeologyPhoto] = React.useState('https://lh3.googleusercontent.com/aida-public/AB6AXu-DHHe-WJTQQyXAhmDCvZ3pj2owtlLrn6z8LZbSV3KdCgClcKXE0BgdV1EhIrz7isw9dK0LmhjQMobpttsB_38b6uOnBtxYrJVJBGwZORnzWy5G4CHTW-05sM8mfnx7ifyNJ08BncfKxqxkwKL5vUAKsPQpYTiIC_jkDaHrQgJnwM3jyznCnIssiuuw3UWpV35yhBP4t8sF3Y5m-vasGbP9KF4x4R7bAbXrdWRLpqHdFjNqvo6NvoDBaMvZTBdBtEMir-Gu59V2RNl');
   const [pumpPhoto, setPumpPhoto] = React.useState('https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80');
+  const [benefitsPhoto, setBenefitsPhoto] = React.useState('https://images.unsplash.com/photo-1542060748-10c28b629f6f?auto=format&fit=crop&w=800&q=80');
+  const [benefitsVideo, setBenefitsVideo] = React.useState('');
   const [isHeroDragging, setIsHeroDragging] = React.useState(false);
   const [isGeologyDragging, setIsGeologyDragging] = React.useState(false);
   const [isPumpDragging, setIsPumpDragging] = React.useState(false);
+  const [isBenefitsDragging, setIsBenefitsDragging] = React.useState(false);
   const [showHeroUrlInput, setShowHeroUrlInput] = React.useState(false);
   const [heroUrlVal, setHeroUrlVal] = React.useState('');
   const [showGeologyUrlInput, setShowGeologyUrlInput] = React.useState(false);
   const [geologyUrlVal, setGeologyUrlVal] = React.useState('');
   const [showPumpUrlInput, setShowPumpUrlInput] = React.useState(false);
   const [pumpUrlVal, setPumpUrlVal] = React.useState('');
+  const [showBenefitsUrlInput, setShowBenefitsUrlInput] = React.useState(false);
+  const [benefitsUrlVal, setBenefitsUrlVal] = React.useState('');
   const [backgroundPhoto, setBackgroundPhoto] = React.useState('');
   const [showBgUrlInput, setShowBgUrlInput] = React.useState(false);
   const [bgUrlVal, setBgUrlVal] = React.useState('');
 
   // Media Overrides persistent local map (statically reads from media_overrides.json)
-  const [mediaOverrides, setMediaOverrides] = React.useState<Record<string, { video?: string; photo?: string; geology?: string; background?: string; pump?: string; drilling?: string }>>(() => {
+  const [mediaOverrides, setMediaOverrides] = React.useState<Record<string, { video?: string; photo?: string; geology?: string; background?: string; pump?: string; drilling?: string; benefits?: string }>>(() => {
     return (mediaOverridesPreset as any) || {};
   });
 
@@ -557,6 +562,7 @@ export default function App() {
         geology: activeData.geology || '',
         pump: activeData.pump || '',
         background: activeData.background || '',
+        benefits: activeData.benefits || '',
         updatedAt: new Date().toISOString()
       })
       .then(() => {
@@ -615,6 +621,7 @@ export default function App() {
                   geology: docData.geology || undefined,
                   pump: docData.pump || undefined,
                   background: docData.background || undefined,
+                  benefits: docData.benefits || undefined,
                 };
               });
               if (Object.keys(fsOverrides).length > 0) {
@@ -738,8 +745,9 @@ export default function App() {
   const geologyInputRef = React.useRef<HTMLInputElement>(null);
   const pumpInputRef = React.useRef<HTMLInputElement>(null);
   const heroInputRef = React.useRef<HTMLInputElement>(null);
+  const benefitsInputRef = React.useRef<HTMLInputElement>(null);
 
-  const saveMediaOverride = (type: 'video' | 'photo' | 'geology' | 'pump', value: string) => {
+  const saveMediaOverride = (type: 'video' | 'photo' | 'geology' | 'pump' | 'benefits', value: string) => {
     if (!selectedSuburbSlug) return;
     setMediaOverrides(prev => {
       const current = prev[selectedSuburbSlug] || {};
@@ -763,11 +771,11 @@ export default function App() {
     });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'video' | 'photo' | 'geology' | 'pump' | 'hero-auto') => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'video' | 'photo' | 'geology' | 'pump' | 'benefits' | 'hero-auto') => {
     const file = e.target.files?.[0];
     if (!file || !selectedSuburbSlug) return;
 
-    let targetType: 'video' | 'photo' | 'geology' | 'pump' = type === 'hero-auto' ? 'photo' : type;
+    let targetType: 'video' | 'photo' | 'geology' | 'pump' | 'benefits' = type === 'hero-auto' ? 'photo' : type;
     if (type === 'hero-auto') {
       const isVideo = file.type.startsWith('video/') || file.name.endsWith('.mp4');
       targetType = isVideo ? 'video' : 'photo';
@@ -786,6 +794,15 @@ export default function App() {
       setGeologyPhoto(objectUrl);
     } else if (targetType === 'pump') {
       setPumpPhoto(objectUrl);
+    } else if (targetType === 'benefits') {
+      const isVideo = file.type.startsWith('video/') || file.name.endsWith('.mp4');
+      if (isVideo) {
+        setBenefitsVideo(objectUrl);
+        setBenefitsPhoto('');
+      } else {
+        setBenefitsPhoto(objectUrl);
+        setBenefitsVideo('');
+      }
     }
 
     // Update local react state instantly for seamless rendering
@@ -823,7 +840,7 @@ export default function App() {
     setDragState(false);
   };
 
-  const handleDrop = (e: React.DragEvent, type: 'hero' | 'geology' | 'pump', setDragState: (val: boolean) => void) => {
+  const handleDrop = (e: React.DragEvent, type: 'hero' | 'geology' | 'pump' | 'benefits', setDragState: (val: boolean) => void) => {
     e.preventDefault();
     e.stopPropagation();
     setDragState(false);
@@ -893,10 +910,32 @@ export default function App() {
         saveMediaOverride('pump', reader.result as string);
       };
       reader.readAsDataURL(file);
+    } else if (type === 'benefits') {
+      const isVideo = file.type.startsWith('video/') || file.name.endsWith('.mp4');
+      const objectUrl = URL.createObjectURL(file);
+      if (isVideo) {
+        setBenefitsVideo(objectUrl);
+        setBenefitsPhoto('');
+      } else {
+        setBenefitsPhoto(objectUrl);
+        setBenefitsVideo('');
+      }
+      setMediaOverrides(prev => ({
+        ...prev,
+        [selectedSuburbSlug]: {
+          ...prev[selectedSuburbSlug],
+          benefits: objectUrl
+        }
+      }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        saveMediaOverride('benefits', reader.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleUrlSubmit = (url: string, type: 'hero' | 'geology' | 'background' | 'pump') => {
+  const handleUrlSubmit = (url: string, type: 'hero' | 'geology' | 'background' | 'pump' | 'benefits') => {
     if (!selectedSuburbSlug) return;
     const cleanUrl = (url || '').trim();
     if (type === 'hero') {
@@ -969,6 +1008,38 @@ export default function App() {
         return updated;
       });
       setPumpPhoto(cleanUrl);
+    } else if (type === 'benefits') {
+      if (!cleanUrl) return;
+      setMediaOverrides(prev => {
+        const current = prev[selectedSuburbSlug] || {};
+        const updated = {
+          ...prev,
+          [selectedSuburbSlug]: {
+            ...current,
+            benefits: cleanUrl
+          }
+        };
+
+        // Persist to server filesystem
+        persistToServer(updated);
+
+        return updated;
+      });
+
+      const isVideo = cleanUrl.endsWith('.mp4') || 
+                      cleanUrl.toLowerCase().includes('.mp4') || 
+                      cleanUrl.includes('.mp4?') || 
+                      cleanUrl.includes('/video/') ||
+                      cleanUrl.includes('youtube.com') ||
+                      cleanUrl.includes('youtu.be') ||
+                      cleanUrl.includes('vimeo.com');
+      if (isVideo) {
+        setBenefitsVideo(cleanUrl);
+        setBenefitsPhoto('');
+      } else {
+        setBenefitsPhoto(cleanUrl);
+        setBenefitsVideo('');
+      }
     } else {
       if (!cleanUrl) return;
       setMediaOverrides(prev => {
@@ -1010,12 +1081,16 @@ export default function App() {
     const customPath = slug ? `/bore-drilling/${slug}` : '/';
     window.history.pushState(null, '', customPath);
     window.dispatchEvent(new Event('app-route-change'));
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   // SEO Tab Title and Local JSON-LD updates on selection change
   React.useEffect(() => {
     if (selectedSuburb) {
       const pc = getPostcode(selectedSuburb.name);
+      
+      // Focus viewport back to top on any SPA transition change
+      window.scrollTo({ top: 0, behavior: 'instant' });
       
       // Update HTML Title tag
       document.title = selectedSuburbSlug 
@@ -1091,6 +1166,7 @@ export default function App() {
     const hasGeologyOverride = local?.geology && isRealUrl(local.geology);
     const hasPumpOverride = local?.pump && isRealUrl(local.pump);
     const hasBgOverride = local?.background && isRealUrl(local.background);
+    const hasBenefitsOverride = local?.benefits && isRealUrl(local.benefits);
 
     if (hasPhotoOverride) {
       setHeroPhoto(local.photo);
@@ -1103,6 +1179,22 @@ export default function App() {
     }
     if (hasPumpOverride) {
       setPumpPhoto(local.pump);
+    }
+    if (hasBenefitsOverride) {
+      const isVideo = local.benefits!.endsWith('.mp4') || 
+                      local.benefits!.toLowerCase().includes('.mp4') || 
+                      local.benefits!.includes('.mp4?') || 
+                      local.benefits!.includes('/video/') ||
+                      local.benefits!.includes('youtube.com') ||
+                      local.benefits!.includes('youtu.be') ||
+                      local.benefits!.includes('vimeo.com');
+      if (isVideo) {
+        setBenefitsVideo(local.benefits!);
+        setBenefitsPhoto('');
+      } else {
+        setBenefitsPhoto(local.benefits!);
+        setBenefitsVideo('');
+      }
     }
     if (hasBgOverride) {
       setBackgroundPhoto(local.background);
@@ -1121,6 +1213,9 @@ export default function App() {
     const testPumpUrl = slug === 'rockingham'
       ? 'https://perthborewater.com.au/serve-image.php?file=Rockingham-pump.jpg'
       : `https://perthborewater.com.au/serve-image.php?file=${slug}-pump.jpg`;
+    const testBenefitsUrl = slug === 'rockingham'
+      ? 'https://perthborewater.com.au/serve-image.php?file=Rockingham-benefits.jpg'
+      : `https://perthborewater.com.au/serve-image.php?file=${slug}-benefits.jpg`;
     const defaultPhoto = 'https://lh3.googleusercontent.com/aida-public/AB6AXuAS9LmvO7mawncwLdjxtZvYiFRtsNcXYv_94qu6ByOeZpKC_DpMT1BJh3SXGLDVzfp5kjvH8bFJ8fJq13Qla3cr3Juvr5x7i4kUiFrptGWMgqmmnp5pRo0yizIO0ewmhP1XbQ3vWAEMy79_7G-w0Vc-wCpkIa41CKErQiDCDpPLaQfzT6mBNEUxQaR0V3QVZpmvH6qS-jNTOj4neyC5lLBhzen03c3hh2BkaFw5KDY7pjGJxBOayRdNd4npeabUG0S9eGZ2YYMrmr2W';
     const defaultGeology = 'https://lh3.googleusercontent.com/aida-public/AB6AXu-DHHe-WJTQQyXAhmDCvZ3pj2owtlLrn6z8LZbSV3KdCgClcKXE0BgdV1EhIrz7isw9dK0LmhjQMobpttsB_38b6uOnBtxYrJVJBGwZORnzWy5G4CHTW-05sM8mfnx7ifyNJ08BncfKxqxkwKL5vUAKsPQpYTiIC_jkDaHrQgJnwM3jyznCnIssiuuw3UWpV35yhBP4t8sF3Y5m-vasGbP9KF4x4R7bAbXrdWRLpqHdFjNqvo6NvoDBaMvZTBdBtEMir-Gu59V2RNl';
     const defaultPump = 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80';
@@ -1163,6 +1258,19 @@ export default function App() {
         setPumpPhoto(defaultPump);
       };
     }
+
+    if (!hasBenefitsOverride) {
+      const tempBenefits = new Image();
+      tempBenefits.src = testBenefitsUrl;
+      tempBenefits.onload = () => {
+        setBenefitsPhoto(testBenefitsUrl);
+        setBenefitsVideo('');
+      };
+      tempBenefits.onerror = () => {
+        setBenefitsPhoto('https://images.unsplash.com/photo-1542060748-10c28b629f6f?auto=format&fit=crop&w=1200&q=80');
+        setBenefitsVideo('');
+      };
+    }
   }, [selectedSuburbSlug, mediaOverrides, isRealUrl]);
 
   // Synchronize admin input textboxes with saved overrides so edits are shown properly
@@ -1174,6 +1282,7 @@ export default function App() {
     const hasGeologyOverride = local?.geology && isRealUrl(local.geology);
     const hasPumpOverride = local?.pump && isRealUrl(local.pump);
     const hasBgOverride = local?.background && isRealUrl(local.background);
+    const hasBenefitsOverride = local?.benefits && isRealUrl(local.benefits);
 
     if (hasVideoOverride) {
       setHeroUrlVal(local.video!);
@@ -1199,6 +1308,12 @@ export default function App() {
       setBgUrlVal(local.background!);
     } else {
       setBgUrlVal('');
+    }
+
+    if (hasBenefitsOverride) {
+      setBenefitsUrlVal(local.benefits!);
+    } else {
+      setBenefitsUrlVal('');
     }
   }, [selectedSuburbSlug, mediaOverrides, isRealUrl]);
 
@@ -1433,6 +1548,13 @@ export default function App() {
         ref={pumpInputRef}
         onChange={(e) => handleFileChange(e, 'pump')}
         accept="image/*"
+        className="hidden"
+      />
+      <input
+        type="file"
+        ref={benefitsInputRef}
+        onChange={(e) => handleFileChange(e, 'benefits')}
+        accept="video/mp4,video/*,image/*"
         className="hidden"
       />
 
@@ -2756,6 +2878,171 @@ export default function App() {
                 <span className="text-xs text-slate-800 font-extrabold font-mono uppercase">WA BORE LIC #2241</span>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Brand New: Benefits & Project Results Section */}
+        <section className="bg-white border border-slate-200/60 rounded-3xl p-8 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-left mt-8 w-full">
+          <div className="space-y-6 animate-fade-in">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <span className="text-[9px] font-mono font-bold tracking-widest text-[#007AFF] uppercase bg-[#007AFF]/10 border border-[#007AFF]/15 px-3 py-1 rounded-full">
+                  VERIFIED BENEFITS &amp; WATERWISE RESULTS
+                </span>
+                <h3 className="font-display font-black text-2xl text-slate-900 leading-tight">
+                  Water Bore Engineering Results &amp; Household Benefits in {selectedSuburb.name}
+                </h3>
+                <p className="text-xs text-slate-500 leading-relaxed max-w-3xl font-sans font-medium">
+                  Our customized casing, premium slot specifications, and downhole flow velocity designs translate directly to long-term cost savings, massive irrigation volume, and pristine water flow.
+                </p>
+              </div>
+            </div>
+
+            {/* Interactive Media Container matching pumpPhoto styling and options */}
+            <div className="relative group/benefits rounded-2xl overflow-hidden bg-slate-950 border border-slate-200 hover:border-slate-350 transition-all shadow-lg aspect-video md:max-h-[480px] w-full flex items-center justify-center">
+              
+              {/* Optional Admin Hover Shield Overlay */}
+              {isAdmin && (
+                <div className="absolute top-3 right-3 z-30 flex items-center gap-2">
+                  <span className="text-[9px] font-mono font-semibold bg-amber-500 text-white px-2.5 py-1 rounded-md shadow-sm select-none">
+                    ADMIN MEDIA OVERLAY
+                  </span>
+                  <button
+                    onClick={() => setShowBenefitsUrlInput(!showBenefitsUrlInput)}
+                    className="p-1 px-2.5 bg-slate-900 hover:bg-slate-800 border border-slate-750 text-amber-400 hover:text-amber-300 font-mono text-[9px] font-black rounded-lg shadow transition-colors cursor-pointer"
+                  >
+                    {showBenefitsUrlInput ? 'HIDE URL' : 'EDIT URL'}
+                  </button>
+                </div>
+              )}
+
+              {/* URL Input Box overlay when requested by Admin */}
+              {isAdmin && showBenefitsUrlInput && (
+                <div className="absolute inset-x-0 bottom-0 bg-slate-950/95 backdrop-blur-md p-5 border-t border-slate-800/80 z-25 flex flex-col gap-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-black text-slate-300 uppercase tracking-widest">
+                      Custom URL Asset Proxy Setup
+                    </span>
+                    <button 
+                      onClick={() => setShowBenefitsUrlInput(false)}
+                      className="text-slate-500 hover:text-white transition-colors font-semibold text-xs cursor-pointer"
+                    >
+                      ✕ CLOSE
+                    </button>
+                  </div>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      value={benefitsUrlVal}
+                      onChange={(e) => setBenefitsUrlVal(e.target.value)}
+                      placeholder="https://example.com/household-benefits-results.jpg"
+                      className="flex-grow bg-slate-900 border border-slate-800 text-slate-200 text-xs px-4 py-2.5 rounded-xl font-mono tracking-wide focus:outline-none focus:border-[#007AFF]"
+                    />
+                    <button
+                      onClick={() => {
+                        const trimmed = (benefitsUrlVal || '').trim();
+                        if (trimmed) handleUrlSubmit(trimmed, 'benefits');
+                        setShowBenefitsUrlInput(false);
+                      }}
+                      className="bg-emerald-600 hover:bg-emerald-500 text-white font-mono text-[10.5px] font-bold px-4 py-2.5 rounded-xl transition-all cursor-pointer"
+                    >
+                      APPLY
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Admin Double Click / Drag-and-Drop Trigger Container */}
+              <div 
+                className={`absolute inset-0 z-15 transition-all duration-300 flex items-center justify-center ${
+                  isAdmin 
+                    ? 'cursor-pointer hover:bg-black/40 group-hover/benefits:opacity-100' 
+                    : 'pointer-events-none'
+                } ${isBenefitsDragging ? 'bg-emerald-600/30 border-2 border-dashed border-emerald-500' : ''}`}
+                onClick={() => isAdmin && benefitsInputRef.current?.click()}
+                onDragOver={(e) => isAdmin && handleDragOver(e, setIsBenefitsDragging)}
+                onDragLeave={(e) => isAdmin && handleDragLeave(e, setIsBenefitsDragging)}
+                onDrop={(e) => isAdmin && handleDrop(e, 'benefits', setIsBenefitsDragging)}
+              >
+                {isAdmin && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center opacity-0 group-hover/benefits:opacity-100 bg-slate-950/55 backdrop-blur-xs transition-opacity duration-200 p-4 text-center">
+                    <div className="w-10 h-10 rounded-full bg-[#007AFF]/10 border border-[#007AFF]/20 flex items-center justify-center text-[#007AFF] mb-2.5">
+                      <Upload className="w-5 h-5" />
+                    </div>
+                    <p className="text-white font-display font-black text-xs">Drop or click to update Benefits Media</p>
+                    <p className="text-[10px] text-slate-300 font-mono mt-0.5 animate-pulse">Supports direct MP4 video, or JPG / PNG image</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Actual image or video rendering */}
+              {benefitsVideo && isRealUrl(benefitsVideo) ? (
+                <video
+                  src={benefitsVideo}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  preload="auto"
+                  className="w-full h-full object-cover"
+                  onError={(e) => {
+                    const t = e.target as HTMLVideoElement;
+                    t.style.display = 'none';
+                  }}
+                />
+              ) : (
+                <img
+                  src={benefitsPhoto || 'https://images.unsplash.com/photo-1542060748-10c28b629f6f?auto=format&fit=crop&w=1200&q=80'}
+                  alt={`Water Bore Engineering Benefits in ${selectedSuburb.name}`}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover/benefits:scale-101"
+                />
+              )}
+
+            </div>
+
+            {/* List of high-value local outcomes/benefits in 4-column layout */}
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2">
+              <div className="bg-slate-50 border border-slate-200/50 hover:bg-slate-100/40 transition-colors p-4.5 rounded-2xl flex flex-col justify-between">
+                <div>
+                  <span className="text-[9px] font-mono font-bold tracking-wider text-[#007AFF] uppercase block">SAVINGS REPORT</span>
+                  <span className="text-sm font-black text-slate-900 mt-1 block">Untapped Irrigation Value</span>
+                  <p className="text-xs text-slate-500 leading-relaxed mt-2.5 font-sans font-medium">
+                    Save up to 90% on scheme-metered water bills by switching to a continuous groundwater supply for your reticulation system and pool topping.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 border border-slate-200/50 hover:bg-slate-100/40 transition-colors p-4.5 rounded-2xl flex flex-col justify-between">
+                <div>
+                  <span className="text-[9px] font-mono font-bold tracking-wider text-emerald-600 uppercase block">OUTLAW PROT</span>
+                  <span className="text-sm font-black text-slate-900 mt-1 block">Exempt Restriction Watering</span>
+                  <p className="text-xs text-slate-500 leading-relaxed mt-2.5 font-sans font-medium">
+                    Garden bore owners enjoy an extra designated watering pattern under current WA Department of Water protocols, securing healthy landscapes during heat waves.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 border border-slate-200/50 hover:bg-slate-100/40 transition-colors p-4.5 rounded-2xl flex flex-col justify-between">
+                <div>
+                  <span className="text-[9px] font-mono font-bold tracking-wider text-purple-600 uppercase block">WATER QUALITY</span>
+                  <span className="text-sm font-black text-slate-900 mt-1 block">Bore Waterwise Certification</span>
+                  <p className="text-xs text-slate-500 leading-relaxed mt-2.5 font-sans font-medium">
+                    Custom designed downhole micro-slot casing, double-wrap screens, and geological sands filtering keeps iron-staining risks and abrasive silica strictly at bay.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 border border-slate-200/50 hover:bg-slate-100/40 transition-colors p-4.5 rounded-2xl flex flex-col justify-between">
+                <div>
+                  <span className="text-[9px] font-mono font-bold tracking-wider text-amber-600 uppercase block">ASSETS LIFE</span>
+                  <span className="text-sm font-black text-slate-900 mt-1 block">Investment Property Equity</span>
+                  <p className="text-xs text-slate-500 leading-relaxed mt-2.5 font-sans font-medium">
+                    A certified, reliable garden bore adds critical capital value to your Western Australian home asset list, and protects landscaping equity permanently.
+                  </p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </section>
 
