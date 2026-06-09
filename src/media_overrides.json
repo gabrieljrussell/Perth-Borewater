@@ -19,7 +19,6 @@
   },
   "coogee": {
     "video": "https://assets.perthborewater.com.au/Coogee.mp4",
-    "photo": "https://perthborewater.com.au/serve-image.php?file=",
     "geology": "https://assets.perthborewater.com.au/Coogee_202606091058.jpeg",
     "pump": "https://perthborewater.com.au/serve-image.php?file="
   },
@@ -547,10 +546,10 @@
     "pump": "https://perthborewater.com.au/serve-image.php?file="
   },
   "harrisdale": {
-    "video": "https://perthborewater.com.au/serve-image.php?file=",
     "photo": "https://perthborewater.com.au/serve-image.php?file=",
-    "geology": "https://perthborewater.com.au/serve-image.php?file=",
-    "pump": "https://perthborewater.com.au/serve-image.php?file="
+    "pump": "https://perthborewater.com.au/serve-image.php?file=",
+    "geology": "https://assets.perthborewater.com.au/Harrisdale_202606091312.jpeg",
+    "video": "https://assets.perthborewater.com.au/Harrisdale.mp4"
   },
   "southern-river": {
     "video": "https://perthborewater.com.au/serve-image.php?file=",
