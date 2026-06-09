@@ -10,6 +10,7 @@ import {
   Phone,
   ShieldCheck,
   User,
+  UserCheck,
   Mail,
   Loader2,
   Search,
@@ -1456,7 +1457,7 @@ export default function App() {
 
   // Modal states for interactive booking/quotes
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalTitle, setModalTitle] = useState('Secure Your Drill Date');
+  const [modalTitle, setModalTitle] = useState("Check My Suburb's Water Yield");
   const [fullName, setFullName] = useState('');
   const [phone, setPhone] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
@@ -2370,13 +2371,24 @@ export default function App() {
               We specialize in providing water bore drilling &amp; upkeep near <strong className="text-slate-900 font-bold">{landmark1}</strong> and the neighboring <strong className="text-slate-900 font-bold">{landmark2}</strong> fields. Access the Superficial Aquifer at <span className="text-[#007AFF] font-bold">{getDepthRange(selectedSuburb.name).text}</span> depth. Sustainable irrigation engineered for <strong className="text-slate-900 font-bold">{getSoilData(selectedSuburb.name).name}</strong> {getSoilData(selectedSuburb.name).type}.
             </p>
 
-            {/* High-Gloss Action Call-to-actions (A drilling primary CTA & an emergency repair secondary CTA) */}
+            {/* Social Trust Ribbon (Proof-Hybrid Update) */}
+            <div className="inline-flex items-center gap-2 bg-[#0B1221] text-slate-200 text-xs px-4.5 py-2 rounded-full shadow-md border border-slate-800 font-sans tracking-wide">
+              <span className="flex h-2 w-2 relative">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span>
+                Trusted by <strong className="text-white">45+ {selectedSuburb.name} families</strong> near <strong className="text-[#38BDF8]">{landmark1}</strong>
+              </span>
+            </div>
+
+            {/* High-Gloss Action Call-to-actions (Waterwise checking primary CTA & emergency repair secondary CTA) */}
             <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center items-stretch sm:items-center w-full max-w-2xl mx-auto font-sans">
               <button
-                onClick={() => handleOpenModal('Secure My Drill Date')}
-                className="flex-grow bg-emerald-600 hover:bg-emerald-500 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] text-white px-6 py-3.5 rounded-full font-black uppercase text-[11px] tracking-wider border border-emerald-500/20 shadow-[0_0_10px_rgba(16,185,129,0.2)] hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer text-center duration-300"
+                onClick={() => handleOpenModal("Check My Suburb's Water Yield")}
+                className="flex-grow bg-[#007AFF] hover:bg-blue-600 hover:shadow-[0_0_20px_rgba(0,122,255,0.4)] text-white px-6 py-3.5 rounded-full font-black uppercase text-[11px] tracking-wider border border-blue-500/20 shadow-[0_0_10px_rgba(0,122,255,0.2)] hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer text-center duration-300"
               >
-                Secure My Drill Date →
+                Check My Suburb&apos;s Water Yield →
               </button>
               
               <button
@@ -3232,44 +3244,77 @@ export default function App() {
 
         {/* Brand New: Hyper-Local Hydrology Narrative Section */}
         <section className="bg-white border border-slate-200/60 rounded-3xl p-8 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-left mt-8 w-full">
-          <div className="flex flex-col md:flex-row gap-6 items-start md:items-center justify-between">
-            <div className="space-y-3 max-w-3xl">
-              <span className="text-[9px] font-mono font-bold tracking-widest text-[#007AFF] uppercase bg-[#007AFF]/10 border border-[#007AFF]/15 px-3 py-1 rounded-full">
-                POSTCODE {getPostcode(selectedSuburb.name)} HYDROLOGY REPORT
-              </span>
-              <h3 className="font-display font-black text-2xl text-slate-900 leading-tight">
-                Why {selectedSuburb.name} Homeowners Choose Us
-              </h3>
-              <div className="space-y-3 pt-2">
-                <span className="text-[10px] font-mono font-bold tracking-wider text-[#007AFF] uppercase block">
-                  Regional Water Outlook
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+            
+            {/* Left side content */}
+            <div className="lg:col-span-8 flex flex-col justify-between space-y-4">
+              <div className="space-y-3">
+                <span className="text-[9px] font-mono font-bold tracking-widest text-[#007AFF] uppercase bg-[#007AFF]/10 border border-[#007AFF]/15 px-3 py-1 rounded-full">
+                  POSTCODE {getPostcode(selectedSuburb.name)} HYDROLOGY REPORT
                 </span>
-                <p className="text-sm text-slate-650 leading-relaxed font-sans whitespace-pre-line">
-                  {getSuburbNarrative(selectedSuburb.name)}
-                </p>
-                
-                {/* Trust Signals: Local Knowledge block */}
-                <div className="bg-slate-50 border border-slate-200/60 p-4.5 rounded-2xl space-y-1.5 mt-4">
-                  <span className="text-[10px] font-mono font-bold tracking-wider text-emerald-600 uppercase block flex items-center gap-1.5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                    Expertise &amp; Local Knowledge
+                <h3 className="font-display font-black text-2xl text-slate-900 leading-tight">
+                  Why {selectedSuburb.name} Homeowners Choose Us
+                </h3>
+                <div className="space-y-3 pt-2">
+                  <span className="text-[10px] font-mono font-bold tracking-wider text-[#007AFF] uppercase block">
+                    Regional Water Outlook
                   </span>
-                  <p className="text-xs text-slate-705 leading-relaxed font-sans font-medium">
-                    We specialize in navigating <strong className="text-slate-900 font-bold">{selectedSuburb.name}</strong>'s unique <strong className="text-slate-900 font-extrabold">{selectedSuburb.soilComposition}</strong> layers to prevent <strong className="text-slate-900 font-extrabold">{selectedSuburb.localHeadache}</strong>.
+                  <p className="text-sm text-slate-650 leading-relaxed font-sans whitespace-pre-line">
+                    {getSuburbNarrative(selectedSuburb.name)}
                   </p>
+                  
+                  {/* Trust Signals: Local Knowledge block */}
+                  <div className="bg-slate-50 border border-slate-200/60 p-4.5 rounded-2xl space-y-1.5 mt-4">
+                    <span className="text-[10px] font-mono font-bold tracking-wider text-emerald-600 uppercase block flex items-center gap-1.5">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Expertise &amp; Local Knowledge
+                    </span>
+                    <p className="text-xs text-slate-755 leading-relaxed font-sans font-medium">
+                      We specialize in navigating <strong className="text-slate-900 font-bold">{selectedSuburb.name}</strong>&apos;s unique <strong className="text-slate-900 font-extrabold">{selectedSuburb.soilComposition}</strong> layers to prevent <strong className="text-slate-900 font-extrabold">{selectedSuburb.localHeadache}</strong>.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trust approval indicator */}
+              <div className="flex items-center gap-3 bg-slate-50 p-4 border border-slate-100 rounded-2xl w-fit mt-4">
+                <div className="w-12 h-12 bg-amber-500/10 rounded-full flex items-center justify-center border border-amber-500/20 text-amber-600">
+                  <ShieldCheck className="w-6 h-6" />
+                </div>
+                <div>
+                  <span className="text-[8px] font-mono text-slate-400 uppercase tracking-widest block font-bold">REGIONAL APPROVAL</span>
+                  <span className="text-xs text-slate-800 font-extrabold font-mono uppercase">WA BORE LIC #2241</span>
                 </div>
               </div>
             </div>
-            {/* Trust approval indicator */}
-            <div className="flex items-center gap-3 bg-slate-50 p-4 border border-slate-100 rounded-2xl shrink-0">
-              <div className="w-12 h-12 bg-amber-500/10 rounded-full flex items-center justify-center border border-amber-500/20 text-amber-600">
-                <ShieldCheck className="w-6 h-6" />
-              </div>
-              <div>
-                <span className="text-[8px] font-mono text-slate-400 uppercase tracking-widest block font-bold">REGIONAL APPROVAL</span>
-                <span className="text-xs text-slate-800 font-extrabold font-mono uppercase">WA BORE LIC #2241</span>
+
+            {/* Right side content: Humanized Driller Photo */}
+            <div className="lg:col-span-4 flex flex-col justify-center">
+              <div className="relative group overflow-hidden rounded-2xl border border-slate-200 shadow-xs aspect-[4/3] bg-white flex-shrink-0 h-full min-h-[260px]">
+                <img 
+                  src="https://assets.perthborewater.com.au/Water_bore_technician_homeowner_%E2%80%A6_202606091214.jpeg" 
+                  alt={`Water bore technician smiling and shaking hands with an appreciative homeowner in ${selectedSuburb.name}`} 
+                  className="w-full h-full object-contain transition-all group-hover:scale-[1.02]"
+                  referrerPolicy="no-referrer"
+                  onError={(e) => {
+                    e.currentTarget.className = "w-full h-full object-cover transition-all group-hover:scale-102";
+                    e.currentTarget.src = "https://images.unsplash.com/photo-1542060748-10c28b629f6f?auto=format&fit=crop&w=800&q=80";
+                  }}
+                />
+                
+                {/* Image caption badge */}
+                <div className="absolute bottom-3 left-3 right-3 bg-slate-900/85 backdrop-blur-xs p-3 rounded-xl border border-white/10 flex items-center gap-2.5">
+                  <div className="w-7 h-7 bg-emerald-500/10 rounded-full flex items-center justify-center border border-emerald-500/25 text-emerald-400 shrink-0">
+                    <UserCheck className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="text-[8px] font-mono text-slate-400 uppercase tracking-widest block font-bold">YOUR LOCAL PARTNER</span>
+                    <span className="text-[10px] text-white font-bold leading-tight block">Friendly, high-yield certified service</span>
+                  </div>
+                </div>
               </div>
             </div>
+
           </div>
         </section>
 
@@ -3847,6 +3892,8 @@ export default function App() {
                           <Loader2 className="w-4 h-4 animate-spin text-white" />
                           <span>SENDING...</span>
                         </>
+                      ) : modalTitle.toLowerCase().includes('yield') ? (
+                        <span>CHECK WATER YIELD →</span>
                       ) : (
                         <span>SUBMIT REQUEST</span>
                       )}
