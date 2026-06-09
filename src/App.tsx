@@ -510,12 +510,16 @@ export default function App() {
   const [heroPhoto, setHeroPhoto] = React.useState('https://lh3.googleusercontent.com/aida-public/AB6AXuAS9LmvO7mawncwLdjxtZvYiFRtsNcXYv_94qu6ByOeZpKC_DpMT1BJh3SXGLDVzfp5kjvH8bFJ8fJq13Qla3cr3Juvr5x7i4kUiFrptGWMgqmmnp5pRo0yizIO0ewmhP1XbQ3vWAEMy79_7G-w0Vc-wCpkIa41CKErQiDCDpPLaQfzT6mBNEUxQaR0V3QVZpmvH6qS-jNTOj4neyC5lLBhzen03c3hh2BkaFw5KDY7pjGJxBOayRdNd4npeabUG0S9eGZ2YYMrmr2W');
   const [heroVideo, setHeroVideo] = React.useState('');
   const [geologyPhoto, setGeologyPhoto] = React.useState('https://lh3.googleusercontent.com/aida-public/AB6AXu-DHHe-WJTQQyXAhmDCvZ3pj2owtlLrn6z8LZbSV3KdCgClcKXE0BgdV1EhIrz7isw9dK0LmhjQMobpttsB_38b6uOnBtxYrJVJBGwZORnzWy5G4CHTW-05sM8mfnx7ifyNJ08BncfKxqxkwKL5vUAKsPQpYTiIC_jkDaHrQgJnwM3jyznCnIssiuuw3UWpV35yhBP4t8sF3Y5m-vasGbP9KF4x4R7bAbXrdWRLpqHdFjNqvo6NvoDBaMvZTBdBtEMir-Gu59V2RNl');
-  const [pumpPhoto, setPumpPhoto] = React.useState('https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80');
+  const [pumpPhoto, setPumpPhoto] = React.useState('https://assets.perthborewater.com.au/Water_bore_diagnostic_repair_202606090937.jpeg');
+  const [reticPhoto, setReticPhoto] = React.useState('https://assets.perthborewater.com.au/Smart_reticulation.jpeg');
+  const [mineralPhoto, setMineralPhoto] = React.useState('https://assets.perthborewater.com.au/Water_bore_stain_removal_system.jpeg');
   const [benefitsPhoto, setBenefitsPhoto] = React.useState('https://images.unsplash.com/photo-1542060748-10c28b629f6f?auto=format&fit=crop&w=800&q=80');
   const [benefitsVideo, setBenefitsVideo] = React.useState('');
   const [isHeroDragging, setIsHeroDragging] = React.useState(false);
   const [isGeologyDragging, setIsGeologyDragging] = React.useState(false);
   const [isPumpDragging, setIsPumpDragging] = React.useState(false);
+  const [isReticDragging, setIsReticDragging] = React.useState(false);
+  const [isMineralDragging, setIsMineralDragging] = React.useState(false);
   const [isBenefitsDragging, setIsBenefitsDragging] = React.useState(false);
   const [showHeroUrlInput, setShowHeroUrlInput] = React.useState(false);
   const [heroUrlVal, setHeroUrlVal] = React.useState('');
@@ -523,6 +527,10 @@ export default function App() {
   const [geologyUrlVal, setGeologyUrlVal] = React.useState('');
   const [showPumpUrlInput, setShowPumpUrlInput] = React.useState(false);
   const [pumpUrlVal, setPumpUrlVal] = React.useState('');
+  const [showReticUrlInput, setShowReticUrlInput] = React.useState(false);
+  const [reticUrlVal, setReticUrlVal] = React.useState('');
+  const [showMineralUrlInput, setShowMineralUrlInput] = React.useState(false);
+  const [mineralUrlVal, setMineralUrlVal] = React.useState('');
   const [showBenefitsUrlInput, setShowBenefitsUrlInput] = React.useState(false);
   const [benefitsUrlVal, setBenefitsUrlVal] = React.useState('');
   const [backgroundPhoto, setBackgroundPhoto] = React.useState('');
@@ -530,7 +538,7 @@ export default function App() {
   const [bgUrlVal, setBgUrlVal] = React.useState('');
 
   // Media Overrides persistent local map (statically reads from media_overrides.json)
-  const [mediaOverrides, setMediaOverrides] = React.useState<Record<string, { video?: string; photo?: string; geology?: string; background?: string; pump?: string; drilling?: string; benefits?: string }>>(() => {
+  const [mediaOverrides, setMediaOverrides] = React.useState<Record<string, { video?: string; photo?: string; geology?: string; background?: string; pump?: string; drilling?: string; benefits?: string; retic?: string; mineral?: string }>>(() => {
     return (mediaOverridesPreset as any) || {};
   });
 
@@ -563,6 +571,8 @@ export default function App() {
         pump: activeData.pump || '',
         background: activeData.background || '',
         benefits: activeData.benefits || '',
+        retic: activeData.retic || '',
+        mineral: activeData.mineral || '',
         updatedAt: new Date().toISOString()
       })
       .then(() => {
@@ -622,6 +632,8 @@ export default function App() {
                   pump: docData.pump || undefined,
                   background: docData.background || undefined,
                   benefits: docData.benefits || undefined,
+                  retic: docData.retic || undefined,
+                  mineral: docData.mineral || undefined,
                 };
               });
               if (Object.keys(fsOverrides).length > 0) {
@@ -744,10 +756,12 @@ export default function App() {
   const photoInputRef = React.useRef<HTMLInputElement>(null);
   const geologyInputRef = React.useRef<HTMLInputElement>(null);
   const pumpInputRef = React.useRef<HTMLInputElement>(null);
+  const reticInputRef = React.useRef<HTMLInputElement>(null);
+  const mineralInputRef = React.useRef<HTMLInputElement>(null);
   const heroInputRef = React.useRef<HTMLInputElement>(null);
   const benefitsInputRef = React.useRef<HTMLInputElement>(null);
 
-  const saveMediaOverride = (type: 'video' | 'photo' | 'geology' | 'pump' | 'benefits', value: string) => {
+  const saveMediaOverride = (type: 'video' | 'photo' | 'geology' | 'pump' | 'benefits' | 'retic' | 'mineral', value: string) => {
     if (!selectedSuburbSlug) return;
     setMediaOverrides(prev => {
       const current = prev[selectedSuburbSlug] || {};
@@ -771,11 +785,11 @@ export default function App() {
     });
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'video' | 'photo' | 'geology' | 'pump' | 'benefits' | 'hero-auto') => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'video' | 'photo' | 'geology' | 'pump' | 'benefits' | 'retic' | 'mineral' | 'hero-auto') => {
     const file = e.target.files?.[0];
     if (!file || !selectedSuburbSlug) return;
 
-    let targetType: 'video' | 'photo' | 'geology' | 'pump' | 'benefits' = type === 'hero-auto' ? 'photo' : type;
+    let targetType: 'video' | 'photo' | 'geology' | 'pump' | 'benefits' | 'retic' | 'mineral' = type === 'hero-auto' ? 'photo' : type;
     if (type === 'hero-auto') {
       const isVideo = file.type.startsWith('video/') || file.name.endsWith('.mp4');
       targetType = isVideo ? 'video' : 'photo';
@@ -794,6 +808,10 @@ export default function App() {
       setGeologyPhoto(objectUrl);
     } else if (targetType === 'pump') {
       setPumpPhoto(objectUrl);
+    } else if (targetType === 'retic') {
+      setReticPhoto(objectUrl);
+    } else if (targetType === 'mineral') {
+      setMineralPhoto(objectUrl);
     } else if (targetType === 'benefits') {
       const isVideo = file.type.startsWith('video/') || file.name.endsWith('.mp4');
       if (isVideo) {
@@ -840,7 +858,7 @@ export default function App() {
     setDragState(false);
   };
 
-  const handleDrop = (e: React.DragEvent, type: 'hero' | 'geology' | 'pump' | 'benefits', setDragState: (val: boolean) => void) => {
+  const handleDrop = (e: React.DragEvent, type: 'hero' | 'geology' | 'pump' | 'benefits' | 'retic' | 'mineral', setDragState: (val: boolean) => void) => {
     e.preventDefault();
     e.stopPropagation();
     setDragState(false);
@@ -910,6 +928,36 @@ export default function App() {
         saveMediaOverride('pump', reader.result as string);
       };
       reader.readAsDataURL(file);
+    } else if (type === 'retic') {
+      const objectUrl = URL.createObjectURL(file);
+      setReticPhoto(objectUrl);
+      setMediaOverrides(prev => ({
+        ...prev,
+        [selectedSuburbSlug]: {
+          ...prev[selectedSuburbSlug],
+          retic: objectUrl
+        }
+      }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        saveMediaOverride('retic', reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else if (type === 'mineral') {
+      const objectUrl = URL.createObjectURL(file);
+      setMineralPhoto(objectUrl);
+      setMediaOverrides(prev => ({
+        ...prev,
+        [selectedSuburbSlug]: {
+          ...prev[selectedSuburbSlug],
+          mineral: objectUrl
+        }
+      }));
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        saveMediaOverride('mineral', reader.result as string);
+      };
+      reader.readAsDataURL(file);
     } else if (type === 'benefits') {
       const isVideo = file.type.startsWith('video/') || file.name.endsWith('.mp4');
       const objectUrl = URL.createObjectURL(file);
@@ -935,7 +983,7 @@ export default function App() {
     }
   };
 
-  const handleUrlSubmit = (url: string, type: 'hero' | 'geology' | 'background' | 'pump' | 'benefits') => {
+  const handleUrlSubmit = (url: string, type: 'hero' | 'geology' | 'background' | 'pump' | 'benefits' | 'retic' | 'mineral') => {
     if (!selectedSuburbSlug) return;
     const cleanUrl = (url || '').trim();
     if (type === 'hero') {
@@ -1008,6 +1056,42 @@ export default function App() {
         return updated;
       });
       setPumpPhoto(cleanUrl);
+    } else if (type === 'retic') {
+      if (!cleanUrl) return;
+      setMediaOverrides(prev => {
+        const current = prev[selectedSuburbSlug] || {};
+        const updated = {
+          ...prev,
+          [selectedSuburbSlug]: {
+            ...current,
+            retic: cleanUrl
+          }
+        };
+
+        // Persist to server filesystem
+        persistToServer(updated);
+
+        return updated;
+      });
+      setReticPhoto(cleanUrl);
+    } else if (type === 'mineral') {
+      if (!cleanUrl) return;
+      setMediaOverrides(prev => {
+        const current = prev[selectedSuburbSlug] || {};
+        const updated = {
+          ...prev,
+          [selectedSuburbSlug]: {
+            ...current,
+            mineral: cleanUrl
+          }
+        };
+
+        // Persist to server filesystem
+        persistToServer(updated);
+
+        return updated;
+      });
+      setMineralPhoto(cleanUrl);
     } else if (type === 'benefits') {
       if (!cleanUrl) return;
       setMediaOverrides(prev => {
@@ -1165,6 +1249,8 @@ export default function App() {
     const hasVideoOverride = local?.video && isRealUrl(local.video);
     const hasGeologyOverride = local?.geology && isRealUrl(local.geology);
     const hasPumpOverride = local?.pump && isRealUrl(local.pump);
+    const hasReticOverride = local?.retic && isRealUrl(local.retic);
+    const hasMineralOverride = local?.mineral && isRealUrl(local.mineral);
     const hasBgOverride = local?.background && isRealUrl(local.background);
     const hasBenefitsOverride = local?.benefits && isRealUrl(local.benefits);
 
@@ -1179,6 +1265,12 @@ export default function App() {
     }
     if (hasPumpOverride) {
       setPumpPhoto(local.pump);
+    }
+    if (hasReticOverride) {
+      setReticPhoto(local.retic);
+    }
+    if (hasMineralOverride) {
+      setMineralPhoto(local.mineral);
     }
     if (hasBenefitsOverride) {
       const isVideo = local.benefits!.endsWith('.mp4') || 
@@ -1213,12 +1305,20 @@ export default function App() {
     const testPumpUrl = slug === 'rockingham'
       ? 'https://perthborewater.com.au/serve-image.php?file=Rockingham-pump.jpg'
       : `https://perthborewater.com.au/serve-image.php?file=${slug}-pump.jpg`;
+    const testReticUrl = slug === 'rockingham'
+      ? 'https://perthborewater.com.au/serve-image.php?file=Rockingham-retic.jpg'
+      : `https://perthborewater.com.au/serve-image.php?file=${slug}-retic.jpg`;
+    const testMineralUrl = slug === 'rockingham'
+      ? 'https://perthborewater.com.au/serve-image.php?file=Rockingham-mineral.jpg'
+      : `https://perthborewater.com.au/serve-image.php?file=${slug}-mineral.jpg`;
     const testBenefitsUrl = slug === 'rockingham'
       ? 'https://perthborewater.com.au/serve-image.php?file=Rockingham-benefits.jpg'
       : `https://perthborewater.com.au/serve-image.php?file=${slug}-benefits.jpg`;
     const defaultPhoto = 'https://lh3.googleusercontent.com/aida-public/AB6AXuAS9LmvO7mawncwLdjxtZvYiFRtsNcXYv_94qu6ByOeZpKC_DpMT1BJh3SXGLDVzfp5kjvH8bFJ8fJq13Qla3cr3Juvr5x7i4kUiFrptGWMgqmmnp5pRo0yizIO0ewmhP1XbQ3vWAEMy79_7G-w0Vc-wCpkIa41CKErQiDCDpPLaQfzT6mBNEUxQaR0V3QVZpmvH6qS-jNTOj4neyC5lLBhzen03c3hh2BkaFw5KDY7pjGJxBOayRdNd4npeabUG0S9eGZ2YYMrmr2W';
     const defaultGeology = 'https://lh3.googleusercontent.com/aida-public/AB6AXu-DHHe-WJTQQyXAhmDCvZ3pj2owtlLrn6z8LZbSV3KdCgClcKXE0BgdV1EhIrz7isw9dK0LmhjQMobpttsB_38b6uOnBtxYrJVJBGwZORnzWy5G4CHTW-05sM8mfnx7ifyNJ08BncfKxqxkwKL5vUAKsPQpYTiIC_jkDaHrQgJnwM3jyznCnIssiuuw3UWpV35yhBP4t8sF3Y5m-vasGbP9KF4x4R7bAbXrdWRLpqHdFjNqvo6NvoDBaMvZTBdBtEMir-Gu59V2RNl';
-    const defaultPump = 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80';
+    const defaultPump = 'https://assets.perthborewater.com.au/Water_bore_diagnostic_repair_202606090937.jpeg';
+    const defaultRetic = 'https://assets.perthborewater.com.au/Smart_reticulation.jpeg';
+    const defaultMineral = 'https://assets.perthborewater.com.au/Water_bore_stain_removal_system.jpeg';
 
     if (!hasPhotoOverride) {
       const tempImg = new Image();
@@ -1259,6 +1359,28 @@ export default function App() {
       };
     }
 
+    if (!hasReticOverride) {
+      const tempRetic = new Image();
+      tempRetic.src = testReticUrl;
+      tempRetic.onload = () => {
+        setReticPhoto(testReticUrl);
+      };
+      tempRetic.onerror = () => {
+        setReticPhoto(defaultRetic);
+      };
+    }
+
+    if (!hasMineralOverride) {
+      const tempMineral = new Image();
+      tempMineral.src = testMineralUrl;
+      tempMineral.onload = () => {
+        setMineralPhoto(testMineralUrl);
+      };
+      tempMineral.onerror = () => {
+        setMineralPhoto(defaultMineral);
+      };
+    }
+
     if (!hasBenefitsOverride) {
       const tempBenefits = new Image();
       tempBenefits.src = testBenefitsUrl;
@@ -1281,6 +1403,8 @@ export default function App() {
     const hasVideoOverride = local?.video && isRealUrl(local.video);
     const hasGeologyOverride = local?.geology && isRealUrl(local.geology);
     const hasPumpOverride = local?.pump && isRealUrl(local.pump);
+    const hasReticOverride = local?.retic && isRealUrl(local.retic);
+    const hasMineralOverride = local?.mineral && isRealUrl(local.mineral);
     const hasBgOverride = local?.background && isRealUrl(local.background);
     const hasBenefitsOverride = local?.benefits && isRealUrl(local.benefits);
 
@@ -1302,6 +1426,18 @@ export default function App() {
       setPumpUrlVal(local.pump!);
     } else {
       setPumpUrlVal('');
+    }
+
+    if (hasReticOverride) {
+      setReticUrlVal(local.retic!);
+    } else {
+      setReticUrlVal('');
+    }
+
+    if (hasMineralOverride) {
+      setMineralUrlVal(local.mineral!);
+    } else {
+      setMineralUrlVal('');
     }
 
     if (hasBgOverride) {
@@ -1547,6 +1683,20 @@ export default function App() {
         type="file"
         ref={pumpInputRef}
         onChange={(e) => handleFileChange(e, 'pump')}
+        accept="image/*"
+        className="hidden"
+      />
+      <input
+        type="file"
+        ref={reticInputRef}
+        onChange={(e) => handleFileChange(e, 'retic')}
+        accept="image/*"
+        className="hidden"
+      />
+      <input
+        type="file"
+        ref={mineralInputRef}
+        onChange={(e) => handleFileChange(e, 'mineral')}
         accept="image/*"
         className="hidden"
       />
@@ -2755,7 +2905,106 @@ export default function App() {
                 </span>
               </div>
               <h4 className="font-display font-black text-slate-900 text-lg leading-tight animate-fade-in-up">Reticulation & Flow Optimization</h4>
-              <p className="text-xs text-slate-500 mt-2 leading-relaxed border-b border-slate-100 pb-2.5">
+              
+              {/* Technical Retic Image Showcase */}
+              <div 
+                onClick={() => isAdmin && reticInputRef.current?.click()}
+                onDragOver={(e) => isAdmin && handleDragOver(e, setIsReticDragging)}
+                onDragLeave={(e) => isAdmin && handleDragLeave(e, setIsReticDragging)}
+                onDrop={(e) => isAdmin && handleDrop(e, 'retic', setIsReticDragging)}
+                className={`mt-4 w-full h-36 rounded-2xl overflow-hidden border relative flex-shrink-0 transition-all duration-300 ${
+                  isAdmin 
+                    ? 'cursor-pointer group hover:border-[#007AFF]/50 border-slate-200/60 bg-slate-900' 
+                    : 'border-slate-100 bg-slate-50'
+                } ${
+                  isReticDragging && isAdmin
+                    ? 'border-[#007AFF] ring-4 ring-[#007AFF]/30 scale-[1.01] bg-blue-950/10' 
+                    : ''
+                }`}
+              >
+                {isReticDragging && isAdmin ? (
+                  <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex flex-col items-center justify-center pointer-events-none p-3 text-center">
+                    <Upload className="w-8 h-8 text-[#007AFF] mb-1 animate-bounce" />
+                    <p className="text-white font-display font-black text-xs">Drop reticulation image here</p>
+                    <p className="text-blue-250 text-[8px] font-mono tracking-wider uppercase">Accepts JPG/PNG image</p>
+                  </div>
+                ) : (
+                  <>
+                    <img 
+                      src={reticPhoto || undefined} 
+                      alt={`Reticulation system optimization in ${selectedSuburb.name} - Perth Bore Water`} 
+                      className="w-full h-full object-cover transition-all animate-fade-in"
+                      referrerPolicy="no-referrer"
+                      key={reticPhoto || 'retic'}
+                      onError={(e) => {
+                        e.currentTarget.src = "https://assets.perthborewater.com.au/Smart_reticulation.jpeg";
+                      }}
+                    />
+                    <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[8.5px] text-white font-mono uppercase tracking-widest font-bold">
+                      FLOW OPTIMIZER
+                    </div>
+                    
+                    {isAdmin && (
+                      <div className="absolute top-2 right-2 z-30 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            reticInputRef.current?.click();
+                          }}
+                          className="bg-black/85 hover:bg-[#007AFF] border border-white/20 px-2 py-1 rounded text-[8.5px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 whitespace-nowrap"
+                        >
+                          <Upload className="w-2.5 h-2.5" />
+                          <span>Upload</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowReticUrlInput(!showReticUrlInput);
+                          }}
+                          className="bg-black/85 hover:bg-[#007AFF] border border-white/25 px-1.5 py-1 rounded text-[8.5px] font-bold text-white uppercase tracking-wider flex items-center gap-0.5 shadow-md transition-all active:scale-95"
+                        >
+                          <span>URL</span>
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* URL Input Box inside Card */}
+              {showReticUrlInput && isAdmin && (
+                <div className="mt-2.5 p-3.5 bg-slate-50 border border-slate-100 rounded-2xl space-y-2 animate-fade-in text-left">
+                  <p className="text-[10px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
+                    <span>RETICULATION ASSET URL:</span>
+                  </p>
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      value={reticUrlVal}
+                      onChange={(e) => setReticUrlVal(e.target.value)}
+                      placeholder="https://example.com/asset-retic.jpg"
+                      className="flex-1 bg-white border border-slate-200 px-3 py-1.5 rounded-xl text-[11px] font-sans text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#007AFF]/25"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const trimmedVal = (reticUrlVal || '').trim();
+                        if (trimmedVal) {
+                          handleUrlSubmit(trimmedVal, 'retic');
+                          setShowReticUrlInput(false);
+                        }
+                      }}
+                      className="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase transition-all"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <p className="text-xs text-slate-500 mt-4 leading-relaxed border-b border-slate-100 pb-2.5">
                 Precision flow balancing and wireless automation retrofitting for modern water conservation.
               </p>
               
@@ -2802,7 +3051,106 @@ export default function App() {
                 </span>
               </div>
               <h4 className="font-display font-black text-slate-900 text-lg leading-tight animate-fade-in-up">Mineral & Iron Oxide Management</h4>
-              <p className="text-xs text-slate-500 mt-2 leading-relaxed border-b border-slate-100 pb-2.5">
+              
+              {/* Technical Mineral Image Showcase */}
+              <div 
+                onClick={() => isAdmin && mineralInputRef.current?.click()}
+                onDragOver={(e) => isAdmin && handleDragOver(e, setIsMineralDragging)}
+                onDragLeave={(e) => isAdmin && handleDragLeave(e, setIsMineralDragging)}
+                onDrop={(e) => isAdmin && handleDrop(e, 'mineral', setIsMineralDragging)}
+                className={`mt-4 w-full h-36 rounded-2xl overflow-hidden border relative flex-shrink-0 transition-all duration-300 ${
+                  isAdmin 
+                    ? 'cursor-pointer group hover:border-amber-500/50 border-slate-200/60 bg-slate-900' 
+                    : 'border-slate-100 bg-slate-50'
+                } ${
+                  isMineralDragging && isAdmin
+                    ? 'border-amber-500 ring-4 ring-amber-500/30 scale-[1.01] bg-amber-950/10' 
+                    : ''
+                }`}
+              >
+                {isMineralDragging && isAdmin ? (
+                  <div className="absolute inset-0 bg-slate-900/40 backdrop-blur-sm flex flex-col items-center justify-center pointer-events-none p-3 text-center">
+                    <Upload className="w-8 h-8 text-amber-500 mb-1 animate-bounce" />
+                    <p className="text-white font-display font-black text-xs">Drop mineral treatment image here</p>
+                    <p className="text-amber-205 text-[8px] font-mono tracking-wider uppercase">Accepts JPG/PNG image</p>
+                  </div>
+                ) : (
+                  <>
+                    <img 
+                      src={mineralPhoto || undefined} 
+                      alt={`Mineral stain mitigation in ${selectedSuburb.name} - Perth Bore Water`} 
+                      className="w-full h-full object-cover transition-all animate-fade-in"
+                      referrerPolicy="no-referrer"
+                      key={mineralPhoto || 'mineral'}
+                      onError={(e) => {
+                        e.currentTarget.src = "https://assets.perthborewater.com.au/Water_bore_stain_removal_system.jpeg";
+                      }}
+                    />
+                    <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-sm px-2.5 py-0.5 rounded-full text-[8.5px] text-white font-mono uppercase tracking-widest font-bold">
+                      MINERAL FILTER
+                    </div>
+                    
+                    {isAdmin && (
+                      <div className="absolute top-2 right-2 z-30 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            mineralInputRef.current?.click();
+                          }}
+                          className="bg-black/85 hover:bg-amber-600 border border-white/20 px-2 py-1 rounded text-[8.5px] font-bold text-white uppercase tracking-wider flex items-center gap-1 shadow-md transition-all active:scale-95 whitespace-nowrap"
+                        >
+                          <Upload className="w-2.5 h-2.5" />
+                          <span>Upload</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setShowMineralUrlInput(!showMineralUrlInput);
+                          }}
+                          className="bg-black/85 hover:bg-amber-600 border border-white/25 px-1.5 py-1 rounded text-[8.5px] font-bold text-white uppercase tracking-wider flex items-center gap-0.5 shadow-md transition-all active:scale-95"
+                        >
+                          <span>URL</span>
+                        </button>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+
+              {/* URL Input Box inside Card */}
+              {showMineralUrlInput && isAdmin && (
+                <div className="mt-2.5 p-3.5 bg-slate-50 border border-slate-100 rounded-2xl space-y-2 animate-fade-in text-left">
+                  <p className="text-[10px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1">
+                    <span>MINERAL ASSET URL:</span>
+                  </p>
+                  <div className="flex gap-2">
+                    <input 
+                      type="text" 
+                      value={mineralUrlVal}
+                      onChange={(e) => setMineralUrlVal(e.target.value)}
+                      placeholder="https://example.com/asset-mineral.jpg"
+                      className="flex-1 bg-white border border-slate-200 px-3 py-1.5 rounded-xl text-[11px] font-sans text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#007AFF]/25"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const trimmedVal = (mineralUrlVal || '').trim();
+                        if (trimmedVal) {
+                          handleUrlSubmit(trimmedVal, 'mineral');
+                          setShowMineralUrlInput(false);
+                        }
+                      }}
+                      className="bg-amber-600 hover:bg-amber-500 text-white px-3 py-1.5 rounded-xl text-[10px] font-bold uppercase transition-all"
+                    >
+                      Save
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <p className="text-xs text-slate-500 mt-4 leading-relaxed border-b border-slate-100 pb-2.5">
                 Mitigate mineral oxidation staining and treat aquifer chemical hazards before they impact surface brickwork.
               </p>
               

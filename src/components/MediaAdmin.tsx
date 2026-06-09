@@ -26,7 +26,7 @@ import {
 import { SUBURBS_DATA } from '../data';
 
 interface MediaAdminProps {
-  mediaOverrides: Record<string, { video?: string; photo?: string; geology?: string; pump?: string; background?: string; drilling?: string; benefits?: string }>;
+  mediaOverrides: Record<string, { video?: string; photo?: string; geology?: string; pump?: string; background?: string; drilling?: string; benefits?: string; retic?: string; mineral?: string }>;
   onSaveOverrides: (updated: Record<string, any>) => void;
   onClose: () => void;
 }
@@ -57,8 +57,22 @@ const ASSET_FIELDS = [
   { 
     key: 'pump' as const, 
     label: 'Pump Technical Spec Image', 
-    description: 'Schematic diagrams, technical setup photos, or catalog listings inside Card 3.',
+    description: 'Schematic diagrams, technical setup photos, or catalog listings inside Card 3 (Bore Diagnostics).',
     icon: Settings,
+    accept: 'image/*'
+  },
+  {
+    key: 'retic' as const,
+    label: 'Reticulation Spec Image',
+    description: 'Technical plumbing/nozzle setup, controller interface, or lawn watering spray photo (Reticulation card).',
+    icon: Image,
+    accept: 'image/*'
+  },
+  {
+    key: 'mineral' as const,
+    label: 'Mineral Management Image',
+    description: 'Chemical filters, stain-stopper systems, or laboratory/dosing setup photo (Mineral Management card).',
+    icon: Shield,
     accept: 'image/*'
   },
   { 
@@ -114,12 +128,12 @@ export default function MediaAdmin({ mediaOverrides, onSaveOverrides, onClose }:
 
   // Active inputs state for selected suburb keys
   const activeData = useMemo(() => {
-    const defaultData = { video: '', photo: '', geology: '', pump: '', background: '', drilling: '', benefits: '' };
+    const defaultData = { video: '', photo: '', geology: '', pump: '', background: '', drilling: '', benefits: '', retic: '', mineral: '' };
     return { ...defaultData, ...(localOverrides[selectedSlug] || {}) };
   }, [localOverrides, selectedSlug]);
 
   // Handle manual input updates
-  const handleFieldChange = (key: 'video' | 'photo' | 'geology' | 'pump' | 'background' | 'drilling' | 'benefits', value: string) => {
+  const handleFieldChange = (key: 'video' | 'photo' | 'geology' | 'pump' | 'background' | 'drilling' | 'benefits' | 'retic' | 'mineral', value: string) => {
     setLocalOverrides(prev => {
       const currentSuburbData = { ...(prev[selectedSlug] || {}) };
       
@@ -142,7 +156,7 @@ export default function MediaAdmin({ mediaOverrides, onSaveOverrides, onClose }:
   };
 
   // Convert uploaded file to base64 inline and save
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, key: 'video' | 'photo' | 'geology' | 'pump' | 'background' | 'drilling' | 'benefits') => {
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>, key: 'video' | 'photo' | 'geology' | 'pump' | 'background' | 'drilling' | 'benefits' | 'retic' | 'mineral') => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -632,7 +646,7 @@ export default function MediaAdmin({ mediaOverrides, onSaveOverrides, onClose }:
                   </div>
 
                   {/* Other images preview thumbnails row */}
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-3 gap-2">
                     
                     {/* Geology thumbnail */}
                     <div className="bg-slate-950/40 rounded-lg p-2 border border-slate-900 flex flex-col justify-between h-[110px] text-left">
@@ -656,6 +670,30 @@ export default function MediaAdmin({ mediaOverrides, onSaveOverrides, onClose }:
                         )}
                       </div>
                       <span className="text-[7.5px] font-mono text-slate-400 font-bold uppercase tracking-wider block mt-1.5 truncate">Pump Details</span>
+                    </div>
+
+                    {/* Retic thumbnail */}
+                    <div className="bg-slate-950/40 rounded-lg p-2 border border-slate-900 flex flex-col justify-between h-[110px] text-left">
+                      <div className="h-[75px] w-full rounded bg-slate-900 overflow-hidden flex items-center justify-center">
+                        {activeData.retic && isRealUrl(activeData.retic) ? (
+                          <img src={activeData.retic} alt="Reticulation asset preview" className="w-full h-full object-cover" />
+                        ) : (
+                          <Image className="w-4 h-4 text-slate-700" />
+                        )}
+                      </div>
+                      <span className="text-[7.5px] font-mono text-slate-400 font-bold uppercase tracking-wider block mt-1.5 truncate">Reticul.</span>
+                    </div>
+
+                    {/* Mineral thumbnail */}
+                    <div className="bg-slate-950/40 rounded-lg p-2 border border-slate-900 flex flex-col justify-between h-[110px] text-left">
+                      <div className="h-[75px] w-full rounded bg-slate-900 overflow-hidden flex items-center justify-center">
+                        {activeData.mineral && isRealUrl(activeData.mineral) ? (
+                          <img src={activeData.mineral} alt="Mineral asset preview" className="w-full h-full object-cover" />
+                        ) : (
+                          <Shield className="w-4 h-4 text-slate-700" />
+                        )}
+                      </div>
+                      <span className="text-[7.5px] font-mono text-slate-400 font-bold uppercase tracking-wider block mt-1.5 truncate">Minerals</span>
                     </div>
 
                     {/* Backdrop thumbnail */}

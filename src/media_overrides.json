@@ -423,7 +423,7 @@
     "video": "https://assets.perthborewater.com.au/Rockingham.mp4",
     "photo": "",
     "geology": "https://assets.perthborewater.com.au/Rockingham_home_Bore_202606081818.jpeg",
-    "pump": "https://perthborewater.com.au/serve-image.php?file=RockinghamDrilling.mp4",
+    "pump": "https://assets.perthborewater.com.au/Water_bore_diagnostic_repair_202606090937.jpeg",
     "background": "https://perthborewater.com.au/serve-image.php?file=Rockingham.png"
   },
   "safety-bay": {
@@ -667,10 +667,10 @@
     "pump": "https://perthborewater.com.au/serve-image.php?file="
   },
   "kelmscott": {
-    "pump": "https://assets.perthborewater.com.au/Water_bore_diagnostic_repair_202606090937.jpeg",
-    "background": "https://assets.perthborewater.com.au/Kelmscotthill.jpeg",
     "video": "https://assets.perthborewater.com.au/Kelmscott%201.mp4",
     "geology": "https://assets.perthborewater.com.au/Kelmscott_202606081959.jpeg",
+    "pump": "https://assets.perthborewater.com.au/Water_bore_diagnostic_repair_202606090937.jpeg",
+    "background": "https://assets.perthborewater.com.au/Kelmscotthill.jpeg",
     "benefits": "https://assets.perthborewater.com.au/Kelmscott.mp4"
   },
   "byford": {
