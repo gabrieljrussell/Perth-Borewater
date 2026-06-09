@@ -37,6 +37,7 @@ import MediaAdmin from './components/MediaAdmin';
 import AuthorityBentoCards from './components/AuthorityBentoCards';
 import mediaOverridesPreset from './media_overrides.json';
 import { getSuburbNarrative } from './masterSuburbNarratives';
+import { SUBURB_GEOLOGICAL_DATA } from './suburbGeologicalData';
 import { db, auth, logInWithGoogle, handleFirestoreError, OperationType } from './firebase';
 import { collection, getDocs, doc, setDoc } from 'firebase/firestore';
 import { onAuthStateChanged } from 'firebase/auth';
@@ -3185,6 +3186,49 @@ export default function App() {
           </div>
 
         </div>
+
+        {/* Brand New: Local Geological Analysis & Neighborhood Expertise */}
+        {(() => {
+          const profile = SUBURB_GEOLOGICAL_DATA[selectedSuburbSlug];
+          if (!profile) return null;
+          return (
+            <section className="grid grid-cols-1 md:grid-cols-12 gap-8 bg-white border border-slate-200/80 rounded-[2rem] p-7 sm:p-9 shadow-xs text-left mt-8 w-full" id="local-geo-analysis-section">
+              <div className="md:col-span-8 space-y-4">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#007AFF] animate-pulse" />
+                  <span className="text-xs font-mono font-bold text-[#007AFF] uppercase tracking-wider block">
+                    Local Geological Analysis Division
+                  </span>
+                </div>
+                <h2 className="text-xl sm:text-2xl font-display font-black text-slate-900 tracking-tight leading-tight">
+                  {profile.headline}
+                </h2>
+                <div className="space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed font-sans pt-1">
+                  <p>{profile.insightParagraph1}</p>
+                  <p>{profile.insightParagraph2}</p>
+                </div>
+              </div>
+
+              <div className="md:col-span-4 flex flex-col justify-between bg-slate-50 border border-slate-150 rounded-2xl p-6 relative overflow-hidden min-h-[220px]">
+                <div className="space-y-3.5 relative z-10">
+                  <span className="text-slate-400 font-mono text-[9px] font-bold uppercase tracking-widest block">
+                    Neighborhood Expertise
+                  </span>
+                  <p className="text-xs text-slate-700 leading-relaxed font-sans font-medium">
+                    {profile.trustSignal}
+                  </p>
+                </div>
+                <div className="mt-6 pt-4 border-t border-slate-200/50 flex items-center justify-between font-mono text-[9px] text-slate-400 font-bold uppercase tracking-widest relative z-10">
+                  <span>✦ EXPERT LED</span>
+                  <span className="text-[#007AFF]">VERIFIED BLUEPRINT</span>
+                </div>
+                <div className="absolute right-[-15px] bottom-[-25px] text-[#007AFF]/[0.02] font-black text-[10rem] pointer-events-none select-none font-sans leading-none">
+                  ✓
+                </div>
+              </div>
+            </section>
+          );
+        })()}
 
         {/* Brand New: Hyper-Local Hydrology Narrative Section */}
         <section className="bg-white border border-slate-200/60 rounded-3xl p-8 hover:shadow-xl transition-all shadow-[0_8px_30px_rgb(0,0,0,0.02)] text-left mt-8 w-full">

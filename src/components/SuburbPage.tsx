@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { GENERAL_REVIEWS } from '../data';
 import SoilProfileDiagram from './SoilProfileDiagram';
+import { SUBURB_GEOLOGICAL_DATA } from '../suburbGeologicalData';
 
 const getSoilTypeAndDepthFromSuburb = (suburb: SuburbData) => {
   let waterDepth = 15;
@@ -58,6 +59,7 @@ interface SuburbPageProps {
 
 export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: SuburbPageProps) {
   const { soilType, waterDepth } = getSoilTypeAndDepthFromSuburb(suburb);
+  const profile = SUBURB_GEOLOGICAL_DATA[suburb.slug];
   const [isPlayingVideo, setIsPlayingVideo] = useState(true);
   const [activeTab, setActiveTab] = useState<'diagnostics' | 'compliance' | 'reviews'>('diagnostics');
 
@@ -437,6 +439,45 @@ export default function SuburbPage({ suburb, onGoBack, onSelectSuburbByName }: S
           </div>
 
         </div>
+
+        {/* Section: Local Geological Analysis & Neighborhood Expertise */}
+        {profile && (
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 bg-white border border-slate-200/80 rounded-[2rem] p-7 sm:p-9 shadow-xs text-left" id="local-geo-analysis-section">
+            <div className="md:col-span-8 space-y-4">
+              <div className="flex items-center gap-2">
+                <span className="w-2.5 h-2.5 rounded-full bg-[#007AFF] animate-pulse" />
+                <span className="text-xs font-mono font-bold text-[#007AFF] uppercase tracking-wider block">
+                  Local Geological Analysis
+                </span>
+              </div>
+              <h2 className="text-xl sm:text-2xl font-display font-black text-slate-900 tracking-tight leading-tight">
+                {profile.headline}
+              </h2>
+              <div className="space-y-4 text-xs sm:text-sm text-slate-600 leading-relaxed font-sans pt-1">
+                <p>{profile.insightParagraph1}</p>
+                <p>{profile.insightParagraph2}</p>
+              </div>
+            </div>
+
+            <div className="md:col-span-4 flex flex-col justify-between bg-slate-50 border border-slate-100 rounded-2xl p-6 relative overflow-hidden h-full">
+              <div className="space-y-3.5 relative z-10">
+                <span className="text-slate-400 font-mono text-[9px] font-bold uppercase tracking-widest block">
+                  Neighborhood Expertise
+                </span>
+                <p className="text-xs text-slate-700 leading-relaxed font-sans font-medium">
+                  {profile.trustSignal}
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-slate-200/50 flex items-center justify-between font-mono text-[9px] text-slate-400 font-bold uppercase tracking-widest relative z-10">
+                <span>✦ EXPERT LED</span>
+                <span className="text-[#007AFF]">VERIFIED BLUEPRINT</span>
+              </div>
+              <div className="absolute right-[-15px] bottom-[-25px] text-[#007AFF]/[0.02] font-black text-[10rem] pointer-events-none select-none font-sans leading-none">
+                ✓
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Secondary Detailed Columns: Form, Technical Specifications, Warning alerts, Accreditations */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 pt-6">
