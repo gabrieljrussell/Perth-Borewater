@@ -453,13 +453,13 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
       <div className="bg-slate-50 border border-slate-200/50 rounded-[2rem] p-8 sm:p-10 text-left space-y-8">
         <div className="flex flex-col lg:flex-row gap-6 items-start lg:items-center justify-between border-b border-slate-200/60 pb-6">
           <div className="max-w-2xl space-y-2">
-            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#00B4D8]/10 border border-[#00B4D8]/20 rounded-full text-[9px] font-mono font-bold text-[#008BB2] uppercase tracking-wider">
+            <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 bg-[#00B4D8]/10 border border-[#00B4D8]/20 rounded-full text-[9px] font-mono font-bold text-[#005B73] uppercase tracking-wider">
               <span>Our Transparent Installation Workflow</span>
             </div>
             <h2 className="text-2xl sm:text-3.5xl font-display font-black text-slate-900 tracking-tight leading-tight">
               Our 3-Step Authority Blueprint
             </h2>
-            <p className="text-xs sm:text-sm text-slate-505 max-w-xl">
+            <p className="text-xs sm:text-sm text-slate-600 max-w-xl">
               Home water drilling is a significant lifestyle asset. We make the entire process smooth, secure, and completely transparent from regulatory checks to active service.
             </p>
           </div>
@@ -476,10 +476,10 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
             </div>
             <div className="text-left space-y-0.5">
               <div className="flex items-center gap-1.5">
-                <span className="text-[8.5px] font-mono font-black text-[#00B4D8] uppercase tracking-widest leading-none">Lead Site Director</span>
+                <span className="text-[8.5px] font-mono font-black text-[#00607A] uppercase tracking-widest leading-none">Lead Site Director</span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               </div>
-              <h4 className="text-xs font-display font-extrabold text-slate-800">Michael &quot;Mike&quot; Russell</h4>
+              <h3 className="text-xs font-display font-extrabold text-slate-800">Michael &quot;Mike&quot; Russell</h3>
               <p className="text-[10px] text-slate-500 italic leading-snug">
                 &quot;We don&apos;t just drill holes. We map your subsoil, design custom slot casing, and guarantee lifetime flow.&quot;
               </p>
@@ -676,7 +676,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
             {/* Payback period and call-to-action block */}
             <div className="mt-6 pt-5 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <div className="text-left">
-                <span className="text-[8px] font-mono text-slate-500 font-bold uppercase tracking-widest block">
+                <span className="text-[8px] font-mono text-slate-300 font-bold uppercase tracking-widest block">
                   AMORTIZATION TIMELINE
                 </span>
                 <span className="text-xs font-sans text-slate-400">

@@ -3520,9 +3520,9 @@ export default function App() {
           <div className="space-y-4 font-sans">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 bg-[#007AFF] rounded-full animate-pulse" />
-              <h4 className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-widest">
+              <p className="text-[10px] font-mono font-bold text-slate-600 uppercase tracking-widest">
                 NEARBY SERVICE AREAS &amp; LOCAL SEO CLUSTERS
-              </h4>
+              </p>
             </div>
             <div className="space-y-1.5">
               <h3 className="text-lg font-display font-black text-slate-900 tracking-tight">
@@ -3626,9 +3626,9 @@ export default function App() {
 
           {/* 5. Navigation Authority Sitemap targeting Google web crawlers */}
           <div id="suburb-directory-sitemap" className="border-t border-slate-800 pt-8 text-left">
-            <h4 className="text-sm font-display font-bold text-slate-400 mb-4 uppercase tracking-widest text-[11px] font-mono font-black">
+            <h2 className="text-sm font-display font-bold text-slate-350 mb-4 uppercase tracking-widest text-[11px] font-mono font-black">
               Authority Sitemap (Perth Subsurface Aquifer Directory)
-            </h4>
+            </h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-x-6 gap-y-2">
               {SUBURBS_DATA.map((sub) => (
                 <a
@@ -3694,7 +3694,7 @@ export default function App() {
                   <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center mx-auto text-slate-400">
                     <Search className="w-4.5 h-4.5" />
                   </div>
-                  <h4 className="text-xs font-bold text-slate-750 font-sans tracking-tight">Search South Corridor Hub</h4>
+                  <p className="text-xs font-bold text-slate-800 font-sans tracking-tight">Search South Corridor Hub</p>
                   <p className="text-[11px] text-slate-500 max-w-sm mx-auto leading-relaxed">
                     Enter any of our twenty index suburbs or postcodes to view specific casing configurations, local water table depths, iron risk levels, and regulatory guidance.
                   </p>
@@ -3720,7 +3720,7 @@ export default function App() {
                   <div className="w-10 h-10 rounded-full bg-amber-50 border border-amber-100/50 flex items-center justify-center mx-auto text-amber-500">
                     <AlertCircle className="w-4.5 h-4.5" />
                   </div>
-                  <h4 className="text-xs font-bold text-slate-755 font-sans tracking-tight">No Suburb Found</h4>
+                  <p className="text-xs font-bold text-slate-800 font-sans tracking-tight">No Suburb Found</p>
                   <p className="text-[11px] text-slate-500 max-w-xs mx-auto leading-relaxed">
                     No results matched &ldquo;<strong className="text-slate-800 font-bold">{globalSearchQuery}</strong>&rdquo;. Please check the spelling or search for another Perth region.
                   </p>
