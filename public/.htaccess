@@ -1,8 +1,23 @@
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # 1. Allow existing physical files and directories to be accessed directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # 2. Prevent rewrite of XML sitemaps, robots.txt, PHP handlers or system files to index.html
+  # If any of these files are missing, the server should return a direct 404 instead of serving HTML.
+  RewriteCond %{REQUEST_URI} \.(xml|txt|png|jpe?g|gif|svg|ico|php|js|css)$ [NC]
+  RewriteRule ^ - [L,R=404]
+
+  # 3. Direct routing fallback for Single Page Application (SPA) routes
   RewriteRule ^index\.html$ - [L]
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME} !-d
   RewriteRule . /index.html [L]
 </IfModule>
+
+# Block access to git/build meta folders
+RewriteRule ^\.builds - [F,L]
