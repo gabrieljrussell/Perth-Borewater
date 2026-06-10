@@ -3324,7 +3324,7 @@ export default function App() {
             <div className="lg:col-span-4 flex flex-col justify-center">
               <div className="relative group overflow-hidden rounded-2xl border border-slate-200 shadow-xs aspect-[4/3] bg-white flex-shrink-0 h-full min-h-[260px]">
                 <img 
-                  src="https://assets.perthborewater.com.au/Water_bore_technician_homeowner_%E2%80%A6_202606091214.jpeg" 
+                  src="/serve-image.php?file=Water_bore_technician_homeowner_%E2%80%A6_202606091214.jpeg&w=400&q=80" 
                   alt={`Water bore technician smiling and shaking hands with an appreciative homeowner in ${selectedSuburb.name}`} 
                   width={400}
                   height={300}
@@ -3333,7 +3333,7 @@ export default function App() {
                   referrerPolicy="no-referrer"
                   onError={(e) => {
                     e.currentTarget.className = "w-full h-full object-cover transition-all group-hover:scale-102";
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1542060748-10c28b629f6f?auto=format&fit=crop&w=800&q=80";
+                    e.currentTarget.src = "https://assets.perthborewater.com.au/Water_bore_technician_homeowner_%E2%80%A6_202606091214.jpeg";
                   }}
                 />
                 

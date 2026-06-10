@@ -193,7 +193,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
                 Find your local water table expert:
               </label>
               
-              <div className="relative flex items-center bg-slate-950/85 hover:bg-slate-900 border border-white/20 focus-within:border-[#00B4D8] focus-within:ring-2 focus-within:ring-[#00B4D8]/10 rounded-xl px-3.5 transition-all">
+              <div className="relative h-[46px] flex items-center bg-slate-950/85 hover:bg-slate-900 border border-white/20 focus-within:border-[#00B4D8] focus-within:ring-2 focus-within:ring-[#00B4D8]/10 rounded-xl px-3.5 transition-all">
                 <MapPin className="w-4 h-4 text-[#00B4D8] shrink-0" />
                 <select
                   id="hero-suburb-select"
@@ -360,7 +360,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               {/* Image holder for Repairs */}
               <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
                 <img 
-                  src="https://assets.perthborewater.com.au/Water_bore_diagnostic_repair_202606090937.jpeg" 
+                  src="/serve-image.php?file=Water_bore_diagnostic_repair_202606090937.jpeg&w=574&q=80" 
                   alt="Water bore diagnostic repair and technicians" 
                   width={574}
                   height={320}
@@ -368,7 +368,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
                   className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=600&q=80";
+                    e.currentTarget.src = "https://assets.perthborewater.com.au/Water_bore_diagnostic_repair_202606090937.jpeg";
                   }}
                 />
                 <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-[8px] text-white font-mono uppercase tracking-widest font-bold">
@@ -398,7 +398,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               {/* Image holder for Filtration */}
               <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
                 <img 
-                  src="https://assets.perthborewater.com.au/Water_bore_stain_removal_system.jpeg" 
+                  src="/serve-image.php?file=Water_bore_stain_removal_system.jpeg&w=574&q=80" 
                   alt="Water bore iron stain filtration and mineral treatment" 
                   width={574}
                   height={320}
@@ -406,7 +406,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
                   className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1585314062340-f1a5a7c9328d?auto=format&fit=crop&w=600&q=80";
+                    e.currentTarget.src = "https://assets.perthborewater.com.au/Water_bore_stain_removal_system.jpeg";
                   }}
                 />
                 <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-[8px] text-white font-mono uppercase tracking-widest font-bold">
@@ -436,7 +436,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               {/* Image holder for Smart Irrigation */}
               <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
                 <img 
-                  src="https://assets.perthborewater.com.au/Smart_reticulation.jpeg" 
+                  src="/serve-image.php?file=Smart_reticulation.jpeg&w=574&q=80" 
                   alt="Smart Reticulation and waterwise irrigation layout" 
                   width={574}
                   height={320}
@@ -444,7 +444,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
                   className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1563514227346-a3b14a2bf1de?auto=format&fit=crop&w=600&q=80";
+                    e.currentTarget.src = "https://assets.perthborewater.com.au/Smart_reticulation.jpeg";
                   }}
                 />
                 <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-[8px] text-white font-mono uppercase tracking-widest font-bold">
