@@ -1766,7 +1766,7 @@ export default function App() {
               <img src="https://assets.perthborewater.com.au/BoreWaterLogo.png" alt="Perth BoreWater Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
             </div>
             <span className="text-lg font-display font-black tracking-tight text-[#0F2C59] transition-colors">
-              Perth<span className="text-[#007AFF] font-medium ml-0.5">BoreWater</span>
+              Perth<span className="text-[#1D4ED8] font-bold ml-0.5">BoreWater</span>
             </span>
           </div>
 
@@ -1774,7 +1774,7 @@ export default function App() {
           <nav className="hidden lg:flex items-center gap-8 font-sans">
             <button 
               onClick={() => handleSuburbChange('')}
-              className="text-[#0F2C59] hover:text-[#007AFF] text-sm font-semibold tracking-wide cursor-pointer focus:outline-none"
+              className="text-[#0F2C59] hover:text-[#1D4ED8] text-sm font-semibold tracking-wide cursor-pointer focus:outline-none"
             >
               Home
             </button>

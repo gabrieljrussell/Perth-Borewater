@@ -189,13 +189,14 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           {/* CTA & Single-Field Zip / Suburb Search box */}
           <div className="mt-8 pt-6 border-t border-white/10 relative z-20 space-y-4">
             <div className="relative w-full max-w-md">
-              <label className="block text-[10px] font-mono font-bold uppercase tracking-widest text-[#00B4D8] mb-2.5">
+              <label htmlFor="hero-suburb-select" className="block text-[10px] font-mono font-bold uppercase tracking-widest text-[#00B4D8] mb-2.5">
                 Find your local water table expert:
               </label>
               
               <div className="relative flex items-center bg-slate-950/85 hover:bg-slate-900 border border-white/20 focus-within:border-[#00B4D8] focus-within:ring-2 focus-within:ring-[#00B4D8]/10 rounded-xl px-3.5 transition-all">
                 <MapPin className="w-4 h-4 text-[#00B4D8] shrink-0" />
                 <select
+                  id="hero-suburb-select"
                   onChange={(e) => {
                     const subSlug = e.target.value;
                     if (subSlug) {
@@ -267,13 +268,13 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               <Cpu className="w-5.5 h-5.5 text-[#00B4D8]" />
             </div>
             <div className="space-y-1.5">
-              <h3 className="font-display font-black text-[#002147] text-base">Slash Your Water Bill</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <h2 className="font-display font-black text-[#002147] text-base">Slash Your Water Bill</h2>
+              <p className="text-xs text-slate-650 leading-relaxed font-sans">
                 Save up to 40% on annual water utility expenses by switching your garden connection over to an optimized shallow bore.
               </p>
             </div>
           </div>
-          <span className="text-[9px] font-mono text-slate-400 uppercase tracking-widest font-black block mt-6">
+          <span className="text-[9px] font-mono text-slate-600 uppercase tracking-widest font-black block mt-6">
             ✦ HIGH WATERWISE RATING
           </span>
         </div>
@@ -281,17 +282,17 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
         {/* TRUST & COMPLIANCE CARD: Spans 4 of 12 columns */}
         <div className="lg:col-span-4 bg-white border border-slate-200/60 rounded-[2rem] p-7 flex flex-col justify-between hover:shadow-xl transition-all duration-300 shadow-[0_8px_30px_rgb(0,0,0,0.01)] min-h-[220px] text-left">
           <div className="space-y-4">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 border border-emerald-100 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-800 border border-emerald-100 flex items-center justify-center">
               <ShieldCheck className="w-5.5 h-5.5" />
             </div>
             <div className="space-y-1.5">
-              <h3 className="font-display font-black text-[#002147] text-base">Government Certified</h3>
-              <p className="text-xs text-slate-500 leading-relaxed">
+              <h2 className="font-display font-black text-[#002147] text-base">Government Certified</h2>
+              <p className="text-xs text-slate-650 leading-relaxed font-sans">
                 Licensed water bore drilling aligning fully with DWER environmental standards to protect the integrity of underlying aquifers.
               </p>
             </div>
           </div>
-          <span className="text-[9px] font-mono text-emerald-600 font-bold uppercase tracking-widest block mt-6">
+          <span className="text-[9px] font-mono text-emerald-800 font-bold uppercase tracking-widest block mt-6">
             DWER LICENSE #2241 APPROVED
           </span>
         </div>
@@ -300,7 +301,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
 
       {/* 2. MIDDLE BENTO ROW: Horizontal Services Strip (4x1 Columns Layout) */}
       <div className="space-y-4 text-left">
-        <h2 className="text-xs font-mono font-black tracking-widest text-[#00B4D8] uppercase pl-1">
+        <h2 className="text-xs font-mono font-black tracking-widest text-[#00607A] uppercase pl-1">
           ✦ Core Drilling &amp; Reticulation Services
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -312,11 +313,11 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
                 <div className="w-9 h-9 rounded-lg bg-[#002147]/5 border border-[#002147]/10 flex items-center justify-center text-[#002147]">
                   <Layers className="w-5 h-5 text-[#002147]" />
                 </div>
-                <span className="text-[8px] font-mono font-bold tracking-widest text-[#007AFF] uppercase bg-[#007AFF]/10 border border-[#007AFF]/15 px-2.5 py-0.5 rounded-full">
+                <span className="text-[8px] font-mono font-bold tracking-widest text-[#1D4ED8] uppercase bg-[#1D4ED8]/10 border border-[#1D4ED8]/15 px-2.5 py-0.5 rounded-full">
                   Tier I
                 </span>
               </div>
-              <h4 className="font-display font-black text-[#002147] text-sm">New Water Bores</h4>
+              <h3 className="font-display font-black text-[#002147] text-sm">New Water Bores</h3>
               
               {/* Image holder for New Water Bores */}
               <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
@@ -344,14 +345,14 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-lg transition-shadow duration-300 text-left flex flex-col justify-between group">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="w-9 h-9 rounded-lg bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600">
+                <div className="w-9 h-9 rounded-lg bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-700">
                   <Wrench className="w-5 h-5" />
                 </div>
-                <span className="text-[8px] font-mono font-bold tracking-widest text-rose-600 uppercase bg-rose-50 border border-rose-100 px-2.5 py-0.5 rounded-full">
+                <span className="text-[8px] font-mono font-bold tracking-widest text-rose-800 uppercase bg-rose-50 border border-rose-100 px-2.5 py-0.5 rounded-full">
                   Tier II
                 </span>
               </div>
-              <h4 className="font-display font-black text-slate-800 text-sm">Pump &amp; Bore Repairs</h4>
+              <h3 className="font-display font-black text-slate-900 text-sm">Pump &amp; Bore Repairs</h3>
 
               {/* Image holder for Repairs */}
               <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
@@ -379,14 +380,14 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-lg transition-shadow duration-300 text-left flex flex-col justify-between group">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-600">
-                  <Droplets className="w-5 h-5 text-blue-500" />
+                <div className="w-9 h-9 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-700">
+                  <Droplets className="w-5 h-5 text-blue-600" />
                 </div>
-                <span className="text-[8px] font-mono font-bold tracking-widest text-[#007AFF] uppercase bg-[#007AFF]/10 border border-[#007AFF]/15 px-2.5 py-0.5 rounded-full">
+                <span className="text-[8px] font-mono font-bold tracking-widest text-[#1D4ED8] uppercase bg-[#1D4ED8]/10 border border-[#1D4ED8]/15 px-2.5 py-0.5 rounded-full">
                   Tier III
                 </span>
               </div>
-              <h4 className="font-display font-black text-slate-800 text-sm">Iron Stain Filtration</h4>
+              <h3 className="font-display font-black text-slate-900 text-sm">Iron Stain Filtration</h3>
 
               {/* Image holder for Filtration */}
               <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
@@ -414,14 +415,14 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           <div className="bg-white border border-slate-200/60 rounded-3xl p-6 hover:shadow-lg transition-shadow duration-300 text-left flex flex-col justify-between group">
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <div className="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+                <div className="w-9 h-9 rounded-lg bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-700">
                   <Smartphone className="w-5 h-5" />
                 </div>
-                <span className="text-[8px] font-mono font-bold tracking-widest text-emerald-600 uppercase bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded-full">
+                <span className="text-[8px] font-mono font-bold tracking-widest text-emerald-800 uppercase bg-emerald-50 border border-emerald-100 px-2.5 py-0.5 rounded-full">
                   Tier IV
                 </span>
               </div>
-              <h4 className="font-display font-black text-[#002147] text-sm">Smart Irrigation</h4>
+              <h3 className="font-display font-black text-[#002147] text-sm">Smart Irrigation</h3>
 
               {/* Image holder for Smart Irrigation */}
               <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
@@ -498,7 +499,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               <p className="text-xs text-slate-500 leading-relaxed font-sans">
                 We analyze the Perth Basin under your property. Our GIS satellite dataset accurately maps depth levels and strata layers before any machinery unloads.
               </p>
-              <div className="text-[9px] font-mono text-slate-400 font-bold uppercase tracking-wider pt-2 border-t border-slate-100">
+              <div className="text-[9px] font-mono text-slate-600 font-bold uppercase tracking-wider pt-2 border-t border-slate-100">
                 ✦ PRIOR CORRIDOR ANALYSIS
               </div>
             </div>
@@ -508,14 +509,14 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           <div className="space-y-4 relative bg-white border border-slate-200/50 p-6 rounded-2xl shadow-[0_4px_20px_rgba(0,180,216,0.01)] hover:shadow-md transition-all group">
             <span className="absolute -top-3 right-4 text-6xl font-sans font-black text-slate-100/50 pointer-events-none select-none z-0 group-hover:text-orange-500/10 transition-colors">02</span>
             <div className="relative z-10 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-600">
-                <Layers className="w-5.5 h-5.5 text-orange-500" />
+              <div className="w-10 h-10 rounded-xl bg-orange-50 border border-orange-100 flex items-center justify-center text-orange-700">
+                <Layers className="w-5.5 h-5.5 text-orange-600" />
               </div>
               <h3 className="text-base font-display font-black text-slate-800">2. Precision Drill</h3>
-              <p className="text-xs text-slate-500 leading-relaxed font-sans">
+              <p className="text-xs text-slate-650 leading-relaxed font-sans">
                 Our compact class-1 rigs handle everything from coastal white sand to tough Darling Scarp coffee clay without digging up your entire garden.
               </p>
-              <div className="text-[9px] font-mono text-orange-600 font-bold uppercase tracking-wider pt-2 border-t border-slate-100">
+              <div className="text-[9px] font-mono text-orange-800 font-bold uppercase tracking-wider pt-2 border-t border-slate-100">
                 ✦ DUST & COMPACTION SHIELDED
               </div>
             </div>
@@ -525,14 +526,14 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           <div className="space-y-4 relative bg-white border border-slate-200/50 p-6 rounded-2xl shadow-[0_4px_20px_rgba(0,180,216,0.01)] hover:shadow-md transition-all group">
             <span className="absolute -top-3 right-4 text-6xl font-sans font-black text-slate-100/50 pointer-events-none select-none z-0 group-hover:text-emerald-500/10 transition-colors">03</span>
             <div className="relative z-10 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
-                <Droplets className="w-5.5 h-5.5 text-emerald-500" />
+              <div className="w-10 h-10 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-700">
+                <Droplets className="w-5.5 h-5.5 text-emerald-700" />
               </div>
               <h3 className="text-base font-display font-black text-slate-800">3. Lifetime Water</h3>
-              <p className="text-xs text-slate-500 leading-relaxed font-sans">
+              <p className="text-xs text-slate-650 leading-relaxed font-sans">
                 We lower premium stainless-steel, high-efficiency Grundfos submersible pumps. Coupled with our 24/7 maintenance support and full warranty peace of mind.
               </p>
-              <div className="text-[9px] font-mono text-emerald-600 font-bold uppercase tracking-wider pt-2 border-t border-slate-100">
+              <div className="text-[9px] font-mono text-emerald-800 font-bold uppercase tracking-wider pt-2 border-t border-slate-100">
                 ✦ GRUNDFOS GOLD SEALED
               </div>
             </div>
@@ -551,14 +552,14 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           {/* Controls & Inputs: Spans 5 columns */}
           <div className="lg:col-span-5 flex flex-col justify-between space-y-6">
             <div className="space-y-3">
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-100 rounded-full text-[10px] font-mono font-bold text-emerald-600 uppercase tracking-wider">
-                <Coins className="w-3.5 h-3.5" />
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] font-mono font-bold text-emerald-800 uppercase tracking-wider">
+                <Coins className="w-3.5 h-3.5 text-emerald-800" />
                 <span>Interactive Yield Tool</span>
               </span>
-              <h3 className="text-xl sm:text-2.5xl font-display font-black text-slate-900 tracking-tight">
+              <h2 className="text-xl sm:text-2.5xl font-display font-black text-slate-900 tracking-tight">
                 Mains vs. Bore Calculator
-              </h3>
-              <p className="text-xs text-slate-500 leading-relaxed font-sans font-medium">
+              </h2>
+              <p className="text-xs text-slate-650 leading-relaxed font-sans font-medium">
                 Adjust your lawn dimensions and active irrigation weeks to calculate the true Water Corporation mains tariff costs compared to a self-sufficient bore.
               </p>
             </div>
@@ -568,21 +569,23 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               {/* Slider 1: Lawn/Garden Size */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-600 font-bold">Lawn &amp; Garden Area:</span>
+                  <label htmlFor="calculator-lawn-size" className="text-slate-700 font-bold">Lawn &amp; Garden Area:</label>
                   <span className="font-mono text-slate-900 font-bold text-sm bg-slate-100 px-2.5 py-1 rounded-lg">
                     {lawnSize} m²
                   </span>
                 </div>
                 <input
+                  id="calculator-lawn-size"
                   type="range"
                   min="50"
                   max="1500"
                   step="25"
                   value={lawnSize}
                   onChange={(e) => setLawnSize(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-100 hover:bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#00B4D8] transition-all"
+                  className="w-full h-2 bg-slate-200 hover:bg-slate-300 rounded-lg appearance-none cursor-pointer accent-[#007794] transition-all"
+                  aria-label="Lawn and Garden Area Slider in Square Meters"
                 />
-                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                <div className="flex justify-between text-[10px] text-slate-600 font-mono">
                   <span>Small Courtyard (50m²)</span>
                   <span>Estate (1500m²)</span>
                 </div>
@@ -591,21 +594,23 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               {/* Slider 2: Irrigation active weeks */}
               <div className="space-y-2">
                 <div className="flex justify-between items-center text-xs">
-                  <span className="text-slate-600 font-bold">Watering Season Duration:</span>
+                  <label htmlFor="calculator-watering-weeks" className="text-slate-700 font-bold">Watering Season Duration:</label>
                   <span className="font-mono text-slate-900 font-bold text-sm bg-slate-100 px-2.5 py-1 rounded-lg">
                     {wateringWeeks} Active Weeks
                   </span>
                 </div>
                 <input
+                  id="calculator-watering-weeks"
                   type="range"
                   min="15"
                   max="45"
                   step="1"
                   value={wateringWeeks}
                   onChange={(e) => setWateringWeeks(Number(e.target.value))}
-                  className="w-full h-2 bg-slate-100 hover:bg-slate-200 rounded-lg appearance-none cursor-pointer accent-[#00B4D8] transition-all"
+                  className="w-full h-2 bg-slate-200 hover:bg-slate-300 rounded-lg appearance-none cursor-pointer accent-[#007794] transition-all"
+                  aria-label="Watering Season Duration Slider in Weeks"
                 />
-                <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+                <div className="flex justify-between text-[10px] text-slate-600 font-mono">
                   <span>Spring/Summer (15w)</span>
                   <span>All-Year Maintenance (45w)</span>
                 </div>
@@ -658,12 +663,12 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               {/* Softened data comparisons */}
               <div className="grid grid-cols-2 gap-4 text-xs">
                 <div className="bg-slate-950/30 border border-slate-850/60 p-3 rounded-xl text-left">
-                  <span className="text-[9px] font-mono text-slate-500 block uppercase font-bold">Standard Mains (1yr)</span>
-                  <span className="text-slate-300 font-semibold block mt-1">${annualMainsCost.toLocaleString()}</span>
+                  <span className="text-[9px] font-mono text-slate-300 block uppercase font-bold tracking-wider">Standard Mains (1yr)</span>
+                  <span className="text-slate-200 font-semibold block mt-1">${annualMainsCost.toLocaleString()}</span>
                 </div>
                 <div className="bg-slate-950/30 border border-slate-850/60 p-3 rounded-xl text-left">
-                  <span className="text-[9px] font-mono text-slate-500 block uppercase font-bold">Bore Power (1yr)</span>
-                  <span className="text-slate-300 font-semibold block mt-1">${annualBoreCost.toLocaleString()}</span>
+                  <span className="text-[9px] font-mono text-slate-300 block uppercase font-bold tracking-wider">Bore Power (1yr)</span>
+                  <span className="text-slate-200 font-semibold block mt-1">${annualBoreCost.toLocaleString()}</span>
                 </div>
               </div>
             </div>
@@ -699,14 +704,14 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           <div className="space-y-5">
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 bg-[#00B4D8] rounded-full animate-pulse" />
-              <h3 className="text-xs font-mono font-bold tracking-widest text-[#002147] uppercase">
+              <p className="text-xs font-mono font-bold tracking-widest text-[#00607A] uppercase">
                 Perth South Corridor Footprint
-              </h3>
+              </p>
             </div>
             
             <div className="space-y-2">
-              <h3 className="text-xl font-display font-black text-slate-900 tracking-tight">Our South Corridor Hub</h3>
-              <p className="text-xs text-slate-500 leading-relaxed max-w-2xl">
+              <h2 className="text-xl font-display font-black text-slate-900 tracking-tight">Our South Corridor Hub</h2>
+              <p className="text-xs text-slate-650 leading-relaxed max-w-2xl font-sans">
                 We maintain active hydrogeological monitoring stations and local drilling operations throughout the Western Australia coastal shelf. Tap on any localized suburb to explore local bore depth limits and specific soil layers:
               </p>
             </div>
@@ -738,7 +743,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           </div>
 
           <div className="mt-6 pt-5 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-xs">
-            <span className="text-slate-400 font-mono tracking-tight font-medium">Providing complete DWER-compliant licensing support for new residential bores.</span>
+            <span className="text-slate-600 font-mono tracking-tight font-medium">Providing complete DWER-compliant licensing support for new residential bores.</span>
             <button 
               onClick={() => {
                 const element = document.getElementById('suburb-directory-sitemap');
@@ -763,17 +768,19 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               <span className="text-[10px] font-mono tracking-widest text-[#00B4D8] font-black uppercase block">
                 Local Water Profile Diagnostic
               </span>
-              <h3 className="font-display font-black text-white text-base">Select Your Suburb</h3>
-              <p className="text-xs text-slate-400 leading-normal">
+              <h2 className="font-display font-black text-white text-base">Select Your Suburb</h2>
+              <p className="text-xs text-slate-300 leading-normal font-sans">
                 Query local unconfined aquifer profiles and geological rock classifications dynamically across our South Corridor range.
               </p>
             </div>
 
             {/* Interactive Search / Autocomplete Field */}
             <div className="relative" ref={dropdownRef}>
+              <label htmlFor="diagnostic-suburb-search" className="sr-only">Search Suburb and Local Aquifer Profile</label>
               <div className="relative flex items-center bg-slate-850 hover:bg-slate-800 border border-slate-800 focus-within:border-[#00B4D8]/60 focus-within:bg-slate-800 rounded-xl px-3.5 py-1.5 transition-colors">
                 <Search className="w-4 h-4 text-[#00B4D8] shrink-0" />
                 <input
+                  id="diagnostic-suburb-search"
                   type="text"
                   value={searchQuery}
                   onFocus={() => setShowDropdown(true)}
@@ -836,7 +843,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
             {/* Display Selected Suburb local water diagnostic block */}
             <div className="bg-slate-950/80 border border-slate-800/80 rounded-2xl p-5 space-y-4 shadow-inner">
               <div className="flex justify-between items-center">
-                <span className="text-[9.5px] font-mono font-bold text-slate-500 uppercase tracking-widest block">
+                <span className="text-[9.5px] font-mono font-bold text-slate-400 uppercase tracking-widest block font-sans">
                   Groundwater Status
                 </span>
                 <span className="flex items-center gap-1.5 px-2 py-0.5 bg-emerald-500/10 border border-emerald-500/25 rounded text-[8.5px] font-mono text-emerald-400 font-bold uppercase tracking-wider">
@@ -856,11 +863,11 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
 
               <div className="grid grid-cols-2 gap-3 pt-2 text-xs font-mono border-t border-slate-800/40">
                 <div>
-                  <span className="text-[9px] text-slate-500 block uppercase font-bold">Recommended casing</span>
+                  <span className="text-[9px] text-slate-400 block uppercase font-bold">Recommended casing</span>
                   <span className="text-slate-300 font-semibold">Food-Grade PVC</span>
                 </div>
                 <div>
-                  <span className="text-[9px] text-slate-500 block uppercase font-bold">Standard drilling</span>
+                  <span className="text-[9px] text-slate-400 block uppercase font-bold">Standard drilling</span>
                   <span className="text-slate-300 font-semibold">Rotary Mud Drill</span>
                 </div>
               </div>
@@ -892,9 +899,9 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
             <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-ping" />
             <span>Fast response priority dispatch</span>
           </div>
-          <h3 className="text-2xl sm:text-3.5xl font-display font-black tracking-tight text-white leading-none">
+          <h2 className="text-2xl sm:text-3.5xl font-display font-black tracking-tight text-white leading-none">
             Ready to secure sustainable water?
-          </h3>
+          </h2>
           <p className="text-xs sm:text-sm text-slate-300 max-w-xl">
             Book an obligation-free diagnostic assessment. Our Waterwise certified hydrologist will visit your site, inspect your retic, and detail precise depth estimates.
           </p>
