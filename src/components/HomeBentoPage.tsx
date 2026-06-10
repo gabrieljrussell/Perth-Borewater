@@ -324,6 +324,9 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
                 <img 
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuAS9LmvO7mawncwLdjxtZvYiFRtsNcXYv_94qu6ByOeZpKC_DpMT1BJh3SXGLDVzfp5kjvH8bFJ8fJq13Qla3cr3Juvr5x7i4kUiFrptGWMgqmmnp5pRo0yizIO0ewmhP1XbQ3vWAEMy79_7G-w0Vc-wCpkIa41CKErQiDCDpPLaQfzT6mBNEUxQaR0V3QVZpmvH6qS-jNTOj4neyC5lLBhzen03c3hh2BkaFw5KDY7pjGJxBOayRdNd4npeabUG0S9eGZ2YYMrmr2W" 
                   alt="New water bore drilling rig and installation" 
+                  width={574}
+                  height={320}
+                  loading="lazy"
                   className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
@@ -359,6 +362,9 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
                 <img 
                   src="https://assets.perthborewater.com.au/Water_bore_diagnostic_repair_202606090937.jpeg" 
                   alt="Water bore diagnostic repair and technicians" 
+                  width={574}
+                  height={320}
+                  loading="lazy"
                   className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
@@ -394,6 +400,9 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
                 <img 
                   src="https://assets.perthborewater.com.au/Water_bore_stain_removal_system.jpeg" 
                   alt="Water bore iron stain filtration and mineral treatment" 
+                  width={574}
+                  height={320}
+                  loading="lazy"
                   className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
@@ -429,6 +438,9 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
                 <img 
                   src="https://assets.perthborewater.com.au/Smart_reticulation.jpeg" 
                   alt="Smart Reticulation and waterwise irrigation layout" 
+                  width={574}
+                  height={320}
+                  loading="lazy"
                   className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
@@ -470,6 +482,9 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               <img 
                 src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=180&h=180&q=80" 
                 alt="Michael Russell, Lead Director" 
+                width={56}
+                height={56}
+                loading="lazy"
                 className="w-full h-full object-cover grayscale font-sans text-[8px]"
                 referrerPolicy="no-referrer"
               />

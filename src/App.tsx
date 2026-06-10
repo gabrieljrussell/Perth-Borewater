@@ -1763,7 +1763,7 @@ export default function App() {
             className="flex items-center gap-2.5 cursor-pointer group"
           >
             <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-white shadow-sm overflow-hidden p-0.5 transition-transform group-hover:scale-105 duration-350">
-              <img src="https://assets.perthborewater.com.au/BoreWaterLogo.png" alt="Perth BoreWater Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+              <img src="/logo.svg" alt="Perth BoreWater Logo" width="36" height="36" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
             </div>
             <span className="text-lg font-display font-black tracking-tight text-[#0F2C59] transition-colors">
               Perth<span className="text-[#1D4ED8] font-bold ml-0.5">BoreWater</span>
@@ -3326,6 +3326,9 @@ export default function App() {
                 <img 
                   src="https://assets.perthborewater.com.au/Water_bore_technician_homeowner_%E2%80%A6_202606091214.jpeg" 
                   alt={`Water bore technician smiling and shaking hands with an appreciative homeowner in ${selectedSuburb.name}`} 
+                  width={400}
+                  height={300}
+                  loading="lazy"
                   className="w-full h-full object-contain transition-all group-hover:scale-[1.02]"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
@@ -3571,7 +3574,7 @@ export default function App() {
             <div className="space-y-3 text-left">
               <div className="flex items-center gap-2.5">
                 <div className="relative flex items-center justify-center w-8 h-8 rounded-lg overflow-hidden bg-white/10 p-0.5">
-                  <img src="https://assets.perthborewater.com.au/BoreWaterLogo.png" alt="Perth BoreWater Logo" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                  <img src="/logo.svg" alt="Perth BoreWater Logo" width="32" height="32" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                 </div>
                 <span className="text-lg font-display font-extrabold tracking-tight text-white">
                   Perth<span className="text-[#38BDF8] font-medium ml-1">BoreWater</span>
