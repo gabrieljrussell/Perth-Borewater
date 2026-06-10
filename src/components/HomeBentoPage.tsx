@@ -45,6 +45,15 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
   const [showDropdown, setShowDropdown] = useState(false);
   const [selectedProfileSuburb, setSelectedProfileSuburb] = useState<string>('Baldivis');
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [loadVideo, setLoadVideo] = useState(false);
+
+  useEffect(() => {
+    // Delay loading the 12MB video to prevent render blocking and huge initial payload sizes
+    const timer = setTimeout(() => {
+      setLoadVideo(true);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, []);
 
   // States for Hero Zip Code / Suburb Search box
   const [heroSearchQuery, setHeroSearchQuery] = useState('');
@@ -147,15 +156,20 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
           {/* Background Wrapper keeping overflow constrained for background video and gradients */}
           <div className="absolute inset-0 rounded-[2rem] overflow-hidden pointer-events-none z-0">
             {/* High-impact Video Montage active background */}
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="absolute inset-0 w-full h-full object-cover opacity-20 z-0 pointer-events-none mix-blend-lighten"
-            >
-              <source src="https://assets.perthborewater.com.au/Coogee.mp4" type="video/mp4" />
-            </video>
+            {loadVideo ? (
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="none"
+                className="absolute inset-0 w-full h-full object-cover opacity-20 z-0 pointer-events-none mix-blend-lighten"
+              >
+                <source src="https://assets.perthborewater.com.au/Coogee.mp4" type="video/mp4" />
+              </video>
+            ) : (
+              <div className="absolute inset-0 bg-[#00142A]" />
+            )}
 
             {/* Subtle water schematic overlay gradient */}
             <div className="absolute inset-0 bg-radial-gradient(ellipse_at_center,rgba(0,33,71,0.4),rgba(0,10,25,0.95)) z-0 pointer-events-none" />

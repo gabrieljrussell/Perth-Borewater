@@ -1209,7 +1209,7 @@ export default function App() {
         "name": selectedSuburbSlug 
           ? `Perth BoreWater Operations - ${selectedSuburb.name} Division` 
           : "Perth BoreWater Operations",
-        "image": "https://assets.perthborewater.com.au/BoreWaterLogo.png",
+        "image": "https://assets.perthborewater.com.au/BoreWaterLogo.webp",
         "@id": selectedSuburbSlug 
           ? `https://perthborewater.com.au/bore-drilling/${selectedSuburbSlug}`
           : "https://perthborewater.com.au/",
@@ -1763,7 +1763,7 @@ export default function App() {
             className="flex items-center gap-2.5 cursor-pointer group"
           >
             <div className="relative flex items-center justify-center w-9 h-9 rounded-xl bg-white shadow-sm overflow-hidden p-0.5 transition-transform group-hover:scale-105 duration-350">
-              <img src="/logo.svg" alt="Perth BoreWater Logo" width="36" height="36" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+              <img src="https://assets.perthborewater.com.au/BoreWaterLogo.webp" alt="Perth BoreWater Logo" width="36" height="36" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
             </div>
             <span className="text-lg font-display font-black tracking-tight text-[#0F2C59] transition-colors">
               Perth<span className="text-[#1D4ED8] font-bold ml-0.5">BoreWater</span>
@@ -2350,7 +2350,7 @@ export default function App() {
                   muted 
                   loop 
                   playsInline 
-                  preload="auto"
+                  preload="none"
                   poster={heroPhoto || undefined}
                   className="w-full h-full object-contain mx-auto bg-[#0a0a0a]"
                   onError={() => {
@@ -3455,7 +3455,7 @@ export default function App() {
                   muted
                   loop
                   playsInline
-                  preload="auto"
+                  preload="none"
                   className="w-full h-full object-cover"
                   onError={(e) => {
                     const t = e.target as HTMLVideoElement;
@@ -3574,7 +3574,7 @@ export default function App() {
             <div className="space-y-3 text-left">
               <div className="flex items-center gap-2.5">
                 <div className="relative flex items-center justify-center w-8 h-8 rounded-lg overflow-hidden bg-white/10 p-0.5">
-                  <img src="/logo.svg" alt="Perth BoreWater Logo" width="32" height="32" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
+                  <img src="https://assets.perthborewater.com.au/BoreWaterLogo.webp" alt="Perth BoreWater Logo" width="32" height="32" className="w-full h-full object-contain" referrerPolicy="no-referrer" />
                 </div>
                 <span className="text-lg font-display font-extrabold tracking-tight text-white">
                   Perth<span className="text-[#38BDF8] font-medium ml-1">BoreWater</span>
