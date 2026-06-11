@@ -123,12 +123,13 @@ async function startServer() {
         }
       }
 
-      // 2. Dispatch real email notifications to GabrielJRussell@gmail.com
+      // 2. Dispatch real email notifications to the configured recipient (defaults to GabrielJRussell@gmail.com)
       let emailStatus = "No API key configured";
       const resendApiKey = process.env.RESEND_API_KEY;
 
       if (resendApiKey) {
-        const recipient = "GabrielJRussell@gmail.com";
+        const recipient = process.env.RESEND_TO_EMAIL || "GabrielJRussell@gmail.com";
+        const sender = process.env.RESEND_FROM_EMAIL || "Perth BoreWater Dispatch <onboarding@resend.dev>";
         const emailHtml = `
           <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 25px; border: 1px solid #e2e8f0; border-radius: 16px; background-color: #ffffff; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
             <div style="text-align: center; margin-bottom: 20px;">
@@ -195,7 +196,7 @@ async function startServer() {
               "Content-Type": "application/json"
             },
             body: JSON.stringify({
-              from: "Perth BoreWater Dispatch <onboarding@resend.dev>",
+              from: sender,
               to: [recipient],
               subject: `[PB LEAD DISPATCH] ${fullName} - ${suburb} (${urgency.toUpperCase()})`,
               html: emailHtml
@@ -203,7 +204,7 @@ async function startServer() {
           });
 
           if (emailResponse.ok) {
-            emailStatus = "Sent successfully via Resend API to GabrielJRussell@gmail.com";
+            emailStatus = `Sent successfully via Resend API to ${recipient}`;
             console.log(`[Email Service] Success dispatch to ${recipient}`);
           } else {
             const errText = await emailResponse.text();
