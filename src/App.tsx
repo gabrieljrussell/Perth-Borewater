@@ -1384,16 +1384,8 @@ export default function App() {
     }
 
     if (!hasBenefitsOverride) {
-      const tempBenefits = new Image();
-      tempBenefits.src = testBenefitsUrl;
-      tempBenefits.onload = () => {
-        setBenefitsPhoto(testBenefitsUrl);
-        setBenefitsVideo('');
-      };
-      tempBenefits.onerror = () => {
-        setBenefitsPhoto('https://images.unsplash.com/photo-1542060748-10c28b629f6f?auto=format&fit=crop&w=1200&q=80');
-        setBenefitsVideo('');
-      };
+      setBenefitsVideo('https://assets.perthborewater.com.au/Bore-Benifits.mp4');
+      setBenefitsPhoto('');
     }
   }, [selectedSuburbSlug, mediaOverrides, isRealUrl]);
 
@@ -3337,7 +3329,7 @@ export default function App() {
                   className="w-full h-full object-contain transition-all group-hover:scale-[1.02]"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
-                    e.currentTarget.className = "w-full h-full object-cover transition-all group-hover:scale-102";
+                    e.currentTarget.className = "w-full h-full object-contain transition-all group-hover:scale-[1.02]";
                     e.currentTarget.src = "https://assets.perthborewater.com.au/Water_bore_technician_homeowner_%E2%80%A6_202606091214.jpeg";
                   }}
                 />
