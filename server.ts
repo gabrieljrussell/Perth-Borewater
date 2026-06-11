@@ -232,6 +232,113 @@ async function startServer() {
     }
   });
 
+  // Diagnostic route to test Resend API connectivity and display exact remote response
+  app.get("/api/test-resend", async (req, res) => {
+    const resendApiKey = process.env.RESEND_API_KEY;
+    const recipient = process.env.RESEND_TO_EMAIL || "GabrielJRussell@gmail.com";
+    const sender = process.env.RESEND_FROM_EMAIL || "Perth BoreWater Dispatch <onboarding@resend.dev>";
+
+    if (!resendApiKey) {
+      return res.status(400).json({
+        success: false,
+        error: "RESEND_API_KEY is not defined in the environment variables.",
+        recipient,
+        sender,
+        hint: "Please open Settings, click Environment Variables, and add RESEND_API_KEY with your API key from resend.com."
+      });
+    }
+
+    try {
+      console.log(`[Diagnostic] Attempting Resend test email send to: ${recipient} from: ${sender}`);
+      const emailResponse = await fetch("https://api.resend.com/emails", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${resendApiKey}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          from: sender,
+          to: [recipient],
+          subject: "[PB TEST] Perth BoreWater Resend Diagnostic",
+          html: `
+            <div style="font-family: sans-serif; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; max-width: 500px; margin: auto;">
+              <h2 style="color: #007aff;">Resend Connection Test Successful!</h2>
+              <p>This is a diagnostic email sent by your Perth BoreWater web application.</p>
+              <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin: 15px 0;">
+                <tr style="background-color: #f8fafc;"><td style="padding: 6px; font-weight: bold;">Sender URL:</td><td style="padding: 6px;">${sender}</td></tr>
+                <tr><td style="padding: 6px; font-weight: bold;">Recipient URL:</td><td style="padding: 6px;">${recipient}</td></tr>
+                <tr style="background-color: #f8fafc;"><td style="padding: 6px; font-weight: bold;">API Key Prefix:</td><td style="padding: 6px; font-family: monospace;">${resendApiKey.slice(0, 7)}...</td></tr>
+              </table>
+              <p style="font-size: 11px; color: #94a3b8; text-align: center; margin-top: 20px;">
+                If you received this message, your Resend pipeline is fully operational!
+              </p>
+            </div>
+          `
+        })
+      });
+
+      const responseText = await emailResponse.text();
+      let responseJson = null;
+      try {
+        responseJson = JSON.parse(responseText);
+      } catch (e) {}
+
+      if (emailResponse.ok) {
+        return res.json({
+          success: true,
+          message: "Test email submitted successfully to Resend!",
+          statusCode: emailResponse.status,
+          response: responseJson || responseText,
+          configuration: {
+            RESEND_API_KEY_status: "Configured",
+            RESEND_TO_EMAIL: recipient,
+            RESEND_FROM_EMAIL: sender
+          }
+        });
+      } else {
+        return res.status(emailResponse.status).json({
+          success: false,
+          error: "Resend API rejected the email request.",
+          statusCode: emailResponse.status,
+          response: responseJson || responseText,
+          configuration: {
+            RESEND_API_KEY_status: "Configured",
+            RESEND_TO_EMAIL: recipient,
+            RESEND_FROM_EMAIL: sender
+          },
+          diagnosis: getResendDiagnosis(emailResponse.status, responseJson || responseText, sender, recipient)
+        });
+      }
+    } catch (err: any) {
+      return res.status(500).json({
+        success: false,
+        error: `Network or runtime execution failed: ${err.message || err}`,
+        configuration: {
+          RESEND_API_KEY_status: "Configured",
+          RESEND_TO_EMAIL: recipient,
+          RESEND_FROM_EMAIL: sender
+        }
+      });
+    }
+  });
+
+  // Helper to diagnose specific Resend API rejections
+  function getResendDiagnosis(status: number, response: any, sender: string, recipient: string): string {
+    const errorMsg = typeof response === "object" ? (response.message || JSON.stringify(response)) : String(response);
+    const lowercaseMsg = errorMsg.toLowerCase();
+
+    if (lowercaseMsg.includes("onboarding@resend.dev") && lowercaseMsg.includes("verify your domain")) {
+      return "You are using the Resend Sandbox from 'onboarding@resend.dev'. In Sandbox mode, Resend ONLY allows sending emails directly to the email address you signed up with (the account owner). It will reject any other recipient address unless you verify your domain ('perthborewater.com.au') in the Resend dashboard and set up proper SPF/DKIM DNS records.";
+    }
+    if (lowercaseMsg.includes("sender") && lowercaseMsg.includes("verify") || lowercaseMsg.includes("unauthorized") || status === 403) {
+      return "Resend rejected the sender address. On a free/new account, you must only send from 'onboarding@resend.dev' until you verify your domain in the Resend dashboard. Ensure RESEND_FROM_EMAIL is set exactly to 'Perth BoreWater Dispatch <onboarding@resend.dev>' or left blank to use that default.";
+    }
+    if (lowercaseMsg.includes("api_key") || lowercaseMsg.includes("unauthorized") || status === 401) {
+      return "Your RESEND_API_KEY is invalid or unauthorized. Please generate a new API key in the Resend Dashboard, copy it, and update it in your AI Studio project Settings.";
+    }
+    return `Resend API returned an error message: "${errorMsg}". Please check the Resend Dashboard Logs section for specific details.`;
+  }
+
   // Dynamically resolve media_overrides.json regardless of the runtime directory, bundler status, or build location
   const getOverridesFilePath = (): string => {
     // 1. Try resolving relative to the workspace root directly
