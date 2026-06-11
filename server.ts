@@ -5,6 +5,7 @@ import { createServer as createViteServer } from "vite";
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
 import admin from "firebase-admin";
+import { getFirestore } from "firebase-admin/firestore";
 
 dotenv.config();
 
@@ -74,14 +75,22 @@ async function startServer() {
     res.json({ email });
   });
 
-  // Initialize firebase-admin Firestore securely
-  let adminDbServer: admin.firestore.Firestore | null = null;
+  // Initialize firebase-admin Firestore securely using the project configuration file
+  let adminDbServer: any = null;
   try {
-    if (admin.apps.length === 0) {
-      admin.initializeApp();
+    const configPath = path.join(process.cwd(), "firebase-applet-config.json");
+    if (fs.existsSync(configPath)) {
+      const firebaseConfig = JSON.parse(fs.readFileSync(configPath, "utf8"));
+      if (admin.apps.length === 0) {
+        admin.initializeApp({
+          projectId: firebaseConfig.projectId,
+        });
+      }
+      adminDbServer = getFirestore(admin.app(), firebaseConfig.firestoreDatabaseId);
+      console.log(`[Firestore Admin] Successfully initialized Firestore database connection for project ${firebaseConfig.projectId}, database ${firebaseConfig.firestoreDatabaseId}`);
+    } else {
+      console.warn("[Firestore Admin] firebase-applet-config.json not found, skipping admin Firestore initialization.");
     }
-    adminDbServer = admin.firestore();
-    console.log("[Firestore Admin] Successfully initialized Firestore database connection.");
   } catch (error) {
     console.warn("[Firestore Admin] Failed to initialize firebase-admin Firestore, using local fallback.", error);
   }
