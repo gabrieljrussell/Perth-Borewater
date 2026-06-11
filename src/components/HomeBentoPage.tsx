@@ -336,7 +336,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
               {/* Image holder for New Water Bores */}
               <div className="w-full h-32 rounded-xl overflow-hidden border border-slate-100 bg-slate-50 relative">
                 <img 
-                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAS9LmvO7mawncwLdjxtZvYiFRtsNcXYv_94qu6ByOeZpKC_DpMT1BJh3SXGLDVzfp5kjvH8bFJ8fJq13Qla3cr3Juvr5x7i4kUiFrptGWMgqmmnp5pRo0yizIO0ewmhP1XbQ3vWAEMy79_7G-w0Vc-wCpkIa41CKErQiDCDpPLaQfzT6mBNEUxQaR0V3QVZpmvH6qS-jNTOj4neyC5lLBhzen03c3hh2BkaFw5KDY7pjGJxBOayRdNd4npeabUG0S9eGZ2YYMrmr2W" 
+                  src="/serve-image.php?file=New-Bores.webp&w=574&q=80" 
                   alt="New water bore drilling rig and installation" 
                   width={574}
                   height={320}
@@ -344,7 +344,7 @@ export default function HomeBentoPage({ onSelectSuburb, onOpenModal }: HomeBento
                   className="w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.02]"
                   referrerPolicy="no-referrer"
                   onError={(e) => {
-                    e.currentTarget.src = "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80";
+                    e.currentTarget.src = "https://assets.perthborewater.com.au/New-Bores.webp";
                   }}
                 />
                 <div className="absolute bottom-2 left-2 bg-slate-900/85 backdrop-blur-xs px-2.5 py-0.5 rounded-full text-[8px] text-white font-mono uppercase tracking-widest font-bold">

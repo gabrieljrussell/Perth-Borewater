@@ -60,8 +60,13 @@ export default function QuoteForm({ initialSuburb = '' }: QuoteFormProps) {
       if (response.ok) {
         const data = await response.json();
         setTicketId(data.ticketId || uuid);
+        console.log(`[Quote Form API] Lead processed on server successfully. Response:`, data);
+        if (data.emailStatus) {
+          console.log(`[Quote Form API] Resend dispatch status: ${data.emailStatus}`);
+        }
       } else {
-        console.error('Failed to submit lead to server', await response.text());
+        const errText = await response.text();
+        console.error('Failed to submit lead to server:', errText);
         setTicketId(uuid);
       }
     } catch (err) {

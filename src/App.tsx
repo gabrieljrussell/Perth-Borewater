@@ -1507,8 +1507,13 @@ export default function App() {
       if (response.ok) {
         const data = await response.json();
         setReceiptNumber(data.ticketId || receiptCode);
+        console.log(`[Lead Entry API] Lead processed on server successfully. Response:`, data);
+        if (data.emailStatus) {
+          console.log(`[Lead Entry API] Resend dispatch status: ${data.emailStatus}`);
+        }
       } else {
-        console.error('Server rejected lead intake', await response.text());
+        const errText = await response.text();
+        console.error('Server rejected lead intake:', errText);
         setReceiptNumber(receiptCode);
       }
     } catch (err) {

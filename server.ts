@@ -89,7 +89,15 @@ async function startServer() {
   // Handle lead submission with Firebase database storage and direct transaction email delivery
   app.post("/api/leads", async (req, res) => {
     try {
-      const { fullName, phone, email, suburb, serviceType, notes, urgency, ticketId, source } = req.body;
+      const fullName = req.body.fullName;
+      const phone = req.body.phone;
+      const email = req.body.email || "";
+      const suburb = req.body.suburb;
+      const serviceType = req.body.serviceType || "Unspecified Service";
+      const notes = req.body.notes || "";
+      const urgency = (req.body.urgency || "standard").toString();
+      const ticketId = req.body.ticketId;
+      const source = req.body.source || "General Contact";
 
       if (!fullName || !phone || !suburb) {
         return res.status(400).json({ error: "Required fields are missing: fullName, phone, and suburb are mandatory." });
@@ -100,13 +108,13 @@ async function startServer() {
       const leadPayload = {
         fullName,
         phone,
-        email: email || "",
+        email,
         suburb,
-        serviceType: serviceType || "Unspecified Service",
-        notes: notes || "",
-        urgency: urgency || "Standard",
+        serviceType,
+        notes,
+        urgency,
         ticketId: generatedTicketId,
-        source: source || "General Contact",
+        source,
         createdAt: new Date().toISOString()
       };
 
@@ -209,11 +217,11 @@ async function startServer() {
           } else {
             const errText = await emailResponse.text();
             emailStatus = `Failed: Resend API response: ${errText}`;
-            console.error(`[Email Service] Resend API rejected dispatch:`, errText);
+            console.error(`[Email Service] Resend API rejected dispatch for lead ${generatedTicketId}:`, errText);
           }
         } catch (emailErr: any) {
           emailStatus = `Error: ${emailErr.message || emailErr}`;
-          console.error(`[Email Service] Execution exception:`, emailErr);
+          console.error(`[Email Service] Execution exception for lead ${generatedTicketId}:`, emailErr);
         }
       } else {
         console.warn("[Email Service] RESEND_API_KEY is not defined. No email will be sent; saving to Firestore only.");
